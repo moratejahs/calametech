@@ -1,0 +1,18 @@
+.input-error {
+    border-color: #dc3545!important;
+}
+
+.error-message.text-danger {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: -0.8rem;
+    margin-bottom: 0;
+    margin-left: 2.5rem;
+}
+
+.input-error::placeholder,
+.error-placeholder::placeholder {
+    color: #dc3545!important;
+}
+
+
