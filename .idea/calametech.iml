@@ -14,6 +14,10 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/tests/Feature" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests/Unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/admin/calametech/tests/Feature" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/admin/calametech/tests/Unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/admin/tests/Feature" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/admin/tests/Unit" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/storage/app" />
       <excludeFolder url="file://$MODULE_DIR$/storage/framework" />
     </content>

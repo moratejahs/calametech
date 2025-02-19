@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Auth\AuthenticatedTokenSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('v1')->group(function () {
+    Route::post('/login', [AuthenticatedTokenSessionController::class, 'store']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        // Logout
+        Route::post('/logout', [AuthenticatedTokenSessionController::class, 'destroy']);
+
+        // Get User
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+
+    });
 });

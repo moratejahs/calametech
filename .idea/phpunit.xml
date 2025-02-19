@@ -7,6 +7,10 @@
         <option value="$PROJECT_DIR$/tests/Feature" />
         <option value="$PROJECT_DIR$/calametech/tests/Unit" />
         <option value="$PROJECT_DIR$/calametech/tests/Feature" />
+        <option value="$PROJECT_DIR$/admin/calametech/tests/Unit" />
+        <option value="$PROJECT_DIR$/admin/calametech/tests/Feature" />
+        <option value="$PROJECT_DIR$/admin/tests/Unit" />
+        <option value="$PROJECT_DIR$/admin/tests/Feature" />
       </list>
     </option>
   </component>

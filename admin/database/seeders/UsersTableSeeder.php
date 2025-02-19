@@ -16,28 +16,13 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminRole = Role::where('name', 'admin')->first();
-        $superAdminRole = Role::where('name', 'super-admin')->first();
+        $adminRole = Role::where('name', 'user')->first();
         $now = now();
 
         User::create([
-            'name' => 'Reygenix Admin',
-            'address' => 'Sotil Tandag City',
-            'email' => 'admin@mail.com',
-            'contact_number' => '09706122212',
-            'address' => 'Sotil Tandag City',
-            'password' => 'password',
-            'plain_password' => Crypt::encrypt('password'),
+            'name' => 'User',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
         ])->roles()->attach($adminRole, ['created_at' => $now, 'updated_at' => $now]);
-
-        User::create([
-            'name' => 'Reygenix Super Admin',
-            'address' => 'Sotil Tandag City',
-            'email' => 'superadmin@mail.com',
-            'contact_number' => '09706122212',
-            'address' => 'Sotil Tandag City',
-            'password' => 'password',
-            'plain_password' => Crypt::encrypt('password'),
-        ])->roles()->attach($superAdminRole, ['created_at' => $now, 'updated_at' => $now]);
     }
 }
