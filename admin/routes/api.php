@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\EmailVerifyController;
 use App\Http\Controllers\Api\V1\Auth\SignupController;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
@@ -23,20 +24,9 @@ Route::prefix('v1')->group(function () {
 
     Route::post('/signup', SignupController::class);
 
-    // Verify Email
-    Route::get('/email/verify/{id}/{hash}', function (Request $request) {
-        $user = User::find($request->route('id'));
-
-        if ($user->hasVerifiedEmail()) {
-            return view('email-already-verified');
-        }
-
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
-        }
-
-        return view('email-verified');
-    })->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+    Route::get('/email/verify/{id}/{hash}', EmailVerifyController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
 
     Route::middleware('auth:sanctum')->group(function () {
         // Logout
