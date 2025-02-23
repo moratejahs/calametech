@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\AuthenticatedTokenSessionController;
 use App\Http\Controllers\Api\V1\Auth\SignupController;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Auth\AuthenticatedTokenSessionController;
 
 /*
 |--------------------------------------------------------------------------

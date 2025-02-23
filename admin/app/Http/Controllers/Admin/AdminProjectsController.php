@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class AdminProjectsController extends Controller
@@ -16,7 +16,7 @@ class AdminProjectsController extends Controller
         $this->middleware('role:admin');
     }
 
-    //this is for the ajax
+    // this is for the ajax
     public function updateProjectStatus(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -132,7 +132,7 @@ class AdminProjectsController extends Controller
             'project_details.created_by',
             'project_details.in_charge',
             'project_details.users_id',
-            'project_details.project_user_id'
+            'project_details.project_user_id',
         ]);
 
         $projectDetails->orderByRaw("CASE
@@ -145,21 +145,19 @@ class AdminProjectsController extends Controller
         return view('admin.admin-projects', compact('projectDetails'));
     }
 
-
-
     public function store(Request $request)
     {
 
         $userId = auth()->id();
 
         $adminProjects = Project::create([
-            'project_name'      => $request->project_name,
-            'project_owner'     => $request->project_owner,
-            'due_date'          => $request->due_date,
-            'priority'          => $request->priority,
-            'budget'            => $request->budget,
-            'created_by'        => $userId,
-            'remarks'           => $request->remarks,
+            'project_name' => $request->project_name,
+            'project_owner' => $request->project_owner,
+            'due_date' => $request->due_date,
+            'priority' => $request->priority,
+            'budget' => $request->budget,
+            'created_by' => $userId,
+            'remarks' => $request->remarks,
         ]);
 
         $adminProjects->users()->attach($userId);
@@ -183,13 +181,13 @@ class AdminProjectsController extends Controller
             ]);
         } else {
             $projectEdit->update([
-                'project_name'      => $request->taskName,
-                'project_owner'     => $request->projectOwner,
-                'due_date'          => $request->dueDate,
-                'status'            => $request->status,
-                'priority'          => $request->priority,
-                'budget'            => $request->userBudget,
-                'remarks'           => $request->userRemark
+                'project_name' => $request->taskName,
+                'project_owner' => $request->projectOwner,
+                'due_date' => $request->dueDate,
+                'status' => $request->status,
+                'priority' => $request->priority,
+                'budget' => $request->userBudget,
+                'remarks' => $request->userRemark,
             ]);
         }
 

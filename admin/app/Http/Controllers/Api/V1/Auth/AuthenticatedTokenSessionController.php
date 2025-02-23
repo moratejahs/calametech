@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedTokenSessionController extends Controller
@@ -21,16 +21,16 @@ class AuthenticatedTokenSessionController extends Controller
         if ($user->email_verified_at === null) {
             return response()->json([
                 'errors' => [
-                    'email' => ['Email not verified.']
-                ]
+                    'email' => ['Email not verified.'],
+                ],
             ], 422);
         }
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (! $user || ! Hash::check($validated['password'], $user->password)) {
             return response()->json([
                 'errors' => [
-                    'email' => ['Account not found.']
-                ]
+                    'email' => ['Account not found.'],
+                ],
             ], 422);
         }
 
@@ -38,7 +38,7 @@ class AuthenticatedTokenSessionController extends Controller
 
         return response()->json([
             'token' => $token,
-            'user' => $user->only('id', 'name', 'email')
+            'user' => $user->only('id', 'name', 'email'),
         ], 200);
     }
 
@@ -47,7 +47,7 @@ class AuthenticatedTokenSessionController extends Controller
         $request->user()->tokens()->delete();
 
         return response()->json([
-            'success' => 'Logged out successful'
+            'success' => 'Logged out successful',
         ]);
     }
 }

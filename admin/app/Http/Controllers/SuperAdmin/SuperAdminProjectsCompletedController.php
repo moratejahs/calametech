@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class SuperAdminProjectsCompletedController extends Controller
 {
@@ -21,6 +21,7 @@ class SuperAdminProjectsCompletedController extends Controller
             $query->where('user_id', $userId);
         })->where('status', 'Done')
             ->get();
+
         // dd($completedProjectData);
         return view('super-admin.super-admin-projects-completed', compact(
             'completedProjectData',
@@ -47,6 +48,7 @@ class SuperAdminProjectsCompletedController extends Controller
         $project->users()->detach($userId);
         $project->delete();
         $request->session()->flash('success_message', 'Deleted Successfully!');
+
         return redirect()->route('super-admin.super-admin-projects-completed');
     }
 }

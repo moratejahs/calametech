@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use Carbon\Carbon;
-use App\Models\Project;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Project;
+use Carbon\Carbon;
 
 class SuperAdminDashboardController extends Controller
 {
@@ -58,6 +57,7 @@ class SuperAdminDashboardController extends Controller
             'inProgressCount' => $inProgressCount,
             'stuckCount' => $stuckCount,
         ];
+
         return $projectStatusData;
     }
 
@@ -102,7 +102,6 @@ class SuperAdminDashboardController extends Controller
         return $weeklyRevenues;
     }
 
-
     public function recentlyCompletedProject()
     {
         $userId = auth()->id();
@@ -118,8 +117,7 @@ class SuperAdminDashboardController extends Controller
         return $recentlyCompletedProject;
     }
 
-
-    function thisMonthWeeks()
+    public function thisMonthWeeks()
     {
         $weeks = [];
         $now = Carbon::now();
@@ -127,8 +125,9 @@ class SuperAdminDashboardController extends Controller
         for ($i = 1; $i <= $lastDayOfThisMonth; $i += 7) {
             $startDay = $i;
             $endDay = min($i + 6, $lastDayOfThisMonth);
-            $weeks[] = $startDay . ' - ' . $endDay;
+            $weeks[] = $startDay.' - '.$endDay;
         }
+
         return $weeks;
     }
 }

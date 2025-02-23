@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class AdminUsersController extends Controller
 {
@@ -18,8 +17,5 @@ class AdminUsersController extends Controller
         return view('admin.admin-users');
     }
 
-    public function store(){
-
-
-    }
+    public function store() {}
 }

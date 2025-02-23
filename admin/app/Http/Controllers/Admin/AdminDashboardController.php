@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\Project;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Project;
+use Carbon\Carbon;
 
 class AdminDashboardController extends Controller
 {
@@ -57,6 +56,7 @@ class AdminDashboardController extends Controller
             'inProgressCount' => $inProgressCount,
             'stuckCount' => $stuckCount,
         ];
+
         return $projectStatusData;
     }
 
@@ -101,7 +101,6 @@ class AdminDashboardController extends Controller
         return $weeklyRevenues;
     }
 
-
     public function recentlyCompletedProject()
     {
         $userId = auth()->id();
@@ -117,8 +116,7 @@ class AdminDashboardController extends Controller
         return $recentlyCompletedProject;
     }
 
-
-    function thisMonthWeeks()
+    public function thisMonthWeeks()
     {
         $weeks = [];
         $now = Carbon::now();
@@ -126,8 +124,9 @@ class AdminDashboardController extends Controller
         for ($i = 1; $i <= $lastDayOfThisMonth; $i += 7) {
             $startDay = $i;
             $endDay = min($i + 6, $lastDayOfThisMonth);
-            $weeks[] = $startDay . ' - ' . $endDay;
+            $weeks[] = $startDay.' - '.$endDay;
         }
+
         return $weeks;
     }
 }

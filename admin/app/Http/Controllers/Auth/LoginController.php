@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 class LoginController extends Controller
 {
@@ -19,8 +18,9 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function handleLogin(LoginRequest $request)
+    public function handleLogin(Request $request)
     {
+        dd($request->all());
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -44,6 +44,7 @@ class LoginController extends Controller
         if ($user->hasRole('admin')) {
             return redirect()->route('admin.admin-dashboard');
         }
+
         return redirect()
             ->back()
             ->withErrors(['account' => 'Invalid email and password'])
@@ -53,6 +54,7 @@ class LoginController extends Controller
     public function handleLogout()
     {
         Auth::guard()->logout();
+
         return redirect()->route('auth.login');
     }
 }

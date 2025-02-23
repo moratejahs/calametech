@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\Project;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Project;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AdminProjectsBehindScheduleController extends Controller
 {
@@ -23,6 +23,7 @@ class AdminProjectsBehindScheduleController extends Controller
         })->where('due_date', '<', Carbon::now()->startOfDay()->format('Y-m-d'))
             ->where('status', '!=', 'Done')
             ->get();
+
         // dd($behindScheduleProjectData);
         return view('admin.admin-projects-behind-schedule', compact(
             'behindScheduleProjectData',
@@ -40,13 +41,13 @@ class AdminProjectsBehindScheduleController extends Controller
             ]);
         } else {
             $project->update([
-                'project_name'      => $request->taskName,
-                'project_owner'     => $request->projectOwner,
-                'due_date'          => $request->dueDate,
-                'status'            => $request->status,
-                'priority'          => $request->priority,
-                'budget'            => $request->userBudget,
-                'remarks'           => $request->userRemark
+                'project_name' => $request->taskName,
+                'project_owner' => $request->projectOwner,
+                'due_date' => $request->dueDate,
+                'status' => $request->status,
+                'priority' => $request->priority,
+                'budget' => $request->userBudget,
+                'remarks' => $request->userRemark,
             ]);
         }
 
@@ -61,6 +62,7 @@ class AdminProjectsBehindScheduleController extends Controller
         $project->users()->detach($userId);
         $project->delete();
         $request->session()->flash('success_message', 'Deleted Successfully!');
+
         return redirect()->route('admin.admin-projects-behind-schedule');
     }
 }

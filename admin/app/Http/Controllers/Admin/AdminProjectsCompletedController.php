@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class AdminProjectsCompletedController extends Controller
 {
@@ -21,6 +21,7 @@ class AdminProjectsCompletedController extends Controller
             $query->where('user_id', $userId);
         })->where('status', 'Done')
             ->get();
+
         // dd($completedProjectData);
         return view('admin.admin-projects-completed', compact(
             'completedProjectData',
@@ -47,6 +48,7 @@ class AdminProjectsCompletedController extends Controller
         $project->users()->detach($userId);
         $project->delete();
         $request->session()->flash('success_message', 'Deleted Successfully!');
+
         return redirect()->route('admin.admin-projects-completed');
     }
 }
