@@ -1,5 +1,4 @@
 import 'package:calametech/constants/api_paths.dart';
-import 'package:calametech/core/auth/login/bloc/login_bloc.dart';
 import 'package:calametech/core/auth/login/models/user.dart';
 import 'package:calametech/utils/services/rest_api_service.dart';
 import 'package:calametech/utils/services/secure_storage_service.dart';

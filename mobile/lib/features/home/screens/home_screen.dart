@@ -1,7 +1,6 @@
 import 'package:calametech/constants/route_constants.dart';
 import 'package:calametech/core/auth/login/bloc/login_bloc.dart';
 import 'package:calametech/core/connectivity/bloc/connectivity_bloc.dart';
-import 'package:calametech/utils/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +27,7 @@ class HomeScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   if (!context.mounted) return;
-                  context.read<LoginBloc>().add(LogoutButtonPressed());
+                  context.read<LoginBloc>().add(const LogoutButtonPressed());
                 },
                 child: const Text('Log Out'),
               ),
