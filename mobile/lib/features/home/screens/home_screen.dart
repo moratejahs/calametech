@@ -27,11 +27,8 @@ class HomeScreen extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  final storage = SecureStorageService();
-                  final token = await storage.readValue('token');
-
                   if (!context.mounted) return;
-                  context.read<LoginBloc>().add(LogoutButtonPressed(token: token));
+                  context.read<LoginBloc>().add(LogoutButtonPressed());
                 },
                 child: const Text('Log Out'),
               ),

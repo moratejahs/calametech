@@ -22,7 +22,7 @@ class RestApiService implements BaseRestApiService {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 20));
 
       return handleResponse(response);
     } on SocketException {

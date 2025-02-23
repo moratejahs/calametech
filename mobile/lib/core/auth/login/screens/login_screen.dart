@@ -33,6 +33,20 @@ class LoginScreen extends StatelessWidget {
                   border: OutlineInputBorder(),
                 ),
               ),
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  if (state is LoginFailure) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 6.0),
+                      child: Text(
+                        (state.message ?? state.errors?['email'][0]).toString(),
+                        style: const TextStyle(fontSize: 14, color: Colors.red),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
               const SizedBox(height: 16),
               TextField(
                 controller: passwordController,
@@ -41,6 +55,20 @@ class LoginScreen extends StatelessWidget {
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
+              ),
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  if (state is LoginFailure) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 6.0),
+                      child: Text(
+                        (state.errors?['password'][0]).toString(),
+                        style: const TextStyle(fontSize: 14, color: Colors.red),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -54,34 +82,28 @@ class LoginScreen extends StatelessWidget {
                       if (state is LoginLoading) {
                         return const CircularProgressIndicator();
                       }
-                      return const Text('Log In');
+                      return const Text('Sign In');
                     },
                   ),
                 ),
               ),
-              BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state) {
-                  if (state is LoginLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state is LoginFailure) {
-                    return Text(
-                      {state.message ?? state.errors}.toString(),
-                      style: const TextStyle(fontSize: 24),
-                    );
-                  }
-
-                  if (state is LoginSuccess) {
-                    return Text(
-                      {state.user}.toString(),
-                      style: const TextStyle(fontSize: 24),
-                    );
-                  }
-
-                  return const SizedBox();
-                },
-              )
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Don\'t have an account?'),
+                  const SizedBox(width: 4),
+                  GestureDetector(
+                    onTap: () {
+                      context.go(RouteConstants.signup);
+                    },
+                    child: const Text(
+                      'Sign up',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

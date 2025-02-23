@@ -52,12 +52,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<void> _onLogoutButtonPressed(LogoutButtonPressed event, Emitter<LoginState> emit) async {
     try {
-      emit(LoginLoading());
+      emit(SignoutLoading());
 
-      final response = await loginRepository.logout(event.token);
+      final token = await storage.readValue('token');
+
+      if (token == null) {
+        emit(LoginInitial());
+        return;
+      }
+
+      final response = await loginRepository.logout(token);
 
       if (!response) {
-        emit(const LoginFailure());
+        emit(const SignoutFailure());
         return;
       }
 
