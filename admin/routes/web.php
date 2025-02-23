@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Models\User;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\AdminUsersController;

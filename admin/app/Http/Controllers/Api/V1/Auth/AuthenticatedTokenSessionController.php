@@ -18,6 +18,14 @@ class AuthenticatedTokenSessionController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
+        if ($user->email_verified_at === null) {
+            return response()->json([
+                'errors' => [
+                    'email' => ['Email not verified.']
+                ]
+            ], 422);
+        }
+
         if (!$user || !Hash::check($validated['password'], $user->password)) {
             return response()->json([
                 'errors' => [
