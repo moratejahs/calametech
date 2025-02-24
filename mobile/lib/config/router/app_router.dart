@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 
 class AppRouter {
   GoRouter router = GoRouter(
-    initialLocation: RouteConstants.splash,
+    initialLocation: RouteConstants.login,
     routes: [
       GoRoute(
           path: RouteConstants.splash,

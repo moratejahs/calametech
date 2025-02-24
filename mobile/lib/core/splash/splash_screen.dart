@@ -19,10 +19,11 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
 
       if (token != null) {
+        debugPrint('Token exists, redirecting to home screen');
         GoRouter.of(context).go(RouteConstants.home);
         return;
       } else {
-        debugPrint('Token is null');
+        debugPrint('Token is null, redirecting to login screen');
         GoRouter.of(context).go(RouteConstants.login);
         return;
       }

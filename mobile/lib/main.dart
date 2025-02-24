@@ -1,4 +1,5 @@
 import 'package:calametech/config/router/app_router.dart';
+import 'package:calametech/config/theme/app_theme.dart';
 import 'package:calametech/constants/api_paths.dart';
 import 'package:calametech/core/auth/login/bloc/login_bloc.dart';
 import 'package:calametech/core/auth/login/repositories/login_repository.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RestApiService restApiService = RestApiService(baseUrl: ApiPaths.localApiUrl);
+    final RestApiService restApiService = RestApiService(baseUrl: ApiPaths.wifiApiUrl);
     final SecureStorageService storage = SecureStorageService();
 
     return MultiRepositoryProvider(
@@ -49,10 +50,7 @@ class MyApp extends StatelessWidget {
                   )),
         ],
         child: MaterialApp.router(
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
+          theme: AppTheme.lightTheme,
           routerConfig: AppRouter().router,
         ),
       ),

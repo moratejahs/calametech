@@ -1,11 +1,20 @@
+import 'package:calametech/config/theme/app_theme.dart';
+import 'package:calametech/constants/asset_paths.dart';
 import 'package:calametech/constants/route_constants.dart';
 import 'package:calametech/core/auth/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _loginFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -14,97 +23,154 @@ class LoginScreen extends StatelessWidget {
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
+        if (state is LoginFailure) {
+          if (state.message != null && state.message!.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message ?? 'An error occurred, please try again.'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+
+          passwordController.clear();
+        }
+
         if (state is LoginSuccess) {
           context.go(RouteConstants.home);
         }
       },
       child: Scaffold(
-          body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state) {
-                  if (state is LoginFailure) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 6.0),
-                      child: Text(
-                        (state.message ?? state.errors?['email'][0]).toString(),
-                        style: const TextStyle(fontSize: 14, color: Colors.red),
-                      ),
-                    );
-                  }
-                  return const SizedBox();
-                },
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state) {
-                  if (state is LoginFailure) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 6.0),
-                      child: Text(
-                        (state.errors?['password'][0]).toString(),
-                        style: const TextStyle(fontSize: 14, color: Colors.red),
-                      ),
-                    );
-                  }
-                  return const SizedBox();
-                },
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.read<LoginBloc>().add(LoginButtonPressed(email: emailController.text, password: passwordController.text));
-                  },
-                  child: BlocBuilder<LoginBloc, LoginState>(
+          body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [AppTheme.primaryColor, Colors.blue[50]!],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Form(
+              key: _loginFormKey,
+              child: Column(
+                spacing: 10,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Image.asset(
+                      AssetPaths.appLogo,
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  const Text(
+                    'Sign in to your Account',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+
+                  // Email field
+                  BlocBuilder<LoginBloc, LoginState>(
                     builder: (context, state) {
-                      if (state is LoginLoading) {
-                        return const CircularProgressIndicator();
+                      String? emailError;
+                      if (state is LoginFailure && state.errors?['email'] != null) {
+                        emailError = state.errors!['email'][0];
                       }
-                      return const Text('Sign In');
+
+                      return TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          errorText: emailError,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                            return 'Please enter a valid email';
+                          }
+
+                          return null;
+                        },
+                      );
                     },
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Don\'t have an account?'),
-                  const SizedBox(width: 4),
-                  GestureDetector(
-                    onTap: () {
-                      context.go(RouteConstants.signup);
+
+                  // Password field
+                  BlocBuilder<LoginBloc, LoginState>(
+                    builder: (context, state) {
+                      String? passwordError;
+                      if (state is LoginFailure && state.errors?['password'] != null) {
+                        passwordError = state.errors!['password'][0];
+                      }
+
+                      return TextFormField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          errorText: passwordError,
+                          border: const OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                      );
                     },
-                    child: const Text(
-                      'Sign up',
-                      style: TextStyle(color: Colors.blue),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_loginFormKey.currentState?.validate() ?? false) {
+                          context.read<LoginBloc>().add(LoginButtonPressed(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              ));
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        }
+                      },
+                      child: BlocBuilder<LoginBloc, LoginState>(
+                        builder: (context, state) {
+                          if (state is LoginLoading) {
+                            return const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            );
+                          }
+                          return const Text('Sign In');
+                        },
+                      ),
                     ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    spacing: 4,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Don\'t have an account?'),
+                      GestureDetector(
+                        onTap: () {
+                          GoRouter.of(context).push(RouteConstants.signup);
+                        },
+                        child: Text(
+                          'Sign up',
+                          style: TextStyle(color: AppTheme.primaryColor),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       )),
