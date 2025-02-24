@@ -22,7 +22,12 @@ class ReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            ''
+            'description' => ['required'],
+            'image' => ['required', 'image'],
+            'status' => ['required', 'in:fire,flood'],
+            'lat' => ['required'],
+            'long' => ['required'],
+            'barangay_id' => ['required', 'exists:barangays,id'],
         ];
     }
 }
