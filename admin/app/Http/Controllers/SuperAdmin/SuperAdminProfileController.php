@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class SuperAdminProfileController extends Controller

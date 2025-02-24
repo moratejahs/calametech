@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\Project;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Project;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AdminProjectsNotStartedController extends Controller
 {
@@ -23,6 +23,7 @@ class AdminProjectsNotStartedController extends Controller
         })->where('status', 'Not Started')
             ->where('due_date', '>=', Carbon::now()->startOfDay()->format('Y-m-d'))
             ->get();
+
         // dd($notStartedProjectData);
         return view('admin.admin-projects-not-started', compact(
             'notStartedProjectData',
@@ -42,13 +43,13 @@ class AdminProjectsNotStartedController extends Controller
             ]);
         } else {
             $project->update([
-                'project_name'      => $request->taskName,
-                'project_owner'     => $request->projectOwner,
-                'due_date'          => $request->dueDate,
-                'status'            => $request->status,
-                'priority'          => $request->priority,
-                'budget'            => $request->userBudget,
-                'remarks'           => $request->userRemark
+                'project_name' => $request->taskName,
+                'project_owner' => $request->projectOwner,
+                'due_date' => $request->dueDate,
+                'status' => $request->status,
+                'priority' => $request->priority,
+                'budget' => $request->userBudget,
+                'remarks' => $request->userRemark,
             ]);
         }
 
@@ -63,6 +64,7 @@ class AdminProjectsNotStartedController extends Controller
         $project->users()->detach($userId);
         $project->delete();
         $request->session()->flash('success_message', 'Deleted Successfully!');
+
         return redirect()->route('admin.admin-projects-not-started');
     }
 }

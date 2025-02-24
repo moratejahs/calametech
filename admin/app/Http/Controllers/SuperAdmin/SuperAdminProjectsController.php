@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +16,7 @@ class SuperAdminProjectsController extends Controller
         $this->middleware('role:super-admin');
     }
 
-    //This is my ajax
+    // This is my ajax
     public function updateProjectStatus(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -37,7 +37,6 @@ class SuperAdminProjectsController extends Controller
 
         return response()->json(['message' => 'Status updated successfully']);
     }
-
 
     public function index()
     {
@@ -102,17 +101,17 @@ class SuperAdminProjectsController extends Controller
 
     public function store(Request $request)
     {
-        $userId     = auth()->id();
+        $userId = auth()->id();
         $assignedId = $request->created_by;
 
         $adminProjects = Project::create([
-            'project_name'      => $request->project_name,
-            'project_owner'     => $request->project_owner,
-            'due_date'          => $request->due_date,
-            'priority'          => $request->priority,
-            'budget'            => $request->budget,
-            'created_by'        => $userId,
-            'remarks'           => $request->remarks,
+            'project_name' => $request->project_name,
+            'project_owner' => $request->project_owner,
+            'due_date' => $request->due_date,
+            'priority' => $request->priority,
+            'budget' => $request->budget,
+            'created_by' => $userId,
+            'remarks' => $request->remarks,
         ]);
 
         $adminProjects->users()->attach($assignedId);
@@ -125,18 +124,18 @@ class SuperAdminProjectsController extends Controller
     public function edit(Request $request)
     {
 
-        $projectId      = $request->projectId;
-        $inChargedId    = $request->created_by;
-        $project        = Project::findOrFail($projectId);
+        $projectId = $request->projectId;
+        $inChargedId = $request->created_by;
+        $project = Project::findOrFail($projectId);
 
         $project->update([
-            'project_name'      => $request->vproject_name,
-            'project_owner'     => $request->vproject_owner,
-            'due_date'          => $request->vdue_date,
-            'status'            => $request->status,
-            'priority'          => $request->priority,
-            'budget'            => $request->vbudget,
-            'remarks'           => $request->vremarks
+            'project_name' => $request->vproject_name,
+            'project_owner' => $request->vproject_owner,
+            'due_date' => $request->vdue_date,
+            'status' => $request->status,
+            'priority' => $request->priority,
+            'budget' => $request->vbudget,
+            'remarks' => $request->vremarks,
         ]);
 
         $project->users()->sync($inChargedId);
@@ -149,10 +148,9 @@ class SuperAdminProjectsController extends Controller
     public function destroy(Request $request)
     {
 
-
-        $projectId      = $request->projectId;
-        $userId         = $request->userId;
-        $project        = Project::findOrFail($projectId);
+        $projectId = $request->projectId;
+        $userId = $request->userId;
+        $project = Project::findOrFail($projectId);
 
         $project->delete();
         $project->users()->detach($userId);
@@ -281,7 +279,6 @@ class SuperAdminProjectsController extends Controller
             ->orderBy('timeline', 'ASC')
             ->get();
 
-
         return view('super-admin.super-admin-projects-completed', compact('projectDetails'));
     }
 
@@ -403,7 +400,6 @@ class SuperAdminProjectsController extends Controller
             ->orderByRaw('CASE WHEN projects.priority = "High" THEN 0 ELSE 1 END')
             ->orderBy('timeline', 'ASC')
             ->get();
-
 
         return view('super-admin.super-admin-projects-behind-schedule', compact('projectDetails'));
     }

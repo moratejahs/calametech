@@ -31,16 +31,16 @@ class AppServiceProvider extends ServiceProvider
 
             ],
 
-            function($view){
+            function ($view) {
 
-                $userRecord = User::all([ 'id', 'name' ]);
-                $roleRecord = Role::all([ 'id', 'description' ]);
-                $statusRecord = [ 'Not Started', 'In progress', 'Done', ];
+                $userRecord = User::all(['id', 'name']);
+                $roleRecord = Role::all(['id', 'description']);
+                $statusRecord = ['Not Started', 'In progress', 'Done'];
 
                 $view->with([
-                    'userRecord'    => $userRecord,
-                    'roleRecord'    => $roleRecord,
-                    'statusRecord'  => $statusRecord
+                    'userRecord' => $userRecord,
+                    'roleRecord' => $roleRecord,
+                    'statusRecord' => $statusRecord,
                 ]);
 
             }

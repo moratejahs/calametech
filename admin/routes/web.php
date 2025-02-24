@@ -1,27 +1,24 @@
 <?php
 
-use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Models\User;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\AdminUsersController;
-use App\Http\Controllers\Admin\AdminProfileController;
-use App\Http\Controllers\Admin\AdminProjectsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\SuperAdmin\SuperAdminUsersController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminProjectsBehindScheduleController;
 use App\Http\Controllers\Admin\AdminProjectsCompletedController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProfileController;
+use App\Http\Controllers\Admin\AdminProjectsController;
 use App\Http\Controllers\Admin\AdminProjectsInProgressController;
 use App\Http\Controllers\Admin\AdminProjectsNotStartedController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProjectsController;
+use App\Http\Controllers\Admin\AdminUsersController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SuperAdmin\SuperAdminDashboardController;
-use App\Http\Controllers\Admin\AdminProjectsBehindScheduleController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProfileController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectsBehindScheduleController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectsCompletedController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectsController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectsInProgressController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectsNotStartedController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProjectsBehindScheduleController;
+use App\Http\Controllers\SuperAdmin\SuperAdminUsersController;
+use App\Models\User;
+use Illuminate\Support\Facades\Route;
 
 // Home Endpoints
 Route::get('/', function () {
@@ -95,7 +92,7 @@ Route::prefix('super-admin')->group(function () {
     Route::get('dashboard', [SuperAdminDashboardController::class, 'index'])
         ->name('super-admin.super-admin-dashboard');
 
-    /*THIS IS FOR THE USER  FUNCTION*/
+    /* THIS IS FOR THE USER  FUNCTION */
     Route::get('users', [SuperAdminUsersController::class, 'index'])
         ->name('super-admin.super-admin-users');
 
@@ -108,7 +105,7 @@ Route::prefix('super-admin')->group(function () {
     Route::post('delete/user', [SuperAdminUsersController::class, 'destroy'])
         ->name('delete.super-admin.super-admin-user');
 
-    /*THIS IS FOR THE PROJECT  FUNCTION*/
+    /* THIS IS FOR THE PROJECT  FUNCTION */
     Route::post('/update-project-status', [SuperAdminProjectsController::class, 'updateProjectStatus'])
         ->name('update.project.status');
 
