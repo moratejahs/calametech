@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:calametech/core/auth/login/models/user.dart';
 import 'package:calametech/core/auth/signup/repositories/signup_repository.dart';
 import 'package:calametech/utils/services/secure_storage_service.dart';
 import 'package:flutter/foundation.dart';
@@ -33,21 +32,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         return;
       }
 
-      if (response.containsKey('user')) {
-        final user = response['user'] as User;
-
-        final success = await storage.writeValue('token', user.token);
-
-        if (!success) {
-          emit(const SignupFailure(message: 'Failed to save token'));
-          return;
-        }
-
-        emit(SignupSuccess(user));
-        return;
-      }
-
-      throw Exception('Unexpected response');
+      emit(SignupSuccess(message: response['success']));
+      return;
     } catch (e) {
       emit(SignupFailure(message: e.toString().replaceFirst('Exception: ', '')));
     }
