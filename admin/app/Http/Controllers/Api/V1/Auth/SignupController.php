@@ -26,10 +26,14 @@ class SignupController extends Controller
 
         $user->roles()->attach(2); // User role
 
-        event(new Registered($user));
+        event(new Registered($user)); // Send email verification link
+
+        $token = $user->createToken($user->name)->plainTextToken;
 
         return response()->json([
             'success' => 'Signup successful, email verification link sent!',
-        ]);
+            'token' => $token,
+            'user' => $user->only('id', 'name', 'email'),
+        ], 201);
     }
 }

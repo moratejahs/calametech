@@ -26,7 +26,7 @@ class AuthenticatedTokenSessionController extends Controller
             ], 422);
         }
 
-        if (! $user || ! Hash::check($validated['password'], $user->password)) {
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
             return response()->json([
                 'errors' => [
                     'email' => ['Account not found.'],
@@ -37,6 +37,7 @@ class AuthenticatedTokenSessionController extends Controller
         $token = $user->createToken($user->name)->plainTextToken;
 
         return response()->json([
+            'success' => 'Logged in successful',
             'token' => $token,
             'user' => $user->only('id', 'name', 'email'),
         ], 200);
@@ -48,6 +49,6 @@ class AuthenticatedTokenSessionController extends Controller
 
         return response()->json([
             'success' => 'Logged out successful',
-        ]);
+        ], 200);
     }
 }

@@ -1,12 +1,13 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\Auth\SignupController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerifyController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticatedTokenSessionController;
-use App\Http\Controllers\Api\V1\Auth\SignupController;
-use App\Models\User;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
+    // Login
     Route::post('/login', [AuthenticatedTokenSessionController::class, 'store']);
 
+    // Signup
     Route::post('/signup', SignupController::class);
 
+    // Email Verification
     Route::get('/email/verify/{id}/{hash}', EmailVerifyController::class)
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
@@ -36,5 +40,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/user', function (Request $request) {
             return $request->user();
         });
+
+        // Report
+        Route::post('/report', ReportController::class);
     });
 });
