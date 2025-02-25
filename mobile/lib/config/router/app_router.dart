@@ -1,8 +1,8 @@
-import 'package:calametech/constants/route_constants.dart';
-import 'package:calametech/core/auth/login/screens/login_screen.dart';
-import 'package:calametech/core/auth/signup/screens/signup_screen.dart';
-import 'package:calametech/core/splash/splash_screen.dart';
-import 'package:calametech/features/home/screens/home_screen.dart';
+import 'package:calamitech/constants/route_constants.dart';
+import 'package:calamitech/core/auth/login/screens/login_screen.dart';
+import 'package:calamitech/core/auth/signup/screens/signup_screen.dart';
+import 'package:calamitech/core/splash/splash_screen.dart';
+import 'package:calamitech/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

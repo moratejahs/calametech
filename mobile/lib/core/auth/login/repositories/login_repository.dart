@@ -1,7 +1,7 @@
-import 'package:calametech/constants/api_paths.dart';
-import 'package:calametech/core/auth/login/models/user.dart';
-import 'package:calametech/utils/services/rest_api_service.dart';
-import 'package:calametech/utils/services/secure_storage_service.dart';
+import 'package:calamitech/constants/api_paths.dart';
+import 'package:calamitech/core/auth/login/models/user.dart';
+import 'package:calamitech/utils/services/rest_api_service.dart';
+import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:flutter/foundation.dart';
 
 class LoginRepository {

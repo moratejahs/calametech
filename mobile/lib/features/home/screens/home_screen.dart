@@ -1,6 +1,6 @@
-import 'package:calametech/constants/route_constants.dart';
-import 'package:calametech/core/auth/login/bloc/login_bloc.dart';
-import 'package:calametech/core/connectivity/bloc/connectivity_bloc.dart';
+import 'package:calamitech/constants/route_constants.dart';
+import 'package:calamitech/core/auth/login/bloc/login_bloc.dart';
+import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

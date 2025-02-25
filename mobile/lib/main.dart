@@ -1,13 +1,13 @@
-import 'package:calametech/config/router/app_router.dart';
-import 'package:calametech/config/theme/app_theme.dart';
-import 'package:calametech/constants/api_paths.dart';
-import 'package:calametech/core/auth/login/bloc/login_bloc.dart';
-import 'package:calametech/core/auth/login/repositories/login_repository.dart';
-import 'package:calametech/core/auth/signup/bloc/signup_bloc.dart';
-import 'package:calametech/core/auth/signup/repositories/signup_repository.dart';
-import 'package:calametech/core/connectivity/bloc/connectivity_bloc.dart';
-import 'package:calametech/utils/services/rest_api_service.dart';
-import 'package:calametech/utils/services/secure_storage_service.dart';
+import 'package:calamitech/config/router/app_router.dart';
+import 'package:calamitech/config/theme/app_theme.dart';
+import 'package:calamitech/constants/api_paths.dart';
+import 'package:calamitech/core/auth/login/bloc/login_bloc.dart';
+import 'package:calamitech/core/auth/login/repositories/login_repository.dart';
+import 'package:calamitech/core/auth/signup/bloc/signup_bloc.dart';
+import 'package:calamitech/core/auth/signup/repositories/signup_repository.dart';
+import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
+import 'package:calamitech/utils/services/rest_api_service.dart';
+import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

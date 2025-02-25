@@ -1,7 +1,7 @@
-import 'package:calametech/config/theme/app_theme.dart';
-import 'package:calametech/constants/asset_paths.dart';
-import 'package:calametech/constants/route_constants.dart';
-import 'package:calametech/core/auth/signup/bloc/signup_bloc.dart';
+import 'package:calamitech/config/theme/app_theme.dart';
+import 'package:calamitech/constants/asset_paths.dart';
+import 'package:calamitech/constants/route_constants.dart';
+import 'package:calamitech/core/auth/signup/bloc/signup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

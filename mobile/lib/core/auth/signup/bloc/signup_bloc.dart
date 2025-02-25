@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:calametech/core/auth/signup/repositories/signup_repository.dart';
-import 'package:calametech/utils/services/secure_storage_service.dart';
+import 'package:calamitech/core/auth/signup/repositories/signup_repository.dart';
+import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
