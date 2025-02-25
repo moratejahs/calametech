@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\SOSController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\Auth\SignupController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerifyController;
@@ -40,6 +41,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/user', function (Request $request) {
             return $request->user();
         });
+
+        // SOS
+        Route::post('/sos', SOSController::class);
 
         // Report
         Route::post('/report', ReportController::class);

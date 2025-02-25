@@ -12,7 +12,6 @@ class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
-class SignoutLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
   final User user;
@@ -37,6 +36,8 @@ class LoginFailure extends LoginState {
         if (errors != null) errors!,
       ];
 }
+
+class SignoutLoading extends LoginState {}
 
 class SignoutFailure extends LoginState {
   final String? message;
