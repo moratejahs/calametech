@@ -21,6 +21,7 @@ dependencies:
   shared_preferences: ^2.3.3
   flutter_secure_storage: ^9.2.2
   hexcolor: ^3.0.1
+  location: ^8.0.0
 
 dev_dependencies:
   flutter_test:

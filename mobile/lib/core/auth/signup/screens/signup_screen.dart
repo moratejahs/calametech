@@ -113,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 labelText: 'Email',
-                                errorText: emailError, // Display Laravel email error here
+                                errorText: emailError,
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {

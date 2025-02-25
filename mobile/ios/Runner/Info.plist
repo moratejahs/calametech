@@ -4,6 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location for SOS and Report submissions.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location for SOS and Report submissions.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location for SOS and Report submissions.</string>
 	<key>CFBundleDisplayName</key>
 	<string>Disaster Reporting App</string>
 	<key>CFBundleExecutable</key>

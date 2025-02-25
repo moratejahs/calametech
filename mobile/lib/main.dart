@@ -1,6 +1,7 @@
 import 'package:calamitech/config/router/app_router.dart';
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/constants/api_paths.dart';
+import 'package:calamitech/core/app/cubit/navigation_cubit.dart';
 import 'package:calamitech/core/auth/login/bloc/login_bloc.dart';
 import 'package:calamitech/core/auth/login/repositories/login_repository.dart';
 import 'package:calamitech/core/auth/signup/bloc/signup_bloc.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider<ConnectivityBloc>(
             create: (_) => ConnectivityBloc(),
+          ),
+          BlocProvider<NavigationCubit>(
+            create: (_) => NavigationCubit(),
           ),
           BlocProvider<LoginBloc>(
             create: (context) => LoginBloc(
