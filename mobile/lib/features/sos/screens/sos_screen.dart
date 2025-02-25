@@ -1,29 +1,121 @@
-import 'package:calamitech/constants/route_constants.dart';
-import 'package:calamitech/core/auth/login/bloc/login_bloc.dart';
+import 'package:calamitech/core/location/cubit/location_cubit.dart';
+import 'package:calamitech/features/sos/bloc/sos_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-class SOSScreen extends StatelessWidget {
+import '../../../config/theme/app_theme.dart';
+
+class SOSScreen extends StatefulWidget {
   const SOSScreen({super.key});
 
   @override
+  State<SOSScreen> createState() => _SOSScreenState();
+}
+
+class _SOSScreenState extends State<SOSScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<LocationCubit>().startLocationUpdates();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<SosBloc, SosState>(
       listener: (context, state) {
-        if (state is LoginInitial) {
-          context.go(RouteConstants.login);
+        if (state is SosSuccess) {
+          debugPrint('SOS Sent Successfully');
+
+          ScaffoldMessenger.of(context).showSnackBar(
+           const SnackBar(
+              content: Text('SOS Sent Successfully.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+
+        if (state is SosFailure) {
+          debugPrint('Failed to send SOS: ${state.message}');
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Emergency SOS'),
+      child: Center(
+          child: Column(
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 400, child: SOSButton()),
+                ],
+              ),
+              const SizedBox(height: 20),
+              BlocBuilder<LocationCubit, LocationCubitState>(
+                builder: (context, state) {
+                  if (state.error != null) {
+                    return const SizedBox();
+                  }
+
+                  if (state.latitude < 1) {
+                    return Row(
+                      spacing: 10,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Calibrating Location...',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            valueColor: AlwaysStoppedAnimation(AppTheme.primaryColor),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+
+                  return  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Location Acquired',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Latitude: ${state.latitude}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        'Longitude: ${state.longitude}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
-       body: const Center(
-          child: SOSButton(),
-        ),
-      ),
     );
   }
 }
@@ -35,7 +127,8 @@ class SOSButton extends StatefulWidget {
   _SOSButtonState createState() => _SOSButtonState();
 }
 
-class _SOSButtonState extends State<SOSButton> with SingleTickerProviderStateMixin {
+class _SOSButtonState extends State<SOSButton>
+    with SingleTickerProviderStateMixin {
   double _scale = 1.0;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -46,7 +139,8 @@ class _SOSButtonState extends State<SOSButton> with SingleTickerProviderStateMix
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3), // Slower animation for smoother effect
+      duration:
+          const Duration(seconds: 3), // Slower animation for smoother effect
     )..repeat(reverse: false);
 
     _scaleAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(
@@ -83,10 +177,43 @@ class _SOSButtonState extends State<SOSButton> with SingleTickerProviderStateMix
     });
   }
 
-  void _sendSOS() {
-    // Add your SOS sending logic here
-    print('SOS Sent');
+  void _sendSOS() async {
+
+    // final activeSOS = await _checkActiveSOS();
+    //
+    // if (activeSOS != null) {
+    //   debugPrint('User has Active SOS: $activeSOS');
+    //   return;
+    // }
+
+    if (context.read<LocationCubit>().state.latitude <= 0){
+      debugPrint('Location not available');
+
+      return;
+    }
+
+    debugPrint('Sending SOS');
+
+    context.read<SosBloc>().add(SOSRequested(
+          lat: context.read<LocationCubit>().state.latitude,
+          long: context.read<LocationCubit>().state.longitude,
+        ));
   }
+
+  // Future<SOS?> _checkActiveSOS() async {
+  //   final storage = SecureStorageService();
+  //   final activeSOS = await storage.readValue('sos');
+  //
+  //   if (activeSOS != null) {
+  //     final sos = SOS.fromJson(activeSOS);
+  //
+  //     debugPrint('Active SOS exists: $sos');
+  //
+  //     return sos;
+  //   }
+  //
+  //   return null;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +224,7 @@ class _SOSButtonState extends State<SOSButton> with SingleTickerProviderStateMix
         onTapCancel: _onTapCancel,
         child: AnimatedScale(
           scale: _scale,
-          duration: Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 100),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -109,7 +236,8 @@ class _SOSButtonState extends State<SOSButton> with SingleTickerProviderStateMix
                     height: 150 * _scaleAnimation.value,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.red.withValues(alpha: _opacityAnimation.value),
+                      color:
+                          Colors.red.withValues(alpha: _opacityAnimation.value),
                     ),
                   );
                 },

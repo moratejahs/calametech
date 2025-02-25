@@ -150,6 +150,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your password';
                                 }
+
+                                if (value != passwordConfirmationController.text) {
+                                  return 'Password do not match';
+                                }
+
                                 return null;
                               },
                             );
