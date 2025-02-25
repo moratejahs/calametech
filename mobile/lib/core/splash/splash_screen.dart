@@ -1,5 +1,5 @@
-import 'package:calametech/constants/route_constants.dart';
-import 'package:calametech/utils/services/secure_storage_service.dart';
+import 'package:calamitech/constants/route_constants.dart';
+import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
