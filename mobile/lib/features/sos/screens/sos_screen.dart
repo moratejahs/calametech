@@ -24,11 +24,9 @@ class _SOSScreenState extends State<SOSScreen> {
     return BlocListener<SosBloc, SosState>(
       listener: (context, state) {
         if (state is SosSuccess) {
-          debugPrint('SOS Sent Successfully');
-
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('SOS Sent Successfully.'),
+              content: Text('SOS sent to CDRRMO.'),
               backgroundColor: Colors.green,
             ),
           );
