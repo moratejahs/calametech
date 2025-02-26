@@ -2,7 +2,6 @@ import 'package:calamitech/constants/api_paths.dart';
 import 'package:calamitech/core/auth/login/models/user.dart';
 import 'package:calamitech/utils/services/rest_api_service.dart';
 import 'package:calamitech/utils/services/secure_storage_service.dart';
-import 'package:flutter/foundation.dart';
 
 class LoginRepository {
   final RestApiService restApiService;
@@ -19,8 +18,6 @@ class LoginRepository {
         ApiPaths.login,
         {'email': email, 'password': password},
       );
-
-      debugPrint('response: $response');
 
       if (response.containsKey('errors')) {
         return {'errors': response['errors']};
@@ -50,8 +47,6 @@ class LoginRepository {
       token: token,
     );
 
-    final tokenDeleted = await storage.deleteValue('token');
-
-    return response.containsKey('success') && tokenDeleted;
+    return response.containsKey('success');
   }
 }

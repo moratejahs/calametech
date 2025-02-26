@@ -28,6 +28,7 @@ class AppScaffold extends StatelessWidget {
 
   BottomAppBar _buildBottomAppBar(BuildContext context, int selectedIndex) {
     return BottomAppBar(
+      color: Colors.grey[200],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
@@ -105,11 +106,11 @@ Widget _buildNavBarItem(BuildContext context, IconData icon, String label,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: selectedIndex == index ? Colors.blue : Colors.grey),
+          Icon(icon, color: selectedIndex == index ? AppTheme.primaryColor : Colors.grey),
           Text(
             label,
             style: TextStyle(
-              color: selectedIndex == index ? Colors.blue : Colors.grey,
+              color: selectedIndex == index ? AppTheme.primaryColor : Colors.grey,
             ),
           ),
         ],

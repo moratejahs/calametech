@@ -7,42 +7,41 @@ import 'package:calamitech/features/profile/screens/profile_screen.dart';
 import 'package:calamitech/features/report/screens/report_screen.dart';
 import 'package:calamitech/features/sos/screens/sos_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/app/app_scaffold.dart';
-import '../../core/auth/login/bloc/login_bloc.dart';
 import '../../utils/services/secure_storage_service.dart';
 
 class AppRouter {
-  GoRouter router = GoRouter(
+  final SecureStorageService storage = SecureStorageService();
+
+  late final GoRouter router = GoRouter(
+    initialLocation: RouteConstants.splash,
     redirect: (context, state) async {
       final currentRoute = state.uri.toString();
-      debugPrint('Current route: $currentRoute');
+      debugPrint('AppRouter: current route: $currentRoute');
 
-      final storage = SecureStorageService();
-      final token = await storage.readValue('token');
+      final userJson = await storage.readValue('user');
 
-      // TODO: Implement persistent auth state
-      if(token == null) {
-        return RouteConstants.login;
-      }
+      return Future.sync(() {
+        if (userJson == null) {
+          // Redirect unauthenticated users to login
+          if (currentRoute != RouteConstants.login &&
+              currentRoute != RouteConstants.signup &&
+              currentRoute != RouteConstants.splash) {
+            return RouteConstants.login;
+          }
+        } else {
+          debugPrint('AppRouter: current user: $userJson');
 
-      if (currentRoute == RouteConstants.splash || currentRoute == RouteConstants.login || currentRoute == RouteConstants.signup) {
-        // if (token != null) {
-        //   return RouteConstants.home;
-        // }
-
+          // Redirect authenticated users away from login/signup
+          if (currentRoute == RouteConstants.login ||
+              currentRoute == RouteConstants.signup ||
+              currentRoute == RouteConstants.splash) {
+            return RouteConstants.home;
+          }
+        }
         return null;
-      }
-
-
-      final loginState = context.read<LoginBloc>().state;
-
-      if (loginState is LoginInitial || loginState is LoginLoading || loginState is LoginFailure) {
-        return RouteConstants.login;
-      }
-
-      return null;
+      });
     },
     routes: [
       GoRoute(

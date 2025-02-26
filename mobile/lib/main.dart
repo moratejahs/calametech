@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<SOSRepository>(
           create: (_) =>
-              SOSRepository(restApiService: restApiService, storage: storage),
+              SOSRepository(restApiService: restApiService),
         ),
       ],
       child: MultiBlocProvider(

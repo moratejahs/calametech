@@ -27,3 +27,12 @@ class LogoutButtonPressed extends LoginEvent {
   @override
   List<Object> get props => [];
 }
+
+class UserAlreadyLoggedIn extends LoginEvent {
+  final User user;
+
+  const UserAlreadyLoggedIn(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
