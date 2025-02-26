@@ -22,6 +22,7 @@ class ProfileScreen extends StatelessWidget {
               SnackBar(
                 content: Text(state.message ?? 'Failed to signout.'),
                 backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
               ),
             );
         }

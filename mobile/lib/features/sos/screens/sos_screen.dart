@@ -28,6 +28,8 @@ class _SOSScreenState extends State<SOSScreen> {
             const SnackBar(
               content: Text('SOS sent to CDRRMO.'),
               backgroundColor: Colors.green,
+              duration: Duration(seconds: 5),
+              behavior: SnackBarBehavior.floating,
             ),
           );
         }
@@ -39,6 +41,7 @@ class _SOSScreenState extends State<SOSScreen> {
             SnackBar(
               content: Text('${state.message}'),
               backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
             ),
           );
         }

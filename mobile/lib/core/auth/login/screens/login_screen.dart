@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SnackBar(
                 content: Text(state.message ?? 'An error occurred, please try again.'),
                 backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
               ),
             );
           }
