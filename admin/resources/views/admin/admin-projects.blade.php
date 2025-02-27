@@ -12,168 +12,40 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/app-dark.css') }}">
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 600px;
+        }
+
+        .barangay-label {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+        }
+    </style>
+
 @endsection
 
 @section('content')
-    {{-- project modal data --}}
-    @include('admin.include.admin-store-project')
-    @include('admin.include.admin-show-project')
-    @include('admin.include.admin-delete-project')
 
     <div id="main">
-
         <div class="page-heading">
-
-            @if (session('success_message'))
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: '{{ session('success_message') }}',
-                            showConfirmButton: false,
-                            timer: 2000 // Adjust the duration as needed
-                        });
-                    });
-                </script>
-            @endif
-
-            <section class="section">
+            <h3>Incidents</h3>
+        </div>
+        <div class="row">
+            <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h5>Project Records</h5>
-                    </div>
                     <div class="card-body">
-                        <div>
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#store-project">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-                                </svg>
-                                Add New Project
-                            </button>
-                        </div>
-                        <table class="table table-hover" id="userProjectTable">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Task</th>
-                                    <th>Owner</th>
-                                    <th>Status</th>
-                                    <th>Due Date</th>
-                                    <th>Priority</th>
-                                    <th>Remarks</th>
-                                    <th>Budget</th>
-                                    <th>In-Charged</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach ($projectDetails as $projects)
-                                    <tr>
-                                        <td>
-                                            {{ $loop->iteration }}
-                                        </td>
-                                        <td>
-                                            {{ $projects->project_name }}
-                                        </td>
-
-                                        <td>
-                                            {{ $projects->project_owner }}
-                                        </td>
-
-                                        <td class="text-center">
-                                            <div class="dropdown ">
-                                                <button class="btn btn-sm dropdown-toggle p-1 {{ $projects->status_css }}" type="button" id="statusDropdown{{ $projects->id }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <span class="{{ $projects->status_css }}">{{ $projects->status }}</span>
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="statusDropdown{{ $projects->id }}">
-                                                    <li><a class="dropdown-item update-status p-1" href="#" data-project-id="{{ $projects->id }}" data-status="Not Started"><span class="badge bg-warning">Not Started</span></a></li>
-                                                    <li><a class="dropdown-item update-status p-1" href="#" data-project-id="{{ $projects->id }}" data-status="In progress"><span class="badge bg-primary">In Progress</span></a></li>
-                                                    <li><a class="dropdown-item update-status p-1" href="#" data-project-id="{{ $projects->id }}" data-status="Done"><span class="badge bg-success">Done</span></a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-
-                                        <td class="text-center hover-timeLine" data-timeline="{{ $projects->timeline }}">
-                                            {{ $projects->due_date }}
-                                        </td>
-
-                                        <td class="text-center">
-                                            <span class="{{ $projects->priority_css }}">
-                                                {{ $projects->priority }}
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            {{ $projects->remarks }}
-                                        </td>
-
-                                        <td class="text-center fst-italic">
-                                            {{ $projects->budget }}
-                                        </td>
-
-
-                                        <td class="text-center">
-                                            <span>You</span>
-                                        </td>
-
-                                        <td>
-                                            <div class="btn-group" role="group" aria-label="Basic example">
-
-                                                {{-- VIEW RECORDS BUTTON --}}
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#viewProjectUser"
-                                                    data-bs-projectId        = "{{ $projects->id }}"
-                                                    data-bs-taskname         = "{{ $projects->project_name }}"
-                                                    data-bs-owner            = "{{ $projects->project_owner }}"
-                                                    data-bs-dueDate          = "{{ $projects->standard_due_date }}"
-                                                    data-bs-remark           = "{{ $projects->remarks }}"
-                                                    data-bs-budget           = "{{ $projects->budget }}"
-                                                    data-bs-isUnauthorized   = "{{ $projects->budget }}"
-                                                    data-bs-priority         = "{{ $projects->priority }}"
-                                                    data-bs-status           = "{{ $projects->status }}"
-                                                    data-bs-formatedDate     = "{{ $projects->due_date }}"
-                                                    data-bs-timeLine         = "{{ $projects->timeline }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                        fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                                        <path
-                                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                                    </svg>
-                                                </button>
-
-
-                                                {{-- REMOVED BUTTON --}}
-                                                @if ($projects->budget != 'Unauthorized')
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteProjectUser"
-                                                        data-bs-project-Id      = "{{ $projects->id }}"
-                                                        data-bs-userId         = "{{ $projects->users_id }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                            height="16" fill="currentColor" class="bi bi-trash3-fill"
-                                                            viewBox="0 0 16 16">
-                                                            <path
-                                                                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
-                                                        </svg>
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
+                        <div id="map"></div>
                     </div>
                 </div>
-
-            </section>
+            </div>
         </div>
 
 
@@ -181,6 +53,108 @@
 @endsection
 
 @section('scripts')
+
+    <script>
+        var map = L.map('map').setView([9.078408, 126.199289], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© Calamitech'
+        }).addTo(map);
+
+
+
+        var barangays = [{
+                name: 'Awasian',
+                latitude: 9.071651,
+                longitude: 126.162487
+            },
+            {
+                name: 'Bagong Lungsod',
+                latitude: 9.078408,
+                longitude: 126.199289
+            },
+            {
+                name: 'Bioto',
+                latitude: 9.066121,
+                longitude: 126.178940
+            },
+            {
+                name: 'Bongtod Poblacion',
+                latitude: 9.084141,
+                longitude: 126.193231
+            },
+            {
+                name: 'Buenavista',
+                latitude: 9.121600,
+                longitude: 126.159831
+            },
+            {
+                name: 'Dagocdoc',
+                latitude: 9.078319,
+                longitude: 126.194536
+            },
+            {
+                name: 'Mabua',
+                latitude: 9.071682,
+                longitude: 126.205704
+            },
+            {
+                name: 'Mabuhay',
+                latitude: 9.091768,
+                longitude: 126.132823
+            },
+            {
+                name: 'Maitum',
+                latitude: 9.067148,
+                longitude: 126.122245
+            },
+            {
+                name: 'Maticdum',
+                latitude: 9.036726,
+                longitude: 126.151949
+            }
+        ];
+
+        // Custom icons
+        var fireIcon = L.icon({
+            iconUrl: "{{ asset('assets/images/fire.png') }}",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
+        var floodIcon = L.icon({
+            iconUrl: "{{ asset('assets/images/flood.png') }}",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
+        // Assign disasters randomly
+        barangays.forEach(function(barangay) {
+            var disasterType = Math.random() < 0.5 ? 'fire' : 'flood'; // 50% chance for each
+            var icon = (disasterType === 'fire') ? fireIcon : floodIcon;
+
+            var marker = L.marker([barangay.latitude, barangay.longitude], {
+                icon: icon
+            }).addTo(map);
+
+            marker.bindPopup("<b>" + barangay.name + "</b><br>Disaster: " + (disasterType === 'fire' ? '🔥 Fire' :
+                '🌊 Flood'));
+
+            var label = L.divIcon({
+                className: 'barangay-label',
+                html: barangay.name,
+                iconSize: [60, 20], // Width x Height of label
+                iconAnchor: [30, -10] // Positioning above the marker
+            });
+
+            // Add label to the map
+            L.marker([barangay.latitude, barangay.longitude], {
+                icon: label
+            }).addTo(map);
+        });
+    </script>
 
     {{-- This is for timeline hover --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -304,33 +278,33 @@
 
 
 
-<script>
-    $(document).ready(function() {
-        $('.update-status').on('click', function(e) {
-            e.preventDefault();
+    <script>
+        $(document).ready(function() {
+            $('.update-status').on('click', function(e) {
+                e.preventDefault();
 
-            var projectId = $(this).data('project-id');
-            var newStatus = $(this).data('status');
+                var projectId = $(this).data('project-id');
+                var newStatus = $(this).data('status');
 
-            $.ajax({
-                url: "{{ route('admin.update.project.status') }}",
-                method: 'POST',
-                data: {
-                    projectId: projectId,
-                    newStatus: newStatus,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    $('#statusDropdown' + projectId).text(newStatus);
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    // Handle error or show error message
-                    console.error(error);
-                }
+                $.ajax({
+                    url: "{{ route('admin.update.project.status') }}",
+                    method: 'POST',
+                    data: {
+                        projectId: projectId,
+                        newStatus: newStatus,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        $('#statusDropdown' + projectId).text(newStatus);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error or show error message
+                        console.error(error);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 
 @endsection

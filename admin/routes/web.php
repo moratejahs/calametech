@@ -39,7 +39,7 @@ Route::prefix('admin')->group(function () {
     Route::get('users', [AdminUsersController::class, 'index'])
         ->name('admin.admin-users');
 
-    Route::get('projects', [AdminProjectsController::class, 'index'])
+    Route::get('incidents', [AdminProjectsController::class, 'index'])
         ->name('admin.admin-projects');
 
     Route::post('/update-project-status', [AdminProjectsController::class, 'updateProjectStatus'])
