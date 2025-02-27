@@ -18,6 +18,16 @@
         #map {
             height: 600px;
         }
+
+        .barangay-label {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+        }
     </style>
 
 @endsection
@@ -48,8 +58,10 @@
         var map = L.map('map').setView([9.078408, 126.199289], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+            attribution: '© Calamitech'
         }).addTo(map);
+
+
 
         var barangays = [{
                 name: 'Awasian',
@@ -103,18 +115,44 @@
             }
         ];
 
-        barangays.forEach(function(barangay) {
-            var disasterType = Math.random() < 0.5 ? 'Flood' : 'Fire';
-            var iconColor = disasterType === 'Flood' ? 'blue' : 'red';
+        // Custom icons
+        var fireIcon = L.icon({
+            iconUrl: "{{ asset('assets/images/fire.png') }}",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
 
-            var marker = L.circleMarker([barangay.latitude, barangay.longitude], {
-                color: iconColor,
-                fillColor: iconColor,
-                fillOpacity: 0.5,
-                radius: 10
+        var floodIcon = L.icon({
+            iconUrl: "{{ asset('assets/images/flood.png') }}",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
+        // Assign disasters randomly
+        barangays.forEach(function(barangay) {
+            var disasterType = Math.random() < 0.5 ? 'fire' : 'flood'; // 50% chance for each
+            var icon = (disasterType === 'fire') ? fireIcon : floodIcon;
+
+            var marker = L.marker([barangay.latitude, barangay.longitude], {
+                icon: icon
             }).addTo(map);
 
-            marker.bindPopup(`<b>${barangay.name}</b><br>Disaster: ${disasterType}`);
+            marker.bindPopup("<b>" + barangay.name + "</b><br>Disaster: " + (disasterType === 'fire' ? '🔥 Fire' :
+                '🌊 Flood'));
+
+            var label = L.divIcon({
+                className: 'barangay-label',
+                html: barangay.name,
+                iconSize: [60, 20], // Width x Height of label
+                iconAnchor: [30, -10] // Positioning above the marker
+            });
+
+            // Add label to the map
+            L.marker([barangay.latitude, barangay.longitude], {
+                icon: label
+            }).addTo(map);
         });
     </script>
 
