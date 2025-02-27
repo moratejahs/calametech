@@ -2,6 +2,7 @@
 @section('title', 'Dashboard')
 @section('links')
     <link rel="stylesheet" href="{{ asset('assets/css/pages/dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection
 @section('content')
     <div id="main">
@@ -14,7 +15,7 @@
                 <div class="col-lg-12">
                     <div class="row">
                         {{-- Not Started Project --}}
-                        <div class="col-6 col-lg-3 col-md-6 pointer" id="notStartedProject">
+                        <div class="col-6 col-lg-3 col-md-6 pointer">
                             <div class="card">
                                 <div class="card-body px-3 py-4-5">
                                     <div class="row">
@@ -22,136 +23,85 @@
                                             <div class="stats-icon green">
                                                 {{-- <span class="text-white" style="font-size: 20px;"> ₱ </span> --}}
                                                 <span class="text-white pt-2">
-                                                    <i class="bi bi-pin-angle"></i>
+                                                    <i class="bi bi-person"></i>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <h6 class="text-muted font-semibold">Not Started Project</h6>
-                                            <h6 class="font-extrabold mb-0">{{ $projectStatusData['notStartedCount'] }}</h6>
+                                            <h6 class="text-muted font-semibold">Total Users</h6>
+                                            <h6 class="font-extrabold mb-0">1</h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {{-- Completed Project --}}
-                        <div class="col-6 col-lg-3 col-md-6 pointer" id="completedProject">
+                        <div class="col-6 col-lg-3 col-md-6 pointer">
                             <div class="card">
                                 <div class="card-body px-3 py-4-5">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="stats-icon blue">
+                                            <div class="stats-icon bg-warning">
                                                 <span class="text-white pt-3">
-                                                    <i class="bi bi-check fs-1"></i>
+                                                    <i class="bi bi-flag"></i>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <h6 class="text-muted font-semibold">Completed Project</h6>
-                                            <h6 class="font-extrabold mb-0">{{ $projectStatusData['completedCount'] }}</h6>
+                                            <h6 class="text-muted font-semibold">Total Reports</h6>
+                                            <h6 class="font-extrabold mb-0">2</h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {{-- In Progress Project --}}
-                        <div class="col-6 col-lg-3 col-md-6 pointer" id="inProgressProject">
-                            <div class="card">
-                                <div class="card-body px-3 py-4-5">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="stats-icon purple">
-                                                <span class="text-white pt-2">
-                                                    <i class="bi bi-clock-history"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <h6 class="text-muted font-semibold">In Progress Project</h6>
-                                            <h6 class="font-extrabold mb-0">{{ $projectStatusData['inProgressCount'] }}</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- Stuck Project --}}
-                        <div class="col-6 col-lg-3 col-md-6 pointer" id="behindScheduleProject">
+                        <div class="col-6 col-lg-3 col-md-6 pointer">
                             <div class="card">
                                 <div class="card-body px-3 py-4-5">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="stats-icon red">
                                                 <span class="text-white pt-2">
-                                                    <i class="bi bi-x-octagon"></i>
+                                                    <i class="bi bi-flag"></i>
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <h6 class="text-muted font-semibold">Behind Project</h6>
-                                            <h6 class="font-extrabold mb-0">{{ $projectStatusData['stuckCount'] }}</h6>
+                                            <h6 class="text-muted font-semibold">Fire Reports</h6>
+                                            <h6 class="font-extrabold mb-0">3</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- Stuck Project --}}
+                        <div class="col-6 col-lg-3 col-md-6 pointer">
+                            <div class="card">
+                                <div class="card-body px-3 py-4-5">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="stats-icon blue">
+                                                <span class="text-white pt-2">
+                                                    <i class="bi bi-flag"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h6 class="text-muted font-semibold">Flood Reportst</h6>
+                                            <h6 class="font-extrabold mb-0">4</h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <section class="row">
+                        <div class="col-lg-12">
+                            <canvas id="reportsChart"></canvas>
+                        </div>
+                    </section>
 
-                    <div class="row">
-                        {{-- Monthly Project Revenue --}}
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>
-                                        {{ $thisMonthName }} Project Revenue
-                                        {{-- <span class="text-muted font-semibold">
-                                            | Monthly
-                                        </span> --}}
-                                    </h4>
-                                </div>
-                                <div class="card-body">
-                                    <div id="monthly-project-revenue"></div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- Recently Completed Projects --}}
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title mb-3">Recently Completed Projects</h4>
-                                    <div class="list-group">
-                                        @forelse ($recentlyCompletedProject as $project)
-                                            <div class="list-group-item list-group-item-action">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <p class="mb-1 fw-bold fs-6">
-                                                        {{ $project->project_name }}
-                                                    </p>
-                                                    <small>
-                                                        @if ($project->updated_at->isToday())
-                                                            Today at
-                                                            {{ $project->updated_at->setTimezone('Asia/Manila')->format('H:i') }}
-                                                        @elseif ($project->updated_at->isYesterday())
-                                                            Yesterday at
-                                                            {{ $project->updated_at->setTimezone('Asia/Manila')->format('H:i') }}
-                                                        @else
-                                                            {{ $project->updated_at->setTimezone('Asia/Manila')->format('F') }}
-                                                            {{ $project->updated_at->setTimezone('Asia/Manila')->format('d') }},
-                                                            {{ $project->updated_at->setTimezone('Asia/Manila')->format('Y') }}
-                                                            at
-                                                            {{ $project->updated_at->setTimezone('Asia/Manila')->format('H:i') }}
-                                                        @endif
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        @empty
-                                            <p class="mb-1 fw-semibold fs-6">
-                                                No completed project yet.
-                                            </p>
-                                        @endforelse
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </div>
@@ -159,12 +109,53 @@
 @endsection
 @push('scripts')
     <script>
-        let notStartedProjectUrl = "{{ route('admin.admin-projects-not-started') }}";
-        let completedProjectUrl = "{{ route('admin.admin-projects-completed') }}";
-        let inProgressProjectUrl = "{{ route('admin.admin-projects-in-progress') }}";
-        let behindScheduleProjectUrl = "{{ route('admin.admin-projects-behind-schedule') }}";
-        let revenue = @json($revenueData);
-        let weekRange = @json($weekRangeData);
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('reportsChart').getContext('2d');
+
+            // Static data for demonstration
+            const monthlyLabels = ["January", "February", "March", "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+            const fireReports = [5, 8, 12, 7, 6, 9, 14, 10, 15, 18, 12, 7]; // Example fire reports data
+            const waterReports = [3, 5, 9, 4, 8, 7, 10, 6, 12, 14, 9, 5]; // Example water reports data
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: monthlyLabels,
+                    datasets: [{
+                            label: 'Fire Reports',
+                            data: fireReports,
+                            borderColor: 'red',
+                            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Water Reports',
+                            data: waterReports,
+                            borderColor: 'blue',
+                            backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
     </script>
     <script src="{{ asset('assets/js/pages/cards-dashboard.js') }}"></script>
     <script src="{{ asset('assets/js/pages/barchart-dashboard.js') }}"></script>

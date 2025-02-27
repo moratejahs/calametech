@@ -1,24 +1,25 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminProfileController;
-use App\Http\Controllers\Admin\AdminProjectsBehindScheduleController;
-use App\Http\Controllers\Admin\AdminProjectsCompletedController;
-use App\Http\Controllers\Admin\AdminProjectsController;
-use App\Http\Controllers\Admin\AdminProjectsInProgressController;
-use App\Http\Controllers\Admin\AdminProjectsNotStartedController;
-use App\Http\Controllers\Admin\AdminUsersController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\SuperAdmin\SuperAdminDashboardController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProfileController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProjectsBehindScheduleController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProjectsCompletedController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProjectsController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProjectsInProgressController;
-use App\Http\Controllers\SuperAdmin\SuperAdminProjectsNotStartedController;
-use App\Http\Controllers\SuperAdmin\SuperAdminUsersController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Calametech\UserController;
+use App\Http\Controllers\Admin\AdminUsersController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminProjectsController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\SuperAdmin\SuperAdminUsersController;
+use App\Http\Controllers\Admin\AdminProjectsCompletedController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProfileController;
+use App\Http\Controllers\Admin\AdminProjectsInProgressController;
+use App\Http\Controllers\Admin\AdminProjectsNotStartedController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectsController;
+use App\Http\Controllers\SuperAdmin\SuperAdminDashboardController;
+use App\Http\Controllers\Admin\AdminProjectsBehindScheduleController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectsCompletedController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectsInProgressController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectsNotStartedController;
+use App\Http\Controllers\SuperAdmin\SuperAdminProjectsBehindScheduleController;
 
 // Home Endpoints
 Route::get('/', function () {
@@ -84,6 +85,10 @@ Route::prefix('admin')->group(function () {
         ->name('edit.admin.admin-projects-behind-schedule');
     Route::delete('delete/projects/behind-schedule', [AdminProjectsBehindScheduleController::class, 'destroy'])
         ->name('delete.admin.admin-projects-behind-schedule');
+
+    Route::controller(UserController::class)->group(function (){
+         Route::get('manage-users', 'index')->name('manage-users.index');
+    });
 });
 
 // Super Admin Endpoints

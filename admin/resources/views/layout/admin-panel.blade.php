@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Reygenix')</title>
+    <title>@yield('title', 'Calamitech')</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/app-dark.css') }}">
 
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo/reygenix.png') }}" type="image/x-icon">
+    {{-- <link rel="shortcut icon" href="{{ asset('assets/images/logo/reygenix.png') }}" type="image/x-icon"> --}}
 
     <script>
         const body = document.body;
@@ -34,7 +34,7 @@
 <body class="light">
     <div id="app">
         <div id="sidebar" class="active">
-            <div class="sidebar-wrapper active">
+            <div class="sidebar-wrapper active" style=" background-color: #02778f;">
 
                 <div class="sidebar-menu">
                     <ul class="menu">
@@ -51,7 +51,7 @@
 
                                     <a href="{{ route('admin.admin-dashboard') }}">
                                         <img class="align-items-center img-fluid" width="100"
-                                            src="{{ asset('assets/images/logo/reygenix.png') }}" alt="Logo">
+                                            src="{{ asset('assets/images/calametech-logo.png') }}" alt="Logo">
 
                                     </a>
 
@@ -63,9 +63,9 @@
 
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="logo">
-                                <span>Pages</span>
+                                <span style="color: white;">Pages</span>
                             </div>
-                            <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
+                            {{-- <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                     aria-hidden="true" role="img" class="iconify iconify--system-uicons"
                                     width="20" height="20" preserveAspectRatio="xMidYMid meet"
@@ -100,28 +100,37 @@
                             <div class="sidebar-toggler  x">
                                 <a href="#" class="sidebar-hide d-xl-none d-block"><i
                                         class="bi bi-x bi-middle"></i></a>
-                            </div>
+                            </div> --}}
                         </div>
 
 
-                        <li
-                            class="sidebar-item {{ Route::currentRouteName() === 'admin.admin-dashboard' ? 'active' : '' }}">
+                        <li class="sidebar-item">
                             <a href="{{ route('admin.admin-dashboard') }}" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Dashboard</span>
+                                <i class="bi bi-grid-fill" style="color: white;"></i>
+                                <span style="color: white;">Dashboard</span>
                             </a>
                         </li>
 
-                        <li
-                            class="sidebar-item {{ Route::currentRouteName() === 'admin.admin-projects' ? 'active' : '' }} ">
+                        <li class="sidebar-item ">
                             <a href="{{ route('admin.admin-projects') }}" class='sidebar-link'>
                                 {{-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-git" viewBox="0 0 16 16">
                                     <path
                                         d="M15.698 7.287 8.712.302a1.03 1.03 0 0 0-1.457 0l-1.45 1.45 1.84 1.84a1.223 1.223 0 0 1 1.55 1.56l1.773 1.774a1.224 1.224 0 0 1 1.267 2.025 1.226 1.226 0 0 1-2.002-1.334L8.58 5.963v4.353a1.226 1.226 0 1 1-1.008-.036V5.887a1.226 1.226 0 0 1-.666-1.608L5.093 2.465l-4.79 4.79a1.03 1.03 0 0 0 0 1.457l6.986 6.986a1.03 1.03 0 0 0 1.457 0l6.953-6.953a1.031 1.031 0 0 0 0-1.457" />
                                 </svg> --}}
-                                <i class="bi bi-stack"></i>
-                                <span>Projects</span>
+                                <i class="bi bi-cloud" style="color: white;"></i>
+                                <span style="color: white;">Incidents</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item ">
+                            <a href="{{ route('manage-users.index') }}" class='sidebar-link'>
+                                {{-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="currentColor" class="bi bi-git" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15.698 7.287 8.712.302a1.03 1.03 0 0 0-1.457 0l-1.45 1.45 1.84 1.84a1.223 1.223 0 0 1 1.55 1.56l1.773 1.774a1.224 1.224 0 0 1 1.267 2.025 1.226 1.226 0 0 1-2.002-1.334L8.58 5.963v4.353a1.226 1.226 0 1 1-1.008-.036V5.887a1.226 1.226 0 0 1-.666-1.608L5.093 2.465l-4.79 4.79a1.03 1.03 0 0 0 0 1.457l6.986 6.986a1.03 1.03 0 0 0 1.457 0l6.953-6.953a1.031 1.031 0 0 0 0-1.457" />
+                                </svg> --}}
+                                <i class="bi bi-people-fill" style="color: white;"></i>
+                                <span style="color: white;">Users</span>
                             </a>
                         </li>
 
@@ -173,8 +182,8 @@
                                     <hr class="dropdown-divider">
                                     </li> --}}
                                     <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#logout-modal" style="cursor: pointer;">
+                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logout-modal"
+                                            style="cursor: pointer;">
                                             <i class="icon-mid bi bi-box-arrow-left me-2 text-danger"></i>
                                             Logout
                                         </a>
