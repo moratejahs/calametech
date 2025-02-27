@@ -35,6 +35,7 @@ class _SignupScreenState extends State<SignupScreen> {
             SnackBar(
               content: Text(state.message),
               backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
             ),
           );
         }

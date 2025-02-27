@@ -24,12 +24,12 @@ class _SOSScreenState extends State<SOSScreen> {
     return BlocListener<SosBloc, SosState>(
       listener: (context, state) {
         if (state is SosSuccess) {
-          debugPrint('SOS Sent Successfully');
-
           ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(
-              content: Text('SOS Sent Successfully.'),
+            const SnackBar(
+              content: Text('SOS sent to CDRRMO.'),
               backgroundColor: Colors.green,
+              duration: Duration(seconds: 5),
+              behavior: SnackBarBehavior.floating,
             ),
           );
         }
@@ -41,81 +41,83 @@ class _SOSScreenState extends State<SOSScreen> {
             SnackBar(
               content: Text('${state.message}'),
               backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
             ),
           );
         }
       },
       child: Center(
-          child: Column(
-            children: [
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 400, child: SOSButton()),
-                ],
-              ),
-              const SizedBox(height: 20),
-              BlocBuilder<LocationCubit, LocationCubitState>(
-                builder: (context, state) {
-                  if (state.error != null) {
-                    return const SizedBox();
-                  }
+        child: Column(
+          children: [
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 400, child: SOSButton()),
+              ],
+            ),
+            const SizedBox(height: 20),
+            BlocBuilder<LocationCubit, LocationCubitState>(
+              builder: (context, state) {
+                if (state.error != null) {
+                  return const SizedBox();
+                }
 
-                  if (state.latitude < 1) {
-                    return Row(
-                      spacing: 10,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Calibrating Location...',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            valueColor: AlwaysStoppedAnimation(AppTheme.primaryColor),
-                          ),
-                        )
-                      ],
-                    );
-                  }
-
-                  return  Column(
+                if (state.latitude < 1) {
+                  return Row(
+                    spacing: 10,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Location Acquired',
+                        'Identifying Location...',
                         style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
                       ),
-                      Text(
-                        'Latitude: ${state.latitude}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                      SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.0,
+                          valueColor:
+                              AlwaysStoppedAnimation(AppTheme.primaryColor),
                         ),
-                      ),
-                      Text(
-                        'Longitude: ${state.longitude}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      )
                     ],
                   );
-                },
-              ),
-            ],
-          ),
+                }
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Location Detected',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Latitude: ${state.latitude}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Text(
+                      'Longitude: ${state.longitude}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
         ),
+      ),
     );
   }
 }
@@ -178,7 +180,6 @@ class _SOSButtonState extends State<SOSButton>
   }
 
   void _sendSOS() async {
-
     // final activeSOS = await _checkActiveSOS();
     //
     // if (activeSOS != null) {
@@ -186,13 +187,11 @@ class _SOSButtonState extends State<SOSButton>
     //   return;
     // }
 
-    if (context.read<LocationCubit>().state.latitude <= 0){
+    if (context.read<LocationCubit>().state.latitude <= 0) {
       debugPrint('Location not available');
 
       return;
     }
-
-    debugPrint('Sending SOS');
 
     context.read<SosBloc>().add(SOSRequested(
           lat: context.read<LocationCubit>().state.latitude,
@@ -256,26 +255,36 @@ class _SOSButtonState extends State<SOSButton>
                     ),
                   ],
                 ),
-                child: const Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'SOS',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Tap to send',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
+                child: Center(
+                  child: BlocBuilder<SosBloc, SosState>(
+                    builder: (context, state) {
+                      if (state is SosLoading) {
+                        return const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        );
+                      }
+
+                      return const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'SOS',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Tap to send',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),

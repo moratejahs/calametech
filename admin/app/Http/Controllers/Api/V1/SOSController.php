@@ -7,6 +7,7 @@ use App\Http\Requests\SOSRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
 use App\Models\SOS;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SOSController extends Controller
@@ -15,16 +16,17 @@ class SOSController extends Controller
     {
         $validated = $request->validated();
 
-        $sos = SOS::create([
+        $sos = SOS::updateOrCreate([
+            'status' => 'pending',
+            'user_id' => Auth::id(),
+        ],[
             'lat' => $validated['lat'],
             'long' => $validated['long'],
-            'status' => 'pending',
-            'user_id' => auth()->id(),
         ]);
 
         return response()->json([
             'sos' => $sos->only(['id', 'lat', 'long', 'status']),
-            'success' => 'SOS sent successfully',
+            'success' => 'SOS sent to CDRRMO.',
         ], 201);
     }
 }

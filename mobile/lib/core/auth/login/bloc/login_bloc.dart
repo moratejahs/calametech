@@ -7,23 +7,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'login_event.dart';
+
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginRepository loginRepository;
   final SecureStorageService storage;
 
-  LoginBloc({required this.loginRepository, required this.storage}) : super(LoginInitial()) {
+  LoginBloc({required this.loginRepository, required this.storage})
+      : super(LoginInitial()) {
     on<LoginButtonPressed>(_onLoginButtonPressed);
     on<LogoutButtonPressed>(_onLogoutButtonPressed);
+    on<UserAlreadyLoggedIn>(_onUserAlreadyLoggedIn);
   }
 
-  Future<void> _onLoginButtonPressed(LoginButtonPressed event, Emitter<LoginState> emit) async {
+  Future<void> _onLoginButtonPressed(
+      LoginButtonPressed event, Emitter<LoginState> emit) async {
     try {
       emit(LoginLoading());
 
       final response = await loginRepository.login(event.email, event.password);
-      debugPrint('response: $response');
+      debugPrint('LoginBloc: login response: $response');
 
       if (response.containsKey('errors')) {
         emit(LoginFailure(errors: response['errors']));
@@ -33,9 +37,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (response.containsKey('user')) {
         final user = response['user'] as User;
 
-        final success = await storage.writeValue('token', user.token);
+        final authUser = await storage.writeValue('user', user.toJson());
 
-        if (!success) {
+        if (!authUser) {
           emit(const LoginFailure(message: 'Failed to save token'));
           return;
         }
@@ -50,27 +54,45 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Future<void> _onLogoutButtonPressed(LogoutButtonPressed event, Emitter<LoginState> emit) async {
+  void _onUserAlreadyLoggedIn(
+      UserAlreadyLoggedIn event, Emitter<LoginState> emit) {
+    emit(LoginSuccess(event.user));
+    return;
+  }
+
+  Future<void> _onLogoutButtonPressed(
+      LogoutButtonPressed event, Emitter<LoginState> emit) async {
     try {
       emit(SignoutLoading());
 
-      final token = await storage.readValue('token');
+      final authUser = await storage.readValue('user');
 
-      if (token == null) {
+      if (authUser == null) {
         emit(LoginInitial());
         return;
       }
 
-      final response = await loginRepository.logout(token);
+      final response =
+          await loginRepository.logout(User.fromJson(authUser).token);
 
       if (!response) {
         emit(const SignoutFailure());
         return;
       }
 
+      await storage.deleteValue('user');
+
       emit(LoginInitial());
+      return;
     } catch (e) {
       emit(LoginFailure(message: e.toString().replaceFirst('Exception: ', '')));
     }
+  }
+
+  @override
+  void onChange(Change<LoginState> change) {
+    super.onChange(change);
+
+    debugPrint('LoginBloc: $change');
   }
 }

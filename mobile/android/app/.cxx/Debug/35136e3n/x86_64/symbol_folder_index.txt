@@ -1,0 +1,1 @@
+C:\laragon\www\calametech\mobile\build\app\intermediates\cxx\Debug\35136e3n\obj\x86_64

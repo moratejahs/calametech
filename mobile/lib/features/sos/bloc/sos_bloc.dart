@@ -3,42 +3,48 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../core/auth/login/models/user.dart';
 import '../../../utils/services/secure_storage_service.dart';
 import '../repositories/sos_repository.dart';
 
 part 'sos_event.dart';
+
 part 'sos_state.dart';
 
 class SosBloc extends Bloc<SosEvent, SosState> {
   final SOSRepository sosRepository;
   final SecureStorageService storage;
 
-  SosBloc({required this.sosRepository, required this.storage}) : super(SosInitial()) {
+  SosBloc({required this.sosRepository, required this.storage})
+      : super(SosInitial()) {
     on<SOSRequested>(_onSOSRequested);
   }
 
-  Future<void> _onSOSRequested(SOSRequested event, Emitter<SosState> emit) async {
+  Future<void> _onSOSRequested(
+      SOSRequested event, Emitter<SosState> emit) async {
     try {
       emit(SosLoading());
 
-      debugPrint('in bloc lat: ${event.lat}, long: ${event.long}');
+      final authUser = await storage.readValue('user');
 
-      final response = await sosRepository.sendSOS(event.lat, event.long);
+      if (authUser == null) {
+        throw Exception('User is not signed in.');
+      }
 
-      debugPrint('in bloc response: $response');
+      final response = await sosRepository.sendSOS(
+          User.fromJson(authUser).token, event.lat, event.long);
 
       if (response.containsKey('errors')) {
         emit(SosFailure(errors: response['errors']));
         return;
       }
 
-      final sos =  SOS.fromMap(response['sos']);
-      debugPrint('in bloc sos to json: ${sos.toJson()}');
-      final success = await storage.writeValue('sos', sos.toJson());
+      final sos = SOS.fromMap(response['sos']);
 
-      if (!success) {
-        emit(const SosFailure(message: 'Failed to save SOS'));
-        return;
+      final sosStore = await storage.writeValue('sos', sos.toJson());
+
+      if (!sosStore) {
+        throw Exception('Failed to save SOS');
       }
 
       emit(SosSuccess(sos));
