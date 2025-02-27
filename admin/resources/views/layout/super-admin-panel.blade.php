@@ -56,7 +56,7 @@
                             <div class="logo">
                                 <span>Pages</span>
                             </div>
-                            <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
+                            {{-- <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                     aria-hidden="true" role="img" class="iconify iconify--system-uicons"
                                     width="20" height="20" preserveAspectRatio="xMidYMid meet"
@@ -91,12 +91,12 @@
                             <div class="sidebar-toggler  x">
                                 <a href="#" class="sidebar-hide d-xl-none d-block"><i
                                         class="bi bi-x bi-middle"></i></a>
-                            </div>
+                            </div> --}}
                         </div>
 
 
                         <li
-                            class="sidebar-item {{ Route::currentRouteName() === 'super-admin.super-admin-dashboard' ? 'active' : '' }}">
+                            class="sidebar-item">
                             <a href="{{ route('super-admin.super-admin-dashboard') }}" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
@@ -104,7 +104,7 @@
                         </li>
 
                         <li
-                            class="sidebar-item {{ Route::currentRouteName() === 'super-admin.super-admin-projects' ? 'active' : '' }}">
+                            class="sidebar-item">
                             <a href="{{ route('super-admin.super-admin-projects') }}" class='sidebar-link'>
                                 {{-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-git" viewBox="0 0 16 16">

@@ -17,9 +17,12 @@ class UsersTableSeeder extends Seeder
         $now = now();
 
         User::create([
-            'name' => 'User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password'),
+            'name' => 'Admin',
+            'address' => 'Tandag City',
+            'email' => 'admin@gmail.com',
+            'contact_number' => '09706122212',
+            'password' => bcrypt('123'),
+            'plain_password' => '123',
         ])->roles()->attach($adminRole, ['created_at' => $now, 'updated_at' => $now]);
     }
 }
