@@ -19,7 +19,7 @@ class SOSController extends Controller
         $sos = SOS::updateOrCreate([
             'status' => 'pending',
             'user_id' => Auth::id(),
-        ],[
+        ], [
             'lat' => $validated['lat'],
             'long' => $validated['long'],
         ]);
