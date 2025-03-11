@@ -1,8 +1,10 @@
 import 'package:calamitech/config/theme/app_theme.dart';
+import 'package:calamitech/constants/route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/sos_reports/sos_reports.dart';
+import 'package:go_router/go_router.dart';
 
 class SosReportsScreen extends StatefulWidget {
   const SosReportsScreen({super.key});
@@ -24,6 +26,10 @@ class _SosReportsnState extends State<SosReportsScreen> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: AppTheme.primaryColor,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => context.go(RouteConstants.home),
+        ),
         title: const Text('SOS Reports', style: TextStyle(color: Colors.white)),
       ),
       body: SafeArea(
