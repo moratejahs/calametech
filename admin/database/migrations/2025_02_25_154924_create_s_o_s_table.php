@@ -15,7 +15,9 @@ return new class extends Migration {
             $table->integer('lat');
             $table->integer('long');
             $table->enum('status', ['pending', 'resolved', 'dismissed']);
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->enum('type', ['fire', 'flood'])->nullable();
+            $table->string('image_path')->nullable();
+            $table->foreignId(column: 'user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
