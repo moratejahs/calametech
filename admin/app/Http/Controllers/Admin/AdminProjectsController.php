@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\SOS;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class AdminProjectsController extends Controller
@@ -40,7 +41,10 @@ class AdminProjectsController extends Controller
 
     public function index()
     {
-        return view('admin.admin-projects');
+        $sos = SOS::all();
+        return view('admin.admin-projects',[
+            'sos' => $sos
+        ]);
     }
 
     public function store(Request $request)

@@ -1,6 +1,6 @@
 class ApiPaths {
   static const String localApiUrl = 'http://10.0.2.2:8000/api/v1';
-  static const String wifiApiUrl = 'http://192.168.245.59:8000/api/v1';
+  static const String wifiApiUrl = 'http://192.168.56.1:8000/api/v1';
   static const String productionApiUrl = 'https://domain.tld/api/v1';
   static const String getUser = '/user';
   static const String login = '/login';

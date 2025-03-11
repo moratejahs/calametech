@@ -130,6 +130,13 @@
             popupAnchor: [0, -32]
         });
 
+        var floodIcon = L.icon({
+            iconUrl: "{{ asset('assets/images/placeholder.png') }}",
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
         // Assign disasters randomly
         barangays.forEach(function(barangay) {
             var disasterType = Math.random() < 0.5 ? 'fire' : 'flood'; // 50% chance for each
