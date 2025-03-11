@@ -1,9 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class SosReport {
   final int id;
-  final double lat;
-  final double long;
+  final String lat;
+  final String long;
   final String status;
   final String? type;
   final String? image;
@@ -20,8 +21,8 @@ class SosReport {
 
   SosReport copyWith({
     int? id,
-    double? lat,
-    double? long,
+    String? lat,
+    String? long,
     String? status,
     String? type,
     String? image,
@@ -53,8 +54,8 @@ class SosReport {
   factory SosReport.fromMap(Map<String, dynamic> map) {
     return SosReport(
       id: map['id'] as int,
-      lat: map['lat'] as double,
-      long: map['long'] as double,
+      lat: map['lat'] as String,
+      long: map['long'] as String,
       status: map['status'] as String,
       type: map['type'] != null ? map['type'] as String : null,
       image: map['image'] != null ? map['image'] as String : null,
