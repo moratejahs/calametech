@@ -14,15 +14,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginRepository loginRepository;
   final SecureStorageService storage;
 
-  LoginBloc({required this.loginRepository, required this.storage})
-      : super(LoginInitial()) {
+  LoginBloc({required this.loginRepository, required this.storage}) : super(LoginInitial()) {
     on<LoginButtonPressed>(_onLoginButtonPressed);
     on<LogoutButtonPressed>(_onLogoutButtonPressed);
     on<UserAlreadyLoggedIn>(_onUserAlreadyLoggedIn);
   }
 
-  Future<void> _onLoginButtonPressed(
-      LoginButtonPressed event, Emitter<LoginState> emit) async {
+  Future<void> _onLoginButtonPressed(LoginButtonPressed event, Emitter<LoginState> emit) async {
     try {
       emit(LoginLoading());
 
@@ -54,14 +52,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  void _onUserAlreadyLoggedIn(
-      UserAlreadyLoggedIn event, Emitter<LoginState> emit) {
+  void _onUserAlreadyLoggedIn(UserAlreadyLoggedIn event, Emitter<LoginState> emit) {
     emit(LoginSuccess(event.user));
     return;
   }
 
-  Future<void> _onLogoutButtonPressed(
-      LogoutButtonPressed event, Emitter<LoginState> emit) async {
+  Future<void> _onLogoutButtonPressed(LogoutButtonPressed event, Emitter<LoginState> emit) async {
     try {
       emit(SignoutLoading());
 
@@ -72,12 +68,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         return;
       }
 
-      final response =
-          await loginRepository.logout(User.fromJson(authUser).token);
+      final response = await loginRepository.logout(User.fromJson(authUser).token);
 
       if (!response) {
-        emit(const SignoutFailure());
-        return;
+        await storage.deleteValue('user');
+
+        emit(LoginInitial());
       }
 
       await storage.deleteValue('user');
@@ -85,7 +81,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginInitial());
       return;
     } catch (e) {
-      emit(LoginFailure(message: e.toString().replaceFirst('Exception: ', '')));
+      await storage.deleteValue('user');
+
+      emit(LoginInitial());
     }
   }
 
