@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:calamitech/constants/api_paths.dart';
-import 'package:calamitech/features/home/home.dart';
+import 'package:calamitech/features/sos_reports/models/sos_report.dart';
 import 'package:http/http.dart' as http;
 
 class SosReportsRepository {

@@ -8,6 +8,7 @@ import 'package:calamitech/core/auth/signup/bloc/signup_bloc.dart';
 import 'package:calamitech/core/auth/signup/repositories/signup_repository.dart';
 import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
 import 'package:calamitech/features/home/home.dart';
+import 'package:calamitech/features/sos_reports/sos_reports.dart';
 import 'package:calamitech/features/sos/bloc/sos_bloc.dart';
 import 'package:calamitech/features/sos/repositories/sos_repository.dart';
 import 'package:calamitech/utils/services/rest_api_service.dart';

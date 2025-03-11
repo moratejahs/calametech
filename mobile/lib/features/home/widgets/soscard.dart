@@ -1,6 +1,6 @@
-import 'package:calamitech/constants/api_paths.dart';
-import 'package:calamitech/features/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:calamitech/constants/api_paths.dart';
+import 'package:calamitech/features/sos_reports/models/sos_report.dart';
 
 class SosCard extends StatelessWidget {
   final SosReport sosReport;
@@ -12,42 +12,45 @@ class SosCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: fullWidth ? MediaQuery.of(context).size.width - 32 : 200,
+      height: 150, // Add fixed height to prevent unbounded height error
       margin: const EdgeInsets.only(right: 12),
       child: Card(
         elevation: 3,
         clipBehavior: Clip.antiAlias,
         child: Stack(
+          fit: StackFit.expand, // Ensure stack fills parent
           children: [
-            Positioned.fill(
-              child: sosReport.image != null
-                  ? Image.network(
-                      '${ApiPaths.storage}${sosReport.image}',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.broken_image),
-                      ),
-                    )
-                  : Container(
-                      color: Colors.blueGrey[300],
+            // Image background
+            sosReport.image != null
+                ? Image.network(
+                    '${ApiPaths.storage}${sosReport.image}',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.grey[300],
                       child: const Icon(Icons.broken_image),
                     ),
-            ),
+                  )
+                : Container(
+                    color: Colors.blueGrey[300],
+                    child: const Icon(Icons.broken_image),
+                  ),
+
             // Semi-transparent overlay for text readability
-            // Positioned.fill(
-            //   child: Container(
-            //     decoration: const BoxDecoration(
-            //       gradient: LinearGradient(
-            //         begin: Alignment.topCenter,
-            //         end: Alignment.bottomCenter,
-            //         colors: [
-            //           Colors.transparent,
-            //           Colors.grey,
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Positioned.fill(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black54, // Darker gradient for better readability
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
             // Text content
             Positioned(
               bottom: 0,
@@ -57,6 +60,7 @@ class SosCard extends StatelessWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min, // Use minimum space needed
                   children: [
                     Text(
                       sosReport.address ?? '',

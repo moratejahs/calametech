@@ -4,7 +4,7 @@ import 'package:calamitech/core/auth/signup/screens/signup_screen.dart';
 import 'package:calamitech/features/splash/screens/splash_screen.dart';
 import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/profile/screens/profile_screen.dart';
-import 'package:calamitech/features/report/screens/report_screen.dart';
+import 'package:calamitech/features/sos_reports/sos_reports.dart';
 import 'package:calamitech/features/sos/screens/sos_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -56,7 +56,15 @@ class AppRouter {
             return const MaterialPage(child: SignupScreen());
           }),
       ShellRoute(
-        builder: (context, state, child) => AppScaffold(child: child),
+        builder: (context, state, child) {
+          final noScaffoldRoutes = {RouteConstants.sosReports};
+
+          if (noScaffoldRoutes.contains(state.uri.path)) {
+            return child;
+          }
+
+          return AppScaffold(child: child);
+        },
         routes: [
           GoRoute(
               path: RouteConstants.home,
@@ -69,9 +77,9 @@ class AppRouter {
                 return const MaterialPage(child: ProfileScreen());
               }),
           GoRoute(
-              path: RouteConstants.report,
+              path: RouteConstants.sosReports,
               pageBuilder: (context, state) {
-                return const MaterialPage(child: ReportScreen());
+                return const MaterialPage(child: SosReportsScreen());
               }),
           GoRoute(
               path: RouteConstants.sos,
