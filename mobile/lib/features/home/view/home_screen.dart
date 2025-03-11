@@ -90,8 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  GoRouter.of(context).push(RouteConstants.sosReports);
-                  context.read<NavigationCubit>().selectTab(4);
+                  GoRouter.of(context).go(RouteConstants.sosReports);
                 },
                 child: const Text('see more'),
               ),
