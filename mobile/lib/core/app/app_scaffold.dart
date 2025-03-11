@@ -38,12 +38,10 @@ class AppScaffold extends StatelessWidget {
               spacing: 20,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _buildNavBarItem(context, Icons.home, 'Home',
-                    RouteConstants.home, 0, selectedIndex),
-                _buildNavBarItem(context, Icons.report, 'Report',
-                    RouteConstants.report, 1, selectedIndex),
-                _buildNavBarItem(context, Icons.person, 'Profile',
-                    RouteConstants.profile, 2, selectedIndex),
+                _buildNavBarItem(context, Icons.home, 'Home', RouteConstants.home, 0, selectedIndex),
+                // _buildNavBarItem(context, Icons.report, 'Report',
+                //     RouteConstants.report, 1, selectedIndex),
+                _buildNavBarItem(context, Icons.person, 'Profile', RouteConstants.profile, 2, selectedIndex),
                 // Space for FAB
               ],
             ),
@@ -61,9 +59,9 @@ AppBar _buildAppBar(int selectedIndex) {
     case 0:
       title = 'Home';
       break;
-    case 1:
-      title = 'Report';
-      break;
+    // case 1:
+    //   title = 'Report';
+    //   break;
     case 2:
       title = 'Profile';
       break;
@@ -83,8 +81,7 @@ AppBar _buildAppBar(int selectedIndex) {
 FloatingActionButton _buildSOSFAB(BuildContext context) {
   return FloatingActionButton(
     onPressed: () {
-      if (GoRouter.of(context).routeInformationProvider.value.uri !=
-          RouteConstants.sos) {
+      if (GoRouter.of(context).routeInformationProvider.value.uri != RouteConstants.sos) {
         context.read<NavigationCubit>().selectTab(3);
         context.go(RouteConstants.sos);
       }
@@ -94,8 +91,7 @@ FloatingActionButton _buildSOSFAB(BuildContext context) {
   );
 }
 
-Widget _buildNavBarItem(BuildContext context, IconData icon, String label,
-    String route, int index, int selectedIndex) {
+Widget _buildNavBarItem(BuildContext context, IconData icon, String label, String route, int index, int selectedIndex) {
   return GestureDetector(
     onTap: () {
       context.read<NavigationCubit>().selectTab(index);

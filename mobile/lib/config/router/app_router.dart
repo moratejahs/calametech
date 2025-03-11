@@ -2,7 +2,7 @@ import 'package:calamitech/constants/route_constants.dart';
 import 'package:calamitech/core/auth/login/screens/login_screen.dart';
 import 'package:calamitech/core/auth/signup/screens/signup_screen.dart';
 import 'package:calamitech/features/splash/screens/splash_screen.dart';
-import 'package:calamitech/features/home/screens/home_screen.dart';
+import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/profile/screens/profile_screen.dart';
 import 'package:calamitech/features/report/screens/report_screen.dart';
 import 'package:calamitech/features/sos/screens/sos_screen.dart';
@@ -25,18 +25,14 @@ class AppRouter {
       return Future.sync(() {
         if (userJson == null) {
           // Redirect unauthenticated users to login
-          if (currentRoute != RouteConstants.login &&
-              currentRoute != RouteConstants.signup &&
-              currentRoute != RouteConstants.splash) {
+          if (currentRoute != RouteConstants.login && currentRoute != RouteConstants.signup && currentRoute != RouteConstants.splash) {
             return RouteConstants.login;
           }
         } else {
           debugPrint('AppRouter: current user: $userJson');
 
           // Redirect authenticated users away from login/signup
-          if (currentRoute == RouteConstants.login ||
-              currentRoute == RouteConstants.signup ||
-              currentRoute == RouteConstants.splash) {
+          if (currentRoute == RouteConstants.login || currentRoute == RouteConstants.signup || currentRoute == RouteConstants.splash) {
             return RouteConstants.home;
           }
         }
