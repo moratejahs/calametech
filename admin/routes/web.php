@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminUsersController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminProjectsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\IncidentResponseController;
 use App\Http\Controllers\SuperAdmin\SuperAdminUsersController;
 use App\Http\Controllers\Admin\AdminProjectsCompletedController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProfileController;
@@ -41,7 +42,8 @@ Route::prefix('admin')->group(function () {
 
     Route::get('incidents', [AdminProjectsController::class, 'index'])
         ->name('admin.admin-projects');
-
+    Route::post('indicent/store', [IncidentResponseController::class, 'store'])
+        ->name('incident.store');
     Route::post('/update-project-status', [AdminProjectsController::class, 'updateProjectStatus'])
         ->name('admin.update.project.status');
 

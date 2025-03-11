@@ -42,6 +42,7 @@ class AdminProjectsController extends Controller
     public function index()
     {
         $sos = SOS::all();
+        // dd($sos);
         return view('admin.admin-projects',[
             'sos' => $sos
         ]);
@@ -64,7 +65,7 @@ class AdminProjectsController extends Controller
 
         $adminProjects->users()->attach($userId);
 
-        $request->session()->flash('success_message', 'Saved Successfully!');
+        // $request->session()->flash('success_message', 'Saved Successfully!');
 
         return redirect()->route('admin.admin-projects');
     }
