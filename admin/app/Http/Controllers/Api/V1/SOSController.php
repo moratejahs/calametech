@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\SOS;
-use App\Models\Incident;
 use App\Http\Requests\SOSRequest;
 use App\Http\Resources\SOSResource;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ReportRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class SOSController extends Controller
 {
@@ -18,6 +15,31 @@ class SOSController extends Controller
         $sosReports = SOS::query()
             ->with('user')
             ->where('status', 'resolved')
+            ->latest()
+            ->get();
+
+        return response()->json(SOSResource::collection($sosReports));
+    }
+
+    public function indexFeatured()
+    {
+        $sosReports = SOS::query()
+            ->with('user')
+            ->where('status', 'resolved')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return response()->json(SOSResource::collection($sosReports));
+    }
+
+    public function indexReco()
+    {
+        $sosReports = SOS::query()
+            ->with('user')
+            ->where('status', 'resolved')
+            ->inRandomOrder()
+            ->limit(10)
             ->get();
 
         return response()->json(SOSResource::collection($sosReports));

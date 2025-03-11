@@ -21,6 +21,7 @@ class SOSResource extends JsonResource
             'id' => $this->id,
             'lat' => $this->lat,
             'long' => $this->long,
+            'address' => $this->address,
             'status' => $this->status,
             'type' => $this->type,
             'image' => $this->image_path,

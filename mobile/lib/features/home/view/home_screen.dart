@@ -1,5 +1,6 @@
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/constants/asset_paths.dart';
+import 'package:calamitech/features/home/widgets/soscard.dart';
 import 'package:calamitech/features/home/widgets/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<SosReportsBloc>().add(SosReportsFetched());
+    context.read<SosRecoReportsBloc>().add(SosRecoReportsFetched());
+    context.read<SosFeaturedReportsBloc>().add(SosFeaturedReportsFetched());
     super.initState();
   }
 
@@ -27,8 +29,42 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 8.0,
         children: [
+          Flexible(
+            child: BlocBuilder<SosFeaturedReportsBloc, SosFeaturedReportsState>(
+              builder: (context, state) {
+                if (state is SosFeaturedReportsLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (state is SosFeaturedReportsLoaded) {
+                  return SizedBox(
+                    height: 300,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.sosFeaturedReports.length,
+                      itemBuilder: (context, index) {
+                        return SosCard(
+                          sosReport: state.sosFeaturedReports[index],
+                          fullWidth: true,
+                        );
+                      },
+                    ),
+                  );
+                }
+
+                if (state is SosFeaturedReportsError) {
+                  return Center(
+                    child: Text(state.message),
+                  );
+                }
+
+                return const SizedBox();
+              },
+            ),
+          ),
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
@@ -40,35 +76,48 @@ class _HomeScreenState extends State<HomeScreen> {
               const Tip(color: Colors.blueGrey, image: AssetPaths.more, title: 'More Tips'),
             ],
           ),
-          const Text(
-            'Recommendations for you',
-            style: TextStyle(
-              fontSize: 20.0,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Recommendations for you',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  //
+                },
+                child: const Text('see more'),
+              ),
+            ],
           ),
           Flexible(
-            child: BlocBuilder<SosReportsBloc, SosReportsState>(
+            child: BlocBuilder<SosRecoReportsBloc, SosRecoReportsState>(
               builder: (context, state) {
-                if (state is SosReportsLoading) {
+                if (state is SosRecoReportsLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
-                if (state is SosReportsLoaded) {
-                  return ListView.builder(
-                    itemCount: state.sosReports.length,
-                    itemBuilder: (context, index) {
-                      final sosReport = state.sosReports[index];
-                      return ListTile(
-                        title: Text(sosReport.status),
-                        subtitle: Text(sosReport.date),
-                      );
-                    },
+                if (state is SosRecoReportsLoaded) {
+                  return SizedBox(
+                    height: 250,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.sosRecoReports.length,
+                      itemBuilder: (context, index) {
+                        return SosCard(
+                          sosReport: state.sosRecoReports[index],
+                        );
+                      },
+                    ),
                   );
                 }
 
-                if (state is SosReportsError) {
+                if (state is SosRecoReportsError) {
                   return Center(
                     child: Text(state.message),
                   );
