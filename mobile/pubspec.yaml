@@ -34,6 +34,10 @@ flutter:
 
   assets:
     - assets/images/calamitech.png
+    - assets/images/home.png
+    - assets/images/fire.png
+    - assets/images/safety.png
+    - assets/images/more.png
 
   # fonts:
   #   - family: Schyler
