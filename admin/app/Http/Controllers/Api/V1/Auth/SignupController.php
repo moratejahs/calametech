@@ -21,6 +21,7 @@ class SignupController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'address' => 'Tandag City',
             'password' => Hash::make($validated['password']),
         ]);
 

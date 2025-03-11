@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Models\SOS;
 use App\Models\Incident;
 use App\Http\Requests\SOSRequest;
+use App\Http\Resources\SOSResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
-use App\Models\SOS;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SOSController extends Controller
 {
-    public function __invoke(SOSRequest $request)
+    public function index()
+    {
+        $sosReports = SOS::query()
+            ->with('user')
+            ->where('status', 'resolved')
+            ->get();
+
+        return response()->json(SOSResource::collection($sosReports));
+    }
+
+    public function store(SOSRequest $request)
     {
         $validated = $request->validated();
 
