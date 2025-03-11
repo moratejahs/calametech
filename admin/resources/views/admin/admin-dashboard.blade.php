@@ -29,7 +29,7 @@
                                         </div>
                                         <div class="col-md-8">
                                             <h6 class="text-muted font-semibold">Total Users</h6>
-                                            <h6 class="font-extrabold mb-0">1</h6>
+                                            <h6 class="font-extrabold mb-0">{{ $users }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -48,8 +48,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <h6 class="text-muted font-semibold">Total Reports</h6>
-                                            <h6 class="font-extrabold mb-0">2</h6>
+                                            <h6 class="text-muted font-semibold">Total Incidents</h6>
+                                            <h6 class="font-extrabold mb-0">{{ $total }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                         </div>
                                         <div class="col-md-8">
                                             <h6 class="text-muted font-semibold">Fire Reports</h6>
-                                            <h6 class="font-extrabold mb-0">3</h6>
+                                            <h6 class="font-extrabold mb-0">{{ $sosFire }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                                         </div>
                                         <div class="col-md-8">
                                             <h6 class="text-muted font-semibold">Flood Reportst</h6>
-                                            <h6 class="font-extrabold mb-0">4</h6>
+                                            <h6 class="font-extrabold mb-0">{{ $sosFood }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -112,13 +112,26 @@
         document.addEventListener("DOMContentLoaded", function() {
             const ctx = document.getElementById('reportsChart').getContext('2d');
 
-            // Static data for demonstration
+            // Get chart data from Laravel
+            const chartData = @json($chartData);
+
+            // Define all months for consistent ordering
             const monthlyLabels = ["January", "February", "March", "April", "May", "June", "July", "August",
                 "September", "October", "November", "December"
             ];
-            const fireReports = [5, 8, 12, 7, 6, 9, 14, 10, 15, 18, 12, 7]; // Example fire reports data
-            const waterReports = [3, 5, 9, 4, 8, 7, 10, 6, 12, 14, 9, 5]; // Example water reports data
 
+            // Initialize data arrays
+            let fireReports = Array(12).fill(0);
+            let floodReports = Array(12).fill(0);
+
+            // Populate data arrays based on available database data
+            chartData.forEach(entry => {
+                let monthIndex = parseInt(entry.month) - 1; // Convert month from "01" to index (0-based)
+                fireReports[monthIndex] = entry.fire_count;
+                floodReports[monthIndex] = entry.flood_count;
+            });
+
+            // Create Chart.js line chart
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -126,15 +139,15 @@
                     datasets: [{
                             label: 'Fire Reports',
                             data: fireReports,
-                            borderColor: 'red',
+                            borderColor: '#eb4d4b',
                             backgroundColor: 'rgba(255, 0, 0, 0.2)',
                             fill: true,
                             tension: 0.4
                         },
                         {
-                            label: 'Water Reports',
-                            data: waterReports,
-                            borderColor: 'blue',
+                            label: 'Flood Reports',
+                            data: floodReports,
+                            borderColor: '#3498db',
                             backgroundColor: 'rgba(0, 0, 255, 0.2)',
                             fill: true,
                             tension: 0.4
@@ -157,6 +170,7 @@
             });
         });
     </script>
+
     <script src="{{ asset('assets/js/pages/cards-dashboard.js') }}"></script>
     <script src="{{ asset('assets/js/pages/barchart-dashboard.js') }}"></script>
 @endpush

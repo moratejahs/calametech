@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Project;
 use Carbon\Carbon;
+use App\Models\SOS;
+use App\Models\User;
+use App\Models\Project;
+use App\Http\Controllers\Controller;
 
 class AdminDashboardController extends Controller
 {
@@ -28,12 +30,30 @@ class AdminDashboardController extends Controller
         $now = Carbon::now();
         $thisMonthName = $now->format('F');
 
+        $users  = User::count();
+        $sosFire = SOS::where('type', 'fire')->count();
+        $sosFood = SOS::where('type', 'flood')->count();
+        $total = SOS::count();
+
+        $chartData = SOS::selectRaw("
+            DATE_FORMAT(created_at, '%m') as month,
+            SUM(CASE WHEN type = 'fire' THEN 1 ELSE 0 END) as fire_count,
+            SUM(CASE WHEN type = 'flood' THEN 1 ELSE 0 END) as flood_count
+            ")
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
         return view('admin.admin-dashboard', compact(
             'projectStatusData',
             'revenueData',
             'weekRangeData',
             'recentlyCompletedProject',
-            'thisMonthName'
+            'thisMonthName',
+            'users',
+            'sosFire',
+            'sosFood',
+            'total',
+            'chartData'
         ));
     }
 
