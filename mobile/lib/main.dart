@@ -73,6 +73,16 @@ class MyApp extends StatelessWidget {
                     sosReportsRepository: context.read<SosReportsRepository>(),
                     storage: storage,
                   )),
+          BlocProvider<SosFeaturedReportsBloc>(
+              create: (context) => SosFeaturedReportsBloc(
+                    sosReportsRepository: context.read<SosReportsRepository>(),
+                    storage: storage,
+                  )),
+          BlocProvider<SosRecoReportsBloc>(
+              create: (context) => SosRecoReportsBloc(
+                    sosReportsRepository: context.read<SosReportsRepository>(),
+                    storage: storage,
+                  )),
           BlocProvider<SosBloc>(
               create: (context) => SosBloc(
                     sosRepository: context.read<SOSRepository>(),

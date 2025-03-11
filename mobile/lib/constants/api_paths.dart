@@ -6,10 +6,13 @@ class ApiPaths {
   static const String wifiApiUrl = 'http://$wifiIP:$port/api/v1';
   static const String productionApiUrl = 'https://domain.tld/api/v1';
   static const String baseUrl = wifiApiUrl;
+  static const String storage = 'http://$wifiIP:$port/storage/';
 
   static const String getUser = '/user';
   static const String login = '/login';
   static const String signup = '/signup';
   static const String logout = '/logout';
   static const String sos = '/sos';
+  static const String sosFeatured = '/sos/featured';
+  static const String sosReco = '/sos/reco';
 }

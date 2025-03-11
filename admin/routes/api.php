@@ -44,6 +44,8 @@ Route::prefix('v1')->group(function () {
 
         // SOS
         Route::get('/sos', [SOSController::class, 'index']);
+        Route::get('/sos/featured', [SOSController::class, 'indexFeatured']);
+        Route::get('/sos/reco', [SOSController::class, 'indexReco']);
         Route::post('/sos', [SOSController::class, 'store']);
 
         // Report
