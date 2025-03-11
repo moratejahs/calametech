@@ -1,9 +1,12 @@
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/constants/asset_paths.dart';
+import 'package:calamitech/constants/route_constants.dart';
+import 'package:calamitech/core/app/cubit/navigation_cubit.dart';
 import 'package:calamitech/features/home/widgets/soscard.dart';
 import 'package:calamitech/features/home/widgets/tips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../home.dart';
 
@@ -87,7 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  //
+                  GoRouter.of(context).push(RouteConstants.sosReports);
+                  context.read<NavigationCubit>().selectTab(4);
                 },
                 child: const Text('see more'),
               ),

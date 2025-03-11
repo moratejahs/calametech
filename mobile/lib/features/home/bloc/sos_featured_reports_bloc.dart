@@ -1,11 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:calamitech/core/auth/login/models/user.dart';
-import 'package:calamitech/features/home/models/sos_report.dart';
-import 'package:calamitech/features/home/repositories/sos_reports_repository.dart';
+import 'package:calamitech/features/sos_reports/sos_reports.dart';
 import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 part 'sos_featured_reports_event.dart';
 part 'sos_featured_reports_state.dart';

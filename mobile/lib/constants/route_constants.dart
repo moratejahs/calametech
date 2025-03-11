@@ -5,5 +5,6 @@ class RouteConstants {
   static const String signup = '/signup';
   static const String profile = '/profile';
   static const String report = '/report';
+  static const String sosReports = '/sos_reports';
   static const String sos = '/sos';
 }
