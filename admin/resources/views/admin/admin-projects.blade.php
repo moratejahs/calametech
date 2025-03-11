@@ -58,7 +58,7 @@
                 </div>
                 <div class="modal-body">
                     <center>
-                        <img id="sosImage" src="" alt="SOS Image" width="200" height="200">
+                        <img id="sosImage" src="" alt="SOS Image" width="100" height="100">
                     </center>
                     <form id="storeIncidenResponse" method="post" accept="POST" action="{{ route('incident.store') }}"
                         enctype="multipart/form-data">
@@ -69,7 +69,12 @@
                         <input type="file" name="image" class="form-control" accept=".jpeg,.jpg,.png">
                         <p style="display:none;"><strong>Description:</strong> <span id="sosDescription"></span></p>
                         <p style="display:none;"><strong>Location:</strong> <span id="sosLocation"></span></p>
-                        <p><strong>Address:</strong> <span id="sosAddress"></span></p>
+
+
+                        <p>
+                            <strong>Address:</strong>
+                            <input id="sosAddress" type="text" name="address" class="form-control" value="">
+                        </p>
                         <p><strong>Status:</strong>
                             <select id="sosStatus" name="status" class="form-control">
                                 <option value="pending">Pending</option>
@@ -179,7 +184,7 @@
             document.getElementById('sosId').value = id;
             document.getElementById('sosDescription').textContent = description;
             document.getElementById('sosLocation').textContent = location;
-            document.getElementById('sosAddress').textContent = address;
+            document.getElementById('sosAddress').value = address;
 
             let statusDropdown = document.getElementById('sosStatus');
             let typeDropdown = document.getElementById('sosType');

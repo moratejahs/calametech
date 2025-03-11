@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->enum('status', ['pending', 'resolved', 'dismissed']);
             $table->enum('type', ['fire', 'flood'])->nullable();
             $table->string('image_path')->nullable();
+            $table->string('address')->nullable();
             $table->foreignId(column: 'user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

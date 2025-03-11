@@ -15,6 +15,7 @@ class IncidentResponseController extends Controller
             'id' => 'required', // Ensure the ID exists in the SOS table
             'status' => 'required',
             'type' => 'required',
+            'address' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validate image format & size
         ]);
 
@@ -29,6 +30,7 @@ class IncidentResponseController extends Controller
 
         // Update SOS record
         $sos->status = $validated['status'];
+        $sos->address = $validated['address'];
         $sos->type = $validated['type'];
         $sos->save(); // Save updates
 
