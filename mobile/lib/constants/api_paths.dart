@@ -5,6 +5,7 @@ class ApiPaths {
   static const String localApiUrl = 'http://$emulatorIP:$port/api/v1';
   static const String wifiApiUrl = 'http://$wifiIP:$port/api/v1';
   static const String productionApiUrl = 'https://domain.tld/api/v1';
+  static const String baseUrl = wifiApiUrl;
 
   static const String getUser = '/user';
   static const String login = '/login';

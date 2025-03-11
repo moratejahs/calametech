@@ -7,12 +7,14 @@ import 'package:calamitech/core/auth/login/repositories/login_repository.dart';
 import 'package:calamitech/core/auth/signup/bloc/signup_bloc.dart';
 import 'package:calamitech/core/auth/signup/repositories/signup_repository.dart';
 import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
+import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/sos/bloc/sos_bloc.dart';
 import 'package:calamitech/features/sos/repositories/sos_repository.dart';
 import 'package:calamitech/utils/services/rest_api_service.dart';
 import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 import 'core/location/cubit/location_cubit.dart';
 
@@ -25,23 +27,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RestApiService restApiService =
-        RestApiService(baseUrl: ApiPaths.wifiApiUrl);
+    final RestApiService restApiService = RestApiService(baseUrl: ApiPaths.wifiApiUrl);
     final SecureStorageService storage = SecureStorageService();
+    final httpClient = http.Client();
 
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<LoginRepository>(
-          create: (_) =>
-              LoginRepository(restApiService: restApiService, storage: storage),
+          create: (_) => LoginRepository(restApiService: restApiService, storage: storage),
         ),
         RepositoryProvider<SignupRepository>(
-          create: (_) => SignupRepository(
-              restApiService: restApiService, storage: storage),
+          create: (_) => SignupRepository(restApiService: restApiService, storage: storage),
+        ),
+        RepositoryProvider<SosReportsRepository>(
+          create: (_) => SosReportsRepository(httpClient: httpClient),
         ),
         RepositoryProvider<SOSRepository>(
-          create: (_) =>
-              SOSRepository(restApiService: restApiService),
+          create: (_) => SOSRepository(restApiService: restApiService),
         ),
       ],
       child: MultiBlocProvider(
@@ -64,6 +66,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<SignupBloc>(
               create: (context) => SignupBloc(
                     signupRepository: context.read<SignupRepository>(),
+                    storage: storage,
+                  )),
+          BlocProvider<SosReportsBloc>(
+              create: (context) => SosReportsBloc(
+                    sosReportsRepository: context.read<SosReportsRepository>(),
                     storage: storage,
                   )),
           BlocProvider<SosBloc>(

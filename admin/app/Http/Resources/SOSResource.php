@@ -23,7 +23,8 @@ class SOSResource extends JsonResource
             'long' => $this->long,
             'status' => $this->status,
             'type' => $this->type,
-            'image_path' => $this->image_path,
+            'image' => $this->image_path,
+            'date' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }
