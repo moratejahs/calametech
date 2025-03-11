@@ -1,6 +1,7 @@
 import 'package:calamitech/constants/route_constants.dart';
 import 'package:calamitech/core/auth/login/screens/login_screen.dart';
 import 'package:calamitech/core/auth/signup/screens/signup_screen.dart';
+import 'package:calamitech/features/ai_tips/view/tips_screen.dart';
 import 'package:calamitech/features/splash/screens/splash_screen.dart';
 import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/profile/screens/profile_screen.dart';
@@ -57,7 +58,13 @@ class AppRouter {
           }),
       ShellRoute(
         builder: (context, state, child) {
-          final noScaffoldRoutes = {RouteConstants.sosReports};
+          final noScaffoldRoutes = {
+            RouteConstants.sosReports,
+            RouteConstants.tips,
+            RouteConstants.fireTips,
+            RouteConstants.floodTips,
+            RouteConstants.safetyTips,
+          };
 
           if (noScaffoldRoutes.contains(state.uri.path)) {
             return child;
@@ -85,6 +92,29 @@ class AppRouter {
               path: RouteConstants.sos,
               pageBuilder: (context, state) {
                 return const MaterialPage(child: SOSScreen());
+              }),
+          GoRoute(
+              path: RouteConstants.tips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(child: TipsScreen());
+              }),
+          GoRoute(
+              path: RouteConstants.fireTips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(
+                    child: TipsScreen(
+                  tipType: 'fire_tips',
+                ));
+              }),
+          GoRoute(
+              path: RouteConstants.floodTips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(child: TipsScreen(tipType: 'flood_tips'));
+              }),
+          GoRoute(
+              path: RouteConstants.safetyTips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(child: TipsScreen(tipType: 'safety_tips'));
               }),
         ],
       ),

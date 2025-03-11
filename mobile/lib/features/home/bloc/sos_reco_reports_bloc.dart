@@ -31,8 +31,6 @@ class SosRecoReportsBloc extends Bloc<SosRecoReportsEvent, SosRecoReportsState> 
 
       final sosReports = await sosReportsRepository.getSosRecoReports(User.fromJson(authUser).token);
 
-      debugPrint('SosRecoReportsBloc: sosReports: $sosReports');
-
       emit(SosRecoReportsLoaded(sosReports));
     } catch (e) {
       emit(SosRecoReportsError(e.toString().replaceFirst('Exception: ', '')));

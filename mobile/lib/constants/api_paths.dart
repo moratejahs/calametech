@@ -15,4 +15,5 @@ class ApiPaths {
   static const String sos = '/sos';
   static const String sosFeatured = '/sos/featured';
   static const String sosReco = '/sos/reco';
+  static const String aiApiUrl = 'https://api.openai.com/v1/chat/completions';
 }

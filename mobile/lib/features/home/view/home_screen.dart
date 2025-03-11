@@ -70,10 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
             shrinkWrap: true,
             childAspectRatio: 2.0,
             children: [
-              Tip(color: AppTheme.primaryColor, image: AssetPaths.fire, title: 'Fire Tips'),
-              Tip(color: Colors.green[400], image: AssetPaths.home, title: 'Flood Tips'),
-              Tip(color: AppTheme.primaryColor, image: AssetPaths.safety, title: 'Safety Tips'),
-              const Tip(color: Colors.blueGrey, image: AssetPaths.more, title: 'More Tips'),
+              Tip(color: AppTheme.primaryColor, image: AssetPaths.fire, title: 'Fire Tips', route: RouteConstants.fireTips),
+              Tip(color: Colors.green[400], image: AssetPaths.home, title: 'Flood Tips', route: RouteConstants.floodTips),
+              Tip(color: AppTheme.primaryColor, image: AssetPaths.safety, title: 'Safety Tips', route: RouteConstants.safetyTips),
+              const Tip(color: Colors.blueGrey, image: AssetPaths.more, title: 'More Tips', route: RouteConstants.tips),
             ],
           ),
           Row(

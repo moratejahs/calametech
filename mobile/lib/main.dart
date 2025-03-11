@@ -7,6 +7,8 @@ import 'package:calamitech/core/auth/login/repositories/login_repository.dart';
 import 'package:calamitech/core/auth/signup/bloc/signup_bloc.dart';
 import 'package:calamitech/core/auth/signup/repositories/signup_repository.dart';
 import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
+import 'package:calamitech/features/ai_tips/ai_tips.dart';
+import 'package:calamitech/features/ai_tips/bloc/tips_bloc.dart';
 import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/sos_reports/sos_reports.dart';
 import 'package:calamitech/features/sos/bloc/sos_bloc.dart';
@@ -15,11 +17,13 @@ import 'package:calamitech/utils/services/rest_api_service.dart';
 import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/location/cubit/location_cubit.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -45,6 +49,9 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<SOSRepository>(
           create: (_) => SOSRepository(restApiService: restApiService),
+        ),
+        RepositoryProvider<TipsRepository>(
+          create: (_) => TipsRepository(httpClient),
         ),
       ],
       child: MultiBlocProvider(
@@ -87,6 +94,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<SosBloc>(
               create: (context) => SosBloc(
                     sosRepository: context.read<SOSRepository>(),
+                    storage: storage,
+                  )),
+          BlocProvider<TipsBloc>(
+              create: (context) => TipsBloc(
+                    tipsRepository: context.read<TipsRepository>(),
                     storage: storage,
                   )),
         ],
