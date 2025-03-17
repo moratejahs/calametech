@@ -1,10 +1,11 @@
 import 'package:calamitech/constants/route_constants.dart';
 import 'package:calamitech/core/auth/login/screens/login_screen.dart';
 import 'package:calamitech/core/auth/signup/screens/signup_screen.dart';
+import 'package:calamitech/features/ai_tips/view/tips_screen.dart';
 import 'package:calamitech/features/splash/screens/splash_screen.dart';
 import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/profile/screens/profile_screen.dart';
-import 'package:calamitech/features/report/screens/report_screen.dart';
+import 'package:calamitech/features/sos_reports/sos_reports.dart';
 import 'package:calamitech/features/sos/screens/sos_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -56,7 +57,21 @@ class AppRouter {
             return const MaterialPage(child: SignupScreen());
           }),
       ShellRoute(
-        builder: (context, state, child) => AppScaffold(child: child),
+        builder: (context, state, child) {
+          final noScaffoldRoutes = {
+            RouteConstants.sosReports,
+            RouteConstants.tips,
+            RouteConstants.fireTips,
+            RouteConstants.floodTips,
+            RouteConstants.safetyTips,
+          };
+
+          if (noScaffoldRoutes.contains(state.uri.path)) {
+            return child;
+          }
+
+          return AppScaffold(child: child);
+        },
         routes: [
           GoRoute(
               path: RouteConstants.home,
@@ -69,14 +84,37 @@ class AppRouter {
                 return const MaterialPage(child: ProfileScreen());
               }),
           GoRoute(
-              path: RouteConstants.report,
+              path: RouteConstants.sosReports,
               pageBuilder: (context, state) {
-                return const MaterialPage(child: ReportScreen());
+                return const MaterialPage(child: SosReportsScreen());
               }),
           GoRoute(
               path: RouteConstants.sos,
               pageBuilder: (context, state) {
                 return const MaterialPage(child: SOSScreen());
+              }),
+          GoRoute(
+              path: RouteConstants.tips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(child: TipsScreen());
+              }),
+          GoRoute(
+              path: RouteConstants.fireTips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(
+                    child: TipsScreen(
+                  tipType: 'fire_tips',
+                ));
+              }),
+          GoRoute(
+              path: RouteConstants.floodTips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(child: TipsScreen(tipType: 'flood_tips'));
+              }),
+          GoRoute(
+              path: RouteConstants.safetyTips,
+              pageBuilder: (context, state) {
+                return const MaterialPage(child: TipsScreen(tipType: 'safety_tips'));
               }),
         ],
       ),

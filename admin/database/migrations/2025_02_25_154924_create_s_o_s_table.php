@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('s_o_s', function (Blueprint $table) {
             $table->id();
-            $table->integer('lat');
-            $table->integer('long');
+            $table->string('lat');
+            $table->string('long');
             $table->enum('status', ['pending', 'resolved', 'dismissed']);
             $table->enum('type', ['fire', 'flood'])->nullable();
             $table->string('image_path')->nullable();

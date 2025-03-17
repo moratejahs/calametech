@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-
-import '../../../core/auth/login/models/user.dart';
-import '../home.dart';
+import 'package:calamitech/utils/services/secure_storage_service.dart';
+import 'package:calamitech/features/sos_reports/sos_reports.dart';
+import 'package:calamitech/core/auth/login/models/user.dart';
 
 part 'sos_reports_event.dart';
 part 'sos_reports_state.dart';
@@ -31,8 +29,6 @@ class SosReportsBloc extends Bloc<SosReportsEvent, SosReportsState> {
       }
 
       final sosReports = await sosReportsRepository.getSosReports(User.fromJson(authUser).token);
-
-      debugPrint('SosReportsBloc: sosReports: $sosReports');
 
       emit(SosReportsLoaded(sosReports));
     } catch (e) {

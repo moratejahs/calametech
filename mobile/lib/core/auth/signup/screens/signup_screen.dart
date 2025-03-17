@@ -26,15 +26,25 @@ class _SignupScreenState extends State<SignupScreen> {
     return BlocListener<SignupBloc, SignupState>(
       listener: (context, state) {
         if (state is SignupSuccess) {
-          nameController.clear();
-          emailController.clear();
-          passwordController.clear();
-          passwordConfirmationController.clear();
-
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
               backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+
+          nameController.clear();
+          emailController.clear();
+          passwordController.clear();
+          passwordConfirmationController.clear();
+        }
+
+        if (state is SignupFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message ?? 'An error occurred'),
+              backgroundColor: Colors.red,
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -83,7 +93,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             if (state is SignupFailure && state.errors?['name'] != null) {
                               nameError = state.errors!['name'][0];
                             }
-                  
+
                             return TextFormField(
                               controller: nameController,
                               decoration: InputDecoration(
@@ -100,7 +110,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             );
                           },
                         ),
-                  
+
                         // Email field
                         BlocBuilder<SignupBloc, SignupState>(
                           builder: (context, state) {
@@ -108,7 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             if (state is SignupFailure && state.errors?['email'] != null) {
                               emailError = state.errors!['email'][0];
                             }
-                  
+
                             return TextFormField(
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
@@ -120,17 +130,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your email';
                                 }
-                  
+
                                 if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                                   return 'Please enter a valid email';
                                 }
-                  
+
                                 return null;
                               },
                             );
                           },
                         ),
-                  
+
                         // Password field
                         BlocBuilder<SignupBloc, SignupState>(
                           builder: (context, state) {
@@ -138,7 +148,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             if (state is SignupFailure && state.errors?['password'] != null) {
                               passwordError = state.errors!['password'][0];
                             }
-                  
+
                             return TextFormField(
                               controller: passwordController,
                               obscureText: true,
@@ -161,7 +171,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             );
                           },
                         ),
-                  
+
                         // Password confirmation field
                         BlocBuilder<SignupBloc, SignupState>(
                           builder: (context, state) {
@@ -169,7 +179,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             if (state is SignupFailure && state.errors?['password_confirmation'] != null) {
                               passwordConfirmationError = state.errors!['password_confirmation'][0];
                             }
-                  
+
                             return TextFormField(
                               controller: passwordConfirmationController,
                               obscureText: true,
@@ -187,7 +197,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             );
                           },
                         ),
-                  
+
                         // Sign up button
                         SizedBox(
                           width: double.infinity,

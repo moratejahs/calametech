@@ -33,7 +33,8 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       }
 
       emit(SignupSuccess(message: response['success']));
-      return;
+
+      debugPrint('response: $response');
     } catch (e) {
       emit(SignupFailure(message: e.toString().replaceFirst('Exception: ', '')));
     }
