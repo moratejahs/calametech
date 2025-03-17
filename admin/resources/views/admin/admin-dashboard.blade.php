@@ -98,7 +98,11 @@
                     </div>
                     <section class="row">
                         <div class="col-lg-12">
-                            <canvas id="reportsChart"></canvas>
+                            <div class="card">
+                                <div class="card-body">
+                                    <canvas id="reportsChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </section>
 

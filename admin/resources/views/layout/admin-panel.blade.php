@@ -34,7 +34,7 @@
 <body class="light">
     <div id="app">
         <div id="sidebar" class="active">
-            <div class="sidebar-wrapper active" style=" background-color: #02778f;">
+            <div class="sidebar-wrapper active" style=" background-color: #0099FF;">
 
                 <div class="sidebar-menu">
                     <ul class="menu">

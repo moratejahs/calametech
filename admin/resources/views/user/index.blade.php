@@ -24,10 +24,10 @@
                         <table class="table table-hover" id="table1">
                             <thead>
                                 <tr>
-                                    <th class="text-white" style="background-color: #02778f;">Name</th>
-                                    <th class="text-white" style="background-color: #02778f;">Address</th>
-                                    <th class="text-white" style="background-color: #02778f;">Email</th>
-                                    <th class="text-white" style="background-color: #02778f;">Contact Number</th>
+                                    <th class="text-white" style="background-color: #0099FF;">Name</th>
+                                    <th class="text-white" style="background-color: #0099FF;">Address</th>
+                                    <th class="text-white" style="background-color: #0099FF;">Email</th>
+                                    <th class="text-white" style="background-color: #0099FF;">Contact Number</th>
                                 </tr>
                             </thead>
                             <tbody>
