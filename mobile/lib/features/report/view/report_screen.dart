@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/constants/asset_paths.dart';
 import 'package:calamitech/constants/route_constants.dart';
+import 'package:calamitech/core/app/cubit/navigation_cubit.dart';
 import 'package:calamitech/features/report/report.dart';
 import 'package:calamitech/features/report/widgets/emergency_type_button.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           );
 
+          context.read<NavigationCubit>().selectTab(0);
           context.go(RouteConstants.home);
         }
 
