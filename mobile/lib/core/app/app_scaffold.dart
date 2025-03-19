@@ -19,8 +19,6 @@ class AppScaffold extends StatelessWidget {
           appBar: _buildAppBar(selectedIndex),
           body: child,
           bottomNavigationBar: _buildBottomAppBar(context, selectedIndex),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-          floatingActionButton: _buildSOSFAB(context),
         );
       },
     );
@@ -30,23 +28,11 @@ class AppScaffold extends StatelessWidget {
     return BottomAppBar(
       color: Colors.grey[200],
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Expanded(
-            child: Row(
-              spacing: 20,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _buildNavBarItem(context, Icons.home, 'Home', RouteConstants.home, 0, selectedIndex),
-                // _buildNavBarItem(context, Icons.report, 'Report',
-                //     RouteConstants.report, 1, selectedIndex),
-                _buildNavBarItem(context, Icons.person, 'Profile', RouteConstants.profile, 2, selectedIndex),
-                // Space for FAB
-              ],
-            ),
-          ),
-          const SizedBox(width: 80),
+          _buildNavBarItem(context, Icons.home, 'Home', RouteConstants.home, 0, selectedIndex),
+          _buildSOSNavItem(context, selectedIndex),
+          _buildNavBarItem(context, Icons.person, 'Profile', RouteConstants.profile, 2, selectedIndex),
         ],
       ),
     );
@@ -78,16 +64,43 @@ AppBar _buildAppBar(int selectedIndex) {
   );
 }
 
-FloatingActionButton _buildSOSFAB(BuildContext context) {
-  return FloatingActionButton(
-    onPressed: () {
+Widget _buildSOSNavItem(BuildContext context, int selectedIndex) {
+  return GestureDetector(
+    onTap: () {
       if (GoRouter.of(context).routeInformationProvider.value.uri != RouteConstants.sos) {
         context.read<NavigationCubit>().selectTab(3);
         context.go(RouteConstants.sos);
       }
     },
-    backgroundColor: Colors.red,
-    child: const Icon(Icons.sos),
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.red,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(8),
+      child: const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.sos, color: Colors.white, size: 40),
+          // Text(
+          //   'SOS',
+          //   style: TextStyle(
+          //     color: Colors.white,
+          //     fontWeight: FontWeight.bold,
+          //     fontSize: 11,
+          //   ),
+          // ),
+        ],
+      ),
+    ),
   );
 }
 
