@@ -67,24 +67,27 @@ class SosCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min, // Use minimum space needed
                       children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on,
-                              size: 16.0,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              sosReport.address ?? 'N/A',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                        if (sosReport.address != null && sosReport.address!.isNotEmpty)
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                size: 16.0,
                                 color: Colors.white,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
+                              Expanded(
+                                child: Text(
+                                  sosReport.address!,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
