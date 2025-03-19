@@ -21,6 +21,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/location/cubit/location_cubit.dart';
+import 'features/report/report.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider<SOSRepository>(
           create: (_) => SOSRepository(restApiService: restApiService),
+        ),
+        RepositoryProvider<ReportRepository>(
+          create: (_) => ReportRepository(httpClient: httpClient),
         ),
         RepositoryProvider<TipsRepository>(
           create: (_) => TipsRepository(httpClient),
@@ -94,6 +98,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<SosBloc>(
               create: (context) => SosBloc(
                     sosRepository: context.read<SOSRepository>(),
+                    storage: storage,
+                  )),
+          BlocProvider<ReportBloc>(
+              create: (context) => ReportBloc(
+                    reportRepository: context.read<ReportRepository>(),
                     storage: storage,
                   )),
           BlocProvider<TipsBloc>(

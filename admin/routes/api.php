@@ -49,6 +49,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/sos', [SOSController::class, 'store']);
 
         // Report
-        // Route::post('/report', ReportController::class);
+        Route::post('/report', ReportController::class);
     });
 });

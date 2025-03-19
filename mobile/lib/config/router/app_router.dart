@@ -2,6 +2,7 @@ import 'package:calamitech/constants/route_constants.dart';
 import 'package:calamitech/core/auth/login/screens/login_screen.dart';
 import 'package:calamitech/core/auth/signup/screens/signup_screen.dart';
 import 'package:calamitech/features/ai_tips/view/tips_screen.dart';
+import 'package:calamitech/features/report/view/view.dart';
 import 'package:calamitech/features/splash/screens/splash_screen.dart';
 import 'package:calamitech/features/home/home.dart';
 import 'package:calamitech/features/profile/screens/profile_screen.dart';
@@ -59,6 +60,7 @@ class AppRouter {
       ShellRoute(
         builder: (context, state, child) {
           final noScaffoldRoutes = {
+            RouteConstants.report,
             RouteConstants.sosReports,
             RouteConstants.tips,
             RouteConstants.fireTips,
@@ -92,6 +94,11 @@ class AppRouter {
               path: RouteConstants.sos,
               pageBuilder: (context, state) {
                 return const MaterialPage(child: SOSScreen());
+              }),
+          GoRoute(
+              path: RouteConstants.report,
+              pageBuilder: (context, state) {
+                return const MaterialPage(child: ReportScreen());
               }),
           GoRoute(
               path: RouteConstants.tips,
