@@ -23,18 +23,19 @@ class SignupController extends Controller
             'email' => $validated['email'],
             'contact_number' => '09123456789',
             'address' => 'Tandag City',
+            'email_verified_at' => now(),
             'plain_password' => $validated['password'],
             'password' => Hash::make($validated['password']),
         ]);
 
         $user->roles()->attach(2); // User role
 
-        event(new Registered($user)); // Send email verification link
+        // event(new Registered($user)); // Send email verification link
 
         $token = $user->createToken($user->name)->plainTextToken;
 
         return response()->json([
-            'success' => 'Signup successful, email verification link sent!',
+            'success' => 'Signup successfully',
             'token' => $token,
             'user' => $user->only('id', 'name', 'email'),
         ], 201);

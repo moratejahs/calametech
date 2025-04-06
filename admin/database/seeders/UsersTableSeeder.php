@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Admin',
             'address' => 'Tandag City',
             'email' => 'admin@gmail.com',
+            'email_verified_at' => now(),
             'contact_number' => '09706122212',
             'password' => bcrypt('123'),
             'plain_password' => '123',
