@@ -57,7 +57,7 @@ class ReportRepository {
       throw Exception('Failed to submit report.');
     } catch (e) {
       debugPrint('ERROR: $e');
-      throw Exception(e);
+      rethrow;
     }
   }
 
