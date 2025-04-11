@@ -23,7 +23,6 @@ class ReportRepository {
       request.headers.addAll({
         'Authorization': 'Bearer $token',
       });
-      // Removed Content-Type header as it's automatically set by MultipartRequest
 
       // Add form fields
       request.fields['sos_id'] = sosId.toString();
@@ -58,7 +57,7 @@ class ReportRepository {
       throw Exception('Failed to submit report.');
     } catch (e) {
       debugPrint('ERROR: $e');
-      throw Exception('Failed to submit report: $e');
+      throw Exception(e);
     }
   }
 
