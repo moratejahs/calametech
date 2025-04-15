@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\NewsController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;
@@ -48,6 +49,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/sos/reco', [SOSController::class, 'indexReco']);
         Route::post('/sos', [SOSController::class, 'store']);
 
+        Route::get('/newss', [NewsController::class, 'index']);
         // Report
         // Route::post('/report', ReportController::class);
     });
