@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
-use App\Models\Incident;
+use App\Models\SOS;
 use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
@@ -14,30 +14,29 @@ class ReportController extends Controller
         $validated = $request->validated();
 
         try {
-            \DB::transaction(function () use ($validated) {
-                $filePath = Storage::disk('local')->put('/reports/images', $validated['image']);
+            $filePath = Storage::disk('public')->put('sos_images', $validated['image']);
 
-                Incident::create([
-                    'description' => $validated['description'],
-                    'image' => $filePath,
-                    'status' => $validated['status'],
-                    'lat' => $validated['lat'],
-                    'long' => $validated['long'],
-                    'user_id' => auth()->id(),
-                    'barangay_id' => $validated['barangay_id'],
-                ]);
-            });
+            $sos = SOS::findOrFail($validated['sos_id']);
+
+            if ($sos->image_path && Storage::disk('public')->exists($sos->image_path)) {
+                Storage::disk('public')->delete($sos->image_path);
+            }
+
+            $sos->update([
+                'description' => $validated['description'],
+                'image_path' => $filePath,
+                'type' => $validated['type'],
+            ]);
 
             return response()->json([
-                'success' => 'Incident submitted successfully.'
+                'success' => 'Report submitted successfully.'
             ], 201);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
 
             return response()->json([
-                'message' => 'Failed to submit incident.'
+                'error' => 'Failed to submit report.'
             ], 500);
         }
-
     }
 }

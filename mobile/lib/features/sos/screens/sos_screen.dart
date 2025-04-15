@@ -1,7 +1,9 @@
+import 'package:calamitech/constants/route_constants.dart';
 import 'package:calamitech/core/location/cubit/location_cubit.dart';
 import 'package:calamitech/features/sos/bloc/sos_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../config/theme/app_theme.dart';
 
@@ -32,6 +34,8 @@ class _SOSScreenState extends State<SOSScreen> {
               behavior: SnackBarBehavior.floating,
             ),
           );
+
+          context.go(RouteConstants.report);
         }
 
         if (state is SosFailure) {
@@ -79,8 +83,7 @@ class _SOSScreenState extends State<SOSScreen> {
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2.0,
-                          valueColor:
-                              AlwaysStoppedAnimation(AppTheme.primaryColor),
+                          valueColor: AlwaysStoppedAnimation(AppTheme.primaryColor),
                         ),
                       )
                     ],
@@ -129,8 +132,7 @@ class SOSButton extends StatefulWidget {
   _SOSButtonState createState() => _SOSButtonState();
 }
 
-class _SOSButtonState extends State<SOSButton>
-    with SingleTickerProviderStateMixin {
+class _SOSButtonState extends State<SOSButton> with SingleTickerProviderStateMixin {
   double _scale = 1.0;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -141,8 +143,7 @@ class _SOSButtonState extends State<SOSButton>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration:
-          const Duration(seconds: 3), // Slower animation for smoother effect
+      duration: const Duration(seconds: 3), // Slower animation for smoother effect
     )..repeat(reverse: false);
 
     _scaleAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(
@@ -235,8 +236,7 @@ class _SOSButtonState extends State<SOSButton>
                     height: 150 * _scaleAnimation.value,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color:
-                          Colors.red.withValues(alpha: _opacityAnimation.value),
+                      color: Colors.red.withValues(alpha: _opacityAnimation.value),
                     ),
                   );
                 },

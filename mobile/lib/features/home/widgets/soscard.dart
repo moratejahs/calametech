@@ -1,3 +1,4 @@
+import 'package:calamitech/constants/asset_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:calamitech/constants/api_paths.dart';
 import 'package:calamitech/features/sos_reports/models/sos_report.dart';
@@ -58,23 +59,55 @@ class SosCard extends StatelessWidget {
               right: 0,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // Use minimum space needed
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      sosReport.address ?? '',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min, // Use minimum space needed
+                      children: [
+                        if (sosReport.address != null && sosReport.address!.isNotEmpty)
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                size: 16.0,
+                                color: Colors.white,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  sosReport.address!,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.calendar_month,
+                              size: 16.0,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              sosReport.date,
+                              style: const TextStyle(color: Colors.white70),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      sosReport.date,
-                      style: const TextStyle(color: Colors.white70),
+                    Image.asset(
+                      sosReport.type == 'fire' ? AssetPaths.fire : AssetPaths.home,
+                      width: 20.0,
+                      height: 20.0,
                     ),
                   ],
                 ),

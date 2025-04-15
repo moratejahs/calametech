@@ -51,6 +51,6 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/newss', [NewsController::class, 'index']);
         // Report
-        // Route::post('/report', ReportController::class);
+        Route::post('/report', ReportController::class);
     });
 });

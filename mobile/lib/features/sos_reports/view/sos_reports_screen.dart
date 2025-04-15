@@ -46,7 +46,7 @@ class _SosReportsnState extends State<SosReportsScreen> {
               if (state is SosReportsLoaded) {
                 return state.sosReports.isEmpty
                     ? const Center(
-                        child: Text('No SOS reports available'),
+                        child: Text('No data available.'),
                       )
                     : Expanded(
                         child: ListView.builder(
