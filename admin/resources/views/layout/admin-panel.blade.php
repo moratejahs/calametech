@@ -31,10 +31,11 @@
     @yield('links')
 </head>
 
-<body class="light">
+<body style="background: linear-gradient(to bottom, #08BFF1, #FFFFFF);">
     <div id="app">
         <div id="sidebar" class="active">
-            <div class="sidebar-wrapper active" style=" background-color: #0099FF;">
+            <div class="sidebar-wrapper active"
+                style="width: 250px; height: 100vh; background: linear-gradient(to bottom, #08BFF1, #FFFFFF);">
 
                 <div class="sidebar-menu">
                     <ul class="menu">
@@ -47,15 +48,19 @@
                                     </a>
 
                                 </div>
-                                <center>
+                                <div class="text-center pt-3">
+                                    <img src="{{ asset('assets/images/calametech-logo.png') }}" alt="Logo"
+                                        width="70">
+                                    <div class="my-3">
+                                        <div class="bg-primary rounded-circle mx-auto"
+                                            style="width: 70px; height: 70px;">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                                                class="img-fluid rounded-circle p-1" alt="User">
+                                        </div>
+                                        <h6 class="text-dark mt-2 mb-0">{{ auth()->user()->name }}</h6>
+                                    </div>
+                                </div>
 
-                                    <a href="{{ route('admin.admin-dashboard') }}">
-                                        <img class="align-items-center img-fluid" width="100"
-                                            src="{{ asset('assets/images/calametech-logo.png') }}" alt="Logo">
-
-                                    </a>
-
-                                </center>
 
                             </div>
                         </li>
@@ -107,7 +112,7 @@
         <div class='layout-navbar'>
 
             <header class='mb p-0'>
-                <nav class="navbar navbar-expand navbar-light ">
+                <nav class="navbar navbar-expand bg-white color-black">
                     <div class="container-fluid">
                         <a href="#" class="burger-btn d-block">
                             <i class="bi bi-justify fs-3"></i>
@@ -146,8 +151,8 @@
                                     <hr class="dropdown-divider">
                                     </li> --}}
                                     <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logout-modal"
-                                            style="cursor: pointer;">
+                                        <a class="dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#logout-modal" style="cursor: pointer;">
                                             <i class="icon-mid bi bi-box-arrow-left me-2 text-danger"></i>
                                             Logout
                                         </a>
