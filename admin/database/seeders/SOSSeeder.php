@@ -16,6 +16,7 @@ class SOSSeeder extends Seeder
             [
             'lat' => '9.071651312307543',
             'long' => '126.162487818678',
+            'address' => 'Brgy. Dawis, Tandag City',
             'status' => 'resolved',
             'type' => 'fire',
             'user_id' => 1, // Ensure this user ID exists in the users table
@@ -25,6 +26,7 @@ class SOSSeeder extends Seeder
             [
             'lat' => '9.07840811322997',
             'long' => '126.1992890639329',
+            'address' => 'Brgy. Draga, Tandag City',
             'status' => 'resolved',
             'type' => 'flood',
             'user_id' => 1,
