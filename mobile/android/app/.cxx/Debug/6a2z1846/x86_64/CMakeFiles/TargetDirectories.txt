@@ -1,0 +1,2 @@
+C:/xampp/htdocs/calametech/mobile/android/app/.cxx/Debug/6a2z1846/x86_64/CMakeFiles/edit_cache.dir
+C:/xampp/htdocs/calametech/mobile/android/app/.cxx/Debug/6a2z1846/x86_64/CMakeFiles/rebuild_cache.dir
