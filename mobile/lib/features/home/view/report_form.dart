@@ -1,13 +1,9 @@
 import 'dart:io';
-import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/constants/asset_paths.dart';
-import 'package:calamitech/constants/route_constants.dart';
-import 'package:calamitech/core/app/cubit/navigation_cubit.dart';
 import 'package:calamitech/features/report/report.dart';
 import 'package:calamitech/features/report/widgets/emergency_type_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ReportForm extends StatefulWidget {

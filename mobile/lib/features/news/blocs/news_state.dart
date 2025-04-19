@@ -8,7 +8,7 @@ final class NewsInitial extends NewsState {}
 final class NewsLoading extends NewsState {}
 
 final class NewsLoaded extends NewsState {
-  final List<News> newsList;
+  final List<NewsModel> newsList;
 
   NewsLoaded({
     required this.newsList,

@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'package:calamitech/constants/api_paths.dart';
-import 'package:calamitech/features/news/models/news.dart';
+import 'package:calamitech/features/news/models/news_model.dart';
+import 'package:calamitech/features/news/repositories/i_news_repository.dart';
 import 'package:http/http.dart' as http;
 
-class NewsRepository {
+class NewsRepository extends INewsRepository {
   final http.Client httpClient;
 
   NewsRepository({
     required this.httpClient,
   });
 
-  Future<List<News>> getNews(String token) async {
+  @override
+  Future<List<NewsModel>> getNews(String token) async {
     final response = await httpClient.get(
       Uri.parse(ApiPaths.news),
       headers: {
@@ -20,11 +22,13 @@ class NewsRepository {
       },
     );
 
+    final jsonBody = json.decode(response.body);
+
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['data'];
-      return data.map((json) => News.fromJson(json)).toList();
+      final List<dynamic> data = jsonBody['data'];
+      return data.map((json) => NewsModel.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to fetch news.');
+      throw Exception(jsonBody['message'] ?? 'Failed to fetch news.');
     }
   }
 }

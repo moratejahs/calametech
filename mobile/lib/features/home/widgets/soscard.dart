@@ -24,7 +24,7 @@ class SosCard extends StatelessWidget {
             // Image background
             sosReport.image != null
                 ? Image.network(
-                    '${ApiPaths.storage}${sosReport.image}',
+                    '${ApiPaths.rootUrl}${sosReport.image}',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
                       color: Colors.grey[300],

@@ -1,6 +1,5 @@
 import 'package:calamitech/core/location/cubit/location_cubit.dart';
 import 'package:calamitech/features/home/view/calamity_tips.dart';
-import 'package:calamitech/features/home/view/featured_sos.dart';
 import 'package:calamitech/features/home/view/report_form.dart';
 import 'package:calamitech/features/news/views/news_cards.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             NewsCards(),
-            FeaturedSos(),
             CalamityTips(),
             ReportForm(),
           ],

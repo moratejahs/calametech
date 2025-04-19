@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:calamitech/features/news/models/news.dart';
+import 'package:calamitech/core/utils/remove_exception_prefix.dart';
+import 'package:calamitech/features/news/models/news_model.dart';
 import 'package:calamitech/features/news/repositories/news_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -20,7 +21,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
       emit(NewsLoaded(newsList: newsList));
     } catch (e) {
-      emit(NewsFailure(message: e.toString()));
+      emit(NewsFailure(message: removeExceptionPrefix(e.toString())));
     }
   }
 }
