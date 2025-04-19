@@ -14,6 +14,7 @@ class AdminNewsController extends Controller
     public function index()
     {
         $news = News::all();
+
     }
 
     /**
@@ -29,24 +30,24 @@ class AdminNewsController extends Controller
      */
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'url' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
-        $news = new News();
-        $news->title = $request->title;
-        $news->description = $request->description;
-        $news->url = $request->url;
+        // Store the image first
+        $imagePath = $request->file('image_path')->store('images', 'public');
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $news->image = '/storage/' . $imagePath;
-        }
-
-        $news->save();
+        // Then create the news record with the correct image path
+        $news = News::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'url' => $validated['url'],
+            'image_path' => '/storage/' . $imagePath,
+        ]);
 
         return redirect()->back()->with('success', 'News created successfully');
     }

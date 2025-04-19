@@ -52,13 +52,14 @@ Route::prefix('admin')->group(function () {
     Route::get('news', [AdminNewsController::class, 'index'])
         ->name('admin.admin-news');
     Route::post('store/news', [AdminNewsController::class, 'store'])
-        ->name('store.admin.admin-news');
+        ->name('admin.news.store');
     Route::put('edit/news', [AdminNewsController::class, 'edit'])
-        ->name('edit.admin.admin-news');
-    Route::post('delete/news', [AdminNewsController::class, 'destroy'])
-        ->name('delete.admin.admin-news');
+        ->name('admin.news.update');
+    Route::delete('delete/news', [AdminNewsController::class, 'destroy'])
+        ->name('admin.news.destroy');
     Route::get('news/{id}', [AdminNewsController::class, 'show'])
         ->name('admin.admin-news.show');
+
 
     Route::post('store/projects', [AdminProjectsController::class, 'store'])
         ->name('store.admin.admin-projects');
