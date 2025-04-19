@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminNewsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\AdminNewsController;
 use App\Http\Controllers\Calametech\UserController;
 use App\Http\Controllers\Admin\AdminUsersController;
 use App\Http\Controllers\Admin\AdminProfileController;
@@ -103,6 +104,12 @@ Route::prefix('admin')->group(function () {
     Route::controller(UserController::class)->group(function (){
          Route::get('manage-users', 'index')->name('manage-users.index');
     });
+
+    Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+    Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
+    Route::post('/news', [NewsController::class, 'store'])->name('news.store');
+    Route::put('/news', [NewsController::class, 'update'])->name('news.update');
+    Route::delete('/news', [NewsController::class, 'destroy'])->name('news.destroy');
 });
 
 // Super Admin Endpoints
