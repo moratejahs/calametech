@@ -17,7 +17,7 @@ class RestApiService implements BaseRestApiService {
   Future get(String url) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl$url'),
+        Uri.parse(baseUrl),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

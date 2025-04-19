@@ -7,7 +7,7 @@ class ApiPaths {
   static const String wifiApiUrl = 'http://$wifiIP:$port/api/v1';
   static const String productionApiUrl = 'https://domain.tld/api/v1';
   static const String baseUrl = wifiApiUrl;
-  static const String storage = 'http://$wifiIP:$port/storage/';
+  static const String storage = '$baseUrl/storage';
 
   static const String getUser = '/user';
   static const String login = '/login';
@@ -17,6 +17,7 @@ class ApiPaths {
   static const String report = '/report';
   static const String sosFeatured = '/sos/featured';
   static const String sosReco = '/sos/reco';
+  static const String news = '$baseUrl/news';
   static const String aiApiUrl = 'https://api.openai.com/v1/chat/completions';
 
 }

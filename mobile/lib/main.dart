@@ -10,6 +10,8 @@ import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
 import 'package:calamitech/features/ai_tips/ai_tips.dart';
 import 'package:calamitech/features/ai_tips/bloc/tips_bloc.dart';
 import 'package:calamitech/features/home/home.dart';
+import 'package:calamitech/features/news/blocs/news_bloc.dart';
+import 'package:calamitech/features/news/repositories/news_repository.dart';
 import 'package:calamitech/features/sos_reports/sos_reports.dart';
 import 'package:calamitech/features/sos/bloc/sos_bloc.dart';
 import 'package:calamitech/features/sos/repositories/sos_repository.dart';
@@ -33,7 +35,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RestApiService restApiService = RestApiService(baseUrl: ApiPaths.wifiApiUrl);
+    final RestApiService restApiService =
+        RestApiService(baseUrl: ApiPaths.baseUrl);
     final SecureStorageService storage = SecureStorageService();
     final httpClient = http.Client();
 
@@ -43,7 +46,11 @@ class MyApp extends StatelessWidget {
           create: (_) => LoginRepository(restApiService: restApiService, storage: storage),
         ),
         RepositoryProvider<SignupRepository>(
-          create: (_) => SignupRepository(restApiService: restApiService, storage: storage),
+          create: (_) => SignupRepository(
+              restApiService: restApiService, storage: storage),
+        ),
+        RepositoryProvider<NewsRepository>(
+          create: (_) => NewsRepository(httpClient: httpClient),
         ),
         RepositoryProvider<SosReportsRepository>(
           create: (_) => SosReportsRepository(httpClient: httpClient),
@@ -80,6 +87,9 @@ class MyApp extends StatelessWidget {
                     signupRepository: context.read<SignupRepository>(),
                     storage: storage,
                   )),
+          BlocProvider<NewsBloc>(
+              create: (context) =>
+                  NewsBloc(newsRepository: context.read<NewsRepository>())),
           BlocProvider<SosReportsBloc>(
               create: (context) => SosReportsBloc(
                     sosReportsRepository: context.read<SosReportsRepository>(),
