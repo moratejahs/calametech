@@ -82,17 +82,20 @@ class AdminNewsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'url' => 'required|string',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_path' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $news = News::find($id);
-        $news->title = $request->title;
-        $news->description = $request->description;
-        $news->url = $request->url;
+        $news = News::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $news->image = '/storage/' . $imagePath;
+        // Update fields
+        $news->title = $validated['title'];
+        $news->description = $validated['description'];
+        $news->url = $validated['url'];
+
+        // Optional image update
+        if ($request->hasFile('image_path')) {
+            $imagePath = $request->file('image_path')->store('images', 'public');
+            $news->image_path = '/storage/' . $imagePath;
         }
 
         $news->save();
@@ -100,15 +103,14 @@ class AdminNewsController extends Controller
         return redirect()->back()->with('success', 'News updated successfully');
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(string $id)
     {
-        $validated = $request->validate([
-            'id' => 'required',
-        ]);
-        $news = News::find($request->id);
+
+        $news = News::find($id);
         $news->delete();
         return redirect()->back()->with('success', 'News deleted successfully');
     }

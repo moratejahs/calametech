@@ -18,7 +18,8 @@
 
                     <div class="card-body">
                         <!-- Add News Button -->
-                        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addNewsModal">
+                        <button class="btn mb-3" style=" background: #08BFF1; color: white;" data-bs-toggle="modal"
+                            data-bs-target="#addNewsModal">
                             Add News
                         </button>
 
@@ -37,7 +38,7 @@
                                 @foreach ($news as $new)
                                     <tr>
                                         <td>
-                                            <img src="{{ $new->image_path ? asset('storage/' . $new->image_path) : asset('assets/images/picture.png') }}"
+                                            <img src="{{ $new->image_path ? asset($new->image_path) : asset('assets/images/picture.png') }}"
                                                 alt="Incident Image"
                                                 style="max-width: 90px; max-height: 90px; width: 90px; height: 90px;">
                                         </td>
@@ -92,13 +93,15 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <label>Image</label>
-                                                            <input type="file" name="image" class="form-control">
+                                                            <input type="file" name="image_path" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                                        <button type="submit" class="btn "
+                                                            style=" background: #08BFF1; color: white;">Save
+                                                            changes</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -171,7 +174,8 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Add News</button>
+                                    <button type="submit" class="btn " style=" background: #08BFF1; color: white;">Add
+                                        News</button>
                                 </div>
                             </div>
                         </form>
