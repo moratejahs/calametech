@@ -25,8 +25,8 @@
             background: #87CEEB;
             padding: 2rem;
             border-radius: 20px;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-            width: 600px;
+            /* box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); */
+            width: 700px;
         }
 
         .logo img {
@@ -98,7 +98,7 @@
             </div>
 
             <!-- Form Column -->
-            <div class="col-md-7">
+            <div class="col-md-7 col-lg-7">
                 <div class="login-form">
                     <h4>Log in to your Account</h4>
                     <form method="POST" action="{{ route('login') }}">
@@ -107,7 +107,16 @@
                         <input type="password" class="form-control" name="password" placeholder="Password" required>
                         <button type="submit" class="btn btn-primary">Sign in</button>
                     </form>
-                    <p class="signup-text">Don’t have an account? <a href="#">Sign up</a></p>
+                    <p class="signup-text mt-3"></p>
+
+                    <!-- Mobile App Download Section -->
+                    <div class="mt-4 text-center">
+                        <p>Get our mobile app for a better experience!</p>
+                        <a href="{{ asset('storage/app.apk') }}" class="btn text-dark" style="background-color: white;"
+                            download>
+                            📱 Download Mobile App
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
