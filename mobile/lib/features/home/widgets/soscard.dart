@@ -13,13 +13,13 @@ class SosCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: fullWidth ? MediaQuery.of(context).size.width - 32 : 200,
-      height: 150, // Add fixed height to prevent unbounded height error
+      height: 150, // Fixed height
       margin: const EdgeInsets.only(right: 12),
       child: Card(
         elevation: 3,
         clipBehavior: Clip.antiAlias,
         child: Stack(
-          fit: StackFit.expand, // Ensure stack fills parent
+          fit: StackFit.expand, // Ensure the stack fills the parent
           children: [
             // Image background
             sosReport.image != null
@@ -75,7 +75,8 @@ class SosCard extends StatelessWidget {
                                 size: 16.0,
                                 color: Colors.white,
                               ),
-                              Expanded(
+                              Container(
+                                width: 120, // Set width for the address text
                                 child: Text(
                                   sosReport.address!,
                                   style: const TextStyle(
@@ -104,10 +105,14 @@ class SosCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Image.asset(
-                      sosReport.type == 'fire' ? AssetPaths.fire : AssetPaths.home,
+                    // Set a fixed width and height for the image
+                    Container(
                       width: 20.0,
                       height: 20.0,
+                      child: Image.asset(
+                        sosReport.type == 'fire' ? AssetPaths.fire : AssetPaths.home,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ],
                 ),
