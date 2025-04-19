@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminNewsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
@@ -46,6 +47,17 @@ Route::prefix('admin')->group(function () {
         ->name('incident.store');
     Route::post('/update-project-status', [AdminProjectsController::class, 'updateProjectStatus'])
         ->name('admin.update.project.status');
+
+    Route::get('news', [AdminNewsController::class, 'index'])
+        ->name('admin.admin-news');
+    Route::post('store/news', [AdminNewsController::class, 'store'])
+        ->name('store.admin.admin-news');
+    Route::put('edit/news', [AdminNewsController::class, 'edit'])
+        ->name('edit.admin.admin-news');
+    Route::post('delete/news', [AdminNewsController::class, 'destroy'])
+        ->name('delete.admin.admin-news');
+    Route::get('news/{id}', [AdminNewsController::class, 'show'])
+        ->name('admin.admin-news.show');
 
     Route::post('store/projects', [AdminProjectsController::class, 'store'])
         ->name('store.admin.admin-projects');

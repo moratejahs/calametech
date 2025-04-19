@@ -1,6 +1,7 @@
 class ApiPaths {
   static const String emulatorIP = '10.0.2.2';
   static const String wifiIP = '172.16.80.202';
+
   static const String port = '8000';
   static const String localApiUrl = 'http://$emulatorIP:$port/api/v1';
   static const String wifiApiUrl = 'http://$wifiIP:$port/api/v1';

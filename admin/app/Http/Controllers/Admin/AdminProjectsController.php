@@ -41,7 +41,9 @@ class AdminProjectsController extends Controller
 
     public function index()
     {
-        $sos = SOS::all();
+        $sos = SOS::query()
+            ->where('status', '!=', 'pending')
+            ->get();
         // dd($sos);
         return view('admin.admin-projects',[
             'sos' => $sos

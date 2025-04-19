@@ -31,7 +31,7 @@ class AppScaffold extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildNavBarItem(context, Icons.home, 'Home', RouteConstants.home, 0, selectedIndex),
-          _buildSOSNavItem(context, selectedIndex),
+          // _buildSOSNavItem(context, selectedIndex),
           _buildNavBarItem(context, Icons.person, 'Profile', RouteConstants.profile, 2, selectedIndex),
         ],
       ),

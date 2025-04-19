@@ -24,6 +24,7 @@ class UsersTableSeeder extends Seeder
             'contact_number' => '09706122212',
             'password' => bcrypt('123'),
             'plain_password' => '123',
+            'email_verified_at' => $now,
         ])->roles()->attach($adminRole, ['created_at' => $now, 'updated_at' => $now]);
     }
 }

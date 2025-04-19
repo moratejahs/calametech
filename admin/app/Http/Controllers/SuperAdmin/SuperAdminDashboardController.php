@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Project;
 use Carbon\Carbon;
+use App\Models\SOS;
+use App\Models\Project;
+use App\Http\Controllers\Controller;
 
 class SuperAdminDashboardController extends Controller
 {
@@ -27,13 +28,15 @@ class SuperAdminDashboardController extends Controller
 
         $now = Carbon::now();
         $thisMonthName = $now->format('F');
+        $sos = SOS::all();
 
         return view('super-admin.super-admin-dashboard', compact(
             'projectStatusData',
             'revenueData',
             'weekRangeData',
             'recentlyCompletedProject',
-            'thisMonthName'
+            'thisMonthName',
+            'sos'
         ));
     }
 
