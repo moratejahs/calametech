@@ -185,10 +185,17 @@
                 </div>
             </div>
         </div>
-
+        {{-- <audio id="sosAudio" src="{{ asset('assets/sound/sos.mp3') }}" type="audio/mpeg" autoplay muted></audio> --}}
     </div>
 @endsection
 @push('scripts')
+    {{-- <script>
+        window.onload = function() {
+            var audio = document.getElementById('sosAudio');
+            audio.play();
+            audio.muted = false; // Unmute after autoplay
+        }
+    </script> --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const ctx = document.getElementById('reportsChart').getContext('2d');
@@ -252,6 +259,8 @@
         });
     </script>
     <script>
+        const sosIconUrl = "{{ asset('assets/images/placeholder.png') }}";
+        const sosSoundUrl = "{{ asset('assets/sound/sos.mp3') }}";
         var map = L.map('map').setView([9.078408, 126.199289], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -263,11 +272,14 @@
         console.log("Fetched SOS Data:", sosData); // Debugging: Check if the data is correct
 
         var sosIcon = L.icon({
-            iconUrl: "{{ asset('assets/images/placeholder.png') }}",
+            iconUrl: sosIconUrl,
             iconSize: [32, 32],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
         });
+
+
+
 
         var sosFireIcon = L.icon({
             iconUrl: "{{ asset('assets/images/fire.png') }}",

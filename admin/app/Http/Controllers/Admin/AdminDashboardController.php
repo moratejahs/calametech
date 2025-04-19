@@ -43,7 +43,13 @@ class AdminDashboardController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-            $sos = SOS::all();
+
+
+
+            $sos = SOS::query()
+                ->where('status', 'pending')
+                ->get();
+                // dd($sos);
         return view('admin.admin-dashboard', compact(
             'projectStatusData',
             'revenueData',

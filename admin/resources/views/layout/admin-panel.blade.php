@@ -16,17 +16,17 @@
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/css/app-dark.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/app-dark.css') }}"> --}}
 
     {{-- <link rel="shortcut icon" href="{{ asset('assets/images/logo/reygenix.png') }}" type="image/x-icon"> --}}
-
+    {{--
     <script>
         const body = document.body;
         const theme = localStorage.getItem('theme')
 
         if (theme)
             document.documentElement.setAttribute('data-bs-theme', theme)
-    </script>
+    </script> --}}
 
     @yield('links')
 </head>
@@ -151,8 +151,8 @@
                                     <hr class="dropdown-divider">
                                     </li> --}}
                                     <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#logout-modal" style="cursor: pointer;">
+                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logout-modal"
+                                            style="cursor: pointer;">
                                             <i class="icon-mid bi bi-box-arrow-left me-2 text-danger"></i>
                                             Logout
                                         </a>
@@ -231,6 +231,23 @@
 
         @yield('content')
 
+        @php
+            // Query the SOS model for the 'pending' status directly in the Blade file
+            $sos = \App\Models\SOS::where('status', 'pending')->first();
+        @endphp
+
+        @if ($sos)
+            <audio id="sosAudio" src="{{ asset('assets/sound/sos.mp3') }}" type="audio/mpeg" autoplay loop
+                muted></audio>
+            <script>
+                window.onload = function() {
+                    var audio = document.getElementById('sosAudio');
+                    audio.play();
+                    audio.muted = false; // Unmute after autoplay
+                }
+            </script>
+        @endif
+
     </div>
     <script src="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 
@@ -240,7 +257,7 @@
 
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
-    <script src="{{ asset('assets/js/dark.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/dark.js') }}"></script> --}}
 
     @yield('scripts')
     @stack('scripts')
