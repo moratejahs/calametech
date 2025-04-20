@@ -19,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.authUserService,
   }) : super(AuthInitial()) {
     on<LoginRequested>(onLoginRequested);
+    on<RegisterRequested>(onRegisterRequested);
     on<LogoutRequested>(onLogoutRequested);
     on<AuthCheckRequested>(onAuthCheckRequested);
   }
@@ -43,6 +44,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         AuthLoginFieldError(
           emailError: e.errors['email']?.first ?? '',
           passwordError: e.errors['password']?.first ?? '',
+        ),
+      );
+    } catch (e) {
+      emit(AuthFailure(message: removeExceptionPrefix(e.toString())));
+    }
+  }
+
+  Future<void> onRegisterRequested(
+      RegisterRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+
+    try {
+      final user = await authRepository.register(
+        name: event.name,
+        email: event.email,
+        password: event.password,
+        passwordConfirmation: event.passwordConfirmation,
+        phone: event.phone,
+        address: event.address,
+      );
+
+      if (!await authUserService.store(user)) {
+        throw Exception('Failed to store user.');
+      }
+
+      print('Authenticated!!');
+
+      emit(AuthAuthenticated(user: user));
+    } on ValidationException catch (e) {
+      emit(
+        AuthRegisterFieldError(
+          nameError: e.errors['name']?.first,
+          emailError: e.errors['email']?.first,
+          passwordError: e.errors['password']?.first,
+          passwordConfirmationError: e.errors['password_confirmation']?.first,
+          phoneError: e.errors['phone']?.first,
+          addressError: e.errors['address']?.first,
         ),
       );
     } catch (e) {

@@ -27,8 +27,8 @@ BottomNavigationBar appBottomNav(BuildContext context, String currentRoute) {
         label: 'Home',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person_2_outlined),
-        activeIcon: Icon(Icons.person_2),
+        icon: Icon(Icons.person_outlined),
+        activeIcon: Icon(Icons.person),
         label: 'Profile',
       ),
     ],

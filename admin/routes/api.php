@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\SOSController;
 use App\Http\Controllers\Api\V1\ReportController;
-use App\Http\Controllers\Api\V1\Auth\SignupController;
+use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerifyController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticatedTokenSessionController;
 
@@ -26,8 +26,8 @@ Route::prefix('v1')->group(function () {
     // Login
     Route::post('/login', [AuthenticatedTokenSessionController::class, 'store']);
 
-    // Signup
-    Route::post('/signup', SignupController::class);
+    // Register
+    Route::post('/register', RegisterController::class);
 
     // Email Verification
     Route::get('/email/verify/{id}/{hash}', EmailVerifyController::class)

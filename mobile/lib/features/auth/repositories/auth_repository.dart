@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:calamitech/constants/api_paths.dart';
 import 'package:calamitech/core/exceptions/validation_exception.dart';
+import 'package:calamitech/core/utils/helpers/parse_laravel_validation_errors.dart';
 import 'package:calamitech/core/utils/services/auth_user_service.dart';
 import 'package:calamitech/features/auth/models/user_model.dart';
 import 'package:calamitech/features/auth/repositories/i_auth_repository.dart';
@@ -38,16 +39,50 @@ class AuthRepository implements IAuthRepository {
         'token': jsonBody['token'],
       });
     } else if (response.statusCode == 422) {
-      throw ValidationException(jsonBody['errors']);
+      throw ValidationException(parseLaravelValidationErrors(jsonBody['errors']));
     } else {
-      throw Exception(jsonBody['message']);
+      throw Exception(jsonBody['message'] ?? 'Failed to login.');
     }
   }
 
   @override
-  Future<UserModel> register({required String name, required String email, required String password, required String passwordConfirmation}) {
-    // TODO: implement register
-    throw UnimplementedError();
+  Future<UserModel> register({
+    required String name,
+    required String email,
+    required String password,
+    required String passwordConfirmation,
+    required String phone,
+    required String address,
+  }) async {
+    final response = await httpClient.post(
+      Uri.parse(ApiPaths.register),
+      headers: {
+        'Accept': 'application/json',
+      },
+      body: {
+        'name': name,
+        'email': email,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+        'phone': phone,
+        'address': address,
+      },
+    );
+
+    final jsonBody = json.decode(response.body);
+
+    if (response.statusCode == 201) {
+      return UserModel.fromMap({
+        'id': jsonBody['user']['id'] as int,
+        'name': jsonBody['user']['name'] as String,
+        'email': jsonBody['user']['email'] as String,
+        'token': jsonBody['token'] as String,
+      });
+    } else if (response.statusCode == 422) {
+      throw ValidationException(parseLaravelValidationErrors(jsonBody['errors']));
+    } else {
+      throw Exception(jsonBody['message'] ?? 'Failed to register.');
+    }
   }
 
   @override
@@ -69,8 +104,12 @@ class AuthRepository implements IAuthRepository {
 
     final jsonBody = json.decode(response.body);
 
-    if (response.statusCode != 200) {
-      throw Exception(jsonBody['message']);
+    if (response.statusCode == 200) {
+      if (!await authUserService.delete()) {
+        throw Exception('Failed to delete user data.');
+      }
+    } else {
+      throw Exception(jsonBody['message'] ?? 'Failed to logout.');
     }
   }
 }
