@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class UserModel {
   final int id;
   final String name;
@@ -11,12 +13,63 @@ class UserModel {
     required this.token,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  UserModel copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? token,
+  }) {
     return UserModel(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      token: json['token'],
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      token: token ?? this.token,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'email': email,
+      'token': token,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      id: map['id'] as int,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      token: map['token'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'UserModel(id: $id, name: $name, email: $email, token: $token)';
+  }
+
+  @override
+  bool operator ==(covariant UserModel other) {
+    if (identical(this, other)) return true;
+  
+    return 
+      other.id == id &&
+      other.name == name &&
+      other.email == email &&
+      other.token == token;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+      name.hashCode ^
+      email.hashCode ^
+      token.hashCode;
   }
 }

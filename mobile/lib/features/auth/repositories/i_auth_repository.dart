@@ -8,5 +8,5 @@ abstract class IAuthRepository {
     required String password,
     required String passwordConfirmation,
   });
-  Future<void> logout(String token);
+  Future<void> logout();
 }

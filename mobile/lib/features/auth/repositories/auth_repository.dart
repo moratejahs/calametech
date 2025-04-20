@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'package:calamitech/constants/api_paths.dart';
 import 'package:calamitech/core/exceptions/validation_exception.dart';
+import 'package:calamitech/core/utils/services/auth_user_service.dart';
 import 'package:calamitech/features/auth/models/user_model.dart';
 import 'package:calamitech/features/auth/repositories/i_auth_repository.dart';
-import 'package:calamitech/utils/services/secure_storage_service.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository implements IAuthRepository {
   final http.Client httpClient;
-  final SecureStorageService storage;
+  final AuthUserService authUserService;
 
   const AuthRepository({
     required this.httpClient,
-    required this.storage,
+    required this.authUserService,
   });
 
   @override
@@ -20,7 +20,6 @@ class AuthRepository implements IAuthRepository {
     final response = await httpClient.post(
       Uri.parse(ApiPaths.login),
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
       body: {
@@ -32,7 +31,7 @@ class AuthRepository implements IAuthRepository {
     final jsonBody = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      return UserModel.fromJson({
+      return UserModel.fromMap({
         'id': jsonBody['user']['id'],
         'name': jsonBody['user']['name'],
         'email': jsonBody['user']['email'],
@@ -52,13 +51,19 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<void> logout(String token) async {
+  Future<void> logout() async {
+    final user = await authUserService.get();
+
+    if (user == null) {
+      throw Exception('Unauthenticated.');
+    }
+
     final response = await httpClient.post(
       Uri.parse(ApiPaths.logout),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer ${user.token}'
       },
     );
 

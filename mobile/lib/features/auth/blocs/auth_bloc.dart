@@ -1,13 +1,82 @@
 import 'package:bloc/bloc.dart';
+import 'package:calamitech/core/exceptions/validation_exception.dart';
+import 'package:calamitech/core/utils/helpers/remove_exception_prefix.dart';
+import 'package:calamitech/core/utils/services/auth_user_service.dart';
+import 'package:calamitech/features/auth/models/user_model.dart';
+import 'package:calamitech/features/auth/repositories/auth_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(AuthInitial()) {
-    on<AuthEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  final AuthRepository authRepository;
+  final AuthUserService authUserService;
+
+  AuthBloc({
+    required this.authRepository,
+    required this.authUserService,
+  }) : super(AuthInitial()) {
+    on<LoginRequested>(onLoginRequested);
+    on<LogoutRequested>(onLogoutRequested);
+    on<AuthCheckRequested>(onAuthCheckRequested);
+  }
+
+  Future<void> onLoginRequested(
+      LoginRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+
+    try {
+      final user = await authRepository.login(
+        event.email,
+        event.password,
+      );
+
+      if (!await authUserService.store(user)) {
+        throw Exception('Failed to store user.');
+      }
+
+      emit(AuthAuthenticated(user: user));
+    } on ValidationException catch (e) {
+      emit(
+        AuthLoginFieldError(
+          emailError: e.errors['email']?.first ?? '',
+          passwordError: e.errors['password']?.first ?? '',
+        ),
+      );
+    } catch (e) {
+      emit(AuthFailure(message: removeExceptionPrefix(e.toString())));
+    }
+  }
+
+  Future<void> onLogoutRequested(
+      LogoutRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+
+    try {
+      await authRepository.logout();
+
+      emit(AuthUnAuthenticated());
+    } catch (e) {
+      emit(AuthFailure(message: removeExceptionPrefix(e.toString())));
+    }
+  }
+
+  Future<void> onAuthCheckRequested(
+      AuthCheckRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+
+    try {
+      final user = await authUserService.get();
+
+      if (user != null) {
+        emit(AuthAuthenticated(user: user));
+      } else {
+        emit(AuthUnAuthenticated());
+      }
+    } catch (e) {
+      emit(AuthFailure(message: removeExceptionPrefix(e.toString())));
+    }
   }
 }

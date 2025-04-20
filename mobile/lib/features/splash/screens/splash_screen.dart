@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../config/theme/app_theme.dart';
-import '../../../constants/asset_paths.dart';
-import '../../../constants/route_constants.dart';
-import '../../../core/auth/login/bloc/login_bloc.dart';
-import '../../../core/auth/login/models/user.dart';
-import '../../../utils/services/secure_storage_service.dart';
+import 'package:calamitech/config/theme/app_theme.dart';
+import 'package:calamitech/constants/asset_paths.dart';
+import 'package:calamitech/features/auth/blocs/auth_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,29 +12,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final SecureStorageService storage = SecureStorageService();
-
   @override
   void initState() {
     super.initState();
-    _initializeAuth();
+    _startAuthCheck();
   }
 
-  Future<void> _initializeAuth() async {
-    final authUser = await storage.readValue('user');
-
-    if (authUser != null) {
-      context
-          .read<LoginBloc>()
-          .add(UserAlreadyLoggedIn(User.fromJson(authUser)));
-
-      // Delay for a smooth transition
-      await Future.delayed(const Duration(seconds: 2));
-      if (mounted) context.go(RouteConstants.home);
-    }
-
+  void _startAuthCheck() async {
     await Future.delayed(const Duration(seconds: 2));
-    if (mounted) context.go(RouteConstants.login);
+    if (!mounted) return;
+    context.read<AuthBloc>().add(AuthCheckRequested());
   }
 
   @override

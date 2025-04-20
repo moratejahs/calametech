@@ -13,10 +13,10 @@ class NewsModel {
 
   factory NewsModel.fromJson(Map<String, dynamic> json) {
     return NewsModel(
-      imagePath: json['image_path'],
-      title: json['title'],
-      description: json['description'],
-      url: json['url'],
+      imagePath: json['image_path'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      url: json['url'] as String?,
     );
   }
 }
