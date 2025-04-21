@@ -41,7 +41,13 @@ class RegisterController extends Controller
         return response()->json([
             'success' => 'Signup successfully',
             'token' => $token,
-            'user' => $user->only('id', 'name', 'email'),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->contact_number,
+                'address' => $user->address,
+            ],
         ], 201);
     }
 }
