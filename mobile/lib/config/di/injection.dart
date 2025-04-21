@@ -1,13 +1,13 @@
 import 'package:calamitech/core/utils/services/sos_service.dart';
 import 'package:calamitech/core/utils/services/tips_service.dart';
+import 'package:calamitech/features/connectivity/bloc/connectivity_bloc.dart';
 import 'package:calamitech/features/report/blocs/report_bloc.dart';
 import 'package:calamitech/features/report/repositories/sos_repository.dart';
 import 'package:calamitech/features/tips/blocs/tips_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
-import 'package:calamitech/core/location/cubit/location_cubit.dart';
+import 'package:calamitech/features/location/cubit/location_cubit.dart';
 import 'package:calamitech/core/utils/services/secure_storage_service.dart';
 import 'package:calamitech/core/utils/services/auth_user_service.dart';
 import 'package:calamitech/features/auth/blocs/auth_bloc.dart';

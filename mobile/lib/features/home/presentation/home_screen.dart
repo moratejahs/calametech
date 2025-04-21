@@ -5,7 +5,7 @@ import 'package:calamitech/features/news/presentation/news_cards.dart';
 import 'package:calamitech/features/report/presentation/report_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:calamitech/core/location/cubit/location_cubit.dart';
+import 'package:calamitech/features/location/cubit/location_cubit.dart';
 import 'package:calamitech/features/tips/presentation/calamity_tips.dart';
 
 class HomeScreen extends StatefulWidget {
