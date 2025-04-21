@@ -2,10 +2,11 @@ import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/core/shared_widgets/app_bottom_nav.dart';
 import 'package:calamitech/features/news/presentation/news_cards.dart';
+import 'package:calamitech/features/report/presentation/report_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:calamitech/core/location/cubit/location_cubit.dart';
-import 'package:calamitech/features/home/presentation/calamity_tips.dart';
+import 'package:calamitech/features/tips/presentation/calamity_tips.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               NewsCards(),
               CalamityTips(),
-              // ReportForm(),
+              ReportForm(),
             ],
           ),
         ),

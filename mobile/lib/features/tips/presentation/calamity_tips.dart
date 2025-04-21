@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/constants/asset_paths.dart';
 import 'package:calamitech/constants/route_constants.dart';
-import 'package:calamitech/features/home/presentation/tip_button.dart';
+import 'package:calamitech/features/tips/presentation/tip_button.dart';
 
 class CalamityTips extends StatelessWidget {
   const CalamityTips({super.key});

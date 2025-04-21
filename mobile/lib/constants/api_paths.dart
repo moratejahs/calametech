@@ -16,7 +16,7 @@ class ApiPaths {
   static const String register = '$baseUrl/register';
   static const String logout = '$baseUrl/logout';
   static const String getUser = '$baseUrl/user';
-  static const String news = '$baseUrl/newss';
+  static const String news = '$baseUrl/news';
   static const String report = '$baseUrl/report';
 
   static const String aiApiUrl = 'https://api.openai.com/v1/chat/completions';

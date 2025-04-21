@@ -1,17 +1,13 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
 
 // State
-class LocationCubitState extends Equatable {
+class LocationCubitState {
   final double latitude;
   final double longitude;
   final String? error;
 
   const LocationCubitState({this.latitude = 0.0, this.longitude = 0.0, this.error});
-
-  @override
-  List<Object?> get props => [latitude, longitude, error];
 }
 
 // Cubit
