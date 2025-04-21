@@ -4,14 +4,6 @@ import 'package:hexcolor/hexcolor.dart';
 class AppTheme {
   static Color primaryColor = HexColor('#08BFF1');
 
-  TextStyle _buildTextStyle(Color color, {double size = 16.0, FontWeight? weight}) {
-    return TextStyle(
-      color: color,
-      fontSize: size,
-      fontWeight: weight,
-    );
-  }
-
   OutlineInputBorder _buildOutlineInputBorder(Color color) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(6),
@@ -52,7 +44,6 @@ class AppTheme {
         textStyle: WidgetStateProperty.resolveWith(
           (_) => const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.normal,
           ),
         ),
         foregroundColor: WidgetStateProperty.all<Color>(Colors.white),

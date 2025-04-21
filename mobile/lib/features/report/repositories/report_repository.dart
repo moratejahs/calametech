@@ -1,18 +1,22 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:calamitech/constants/api_paths.dart';
+import 'package:calamitech/core/utils/services/auth_user_service.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart'; // Add this import for MediaType
 
 class ReportRepository {
   final http.Client httpClient;
+  final AuthUserService authUserService;
 
   ReportRepository({
     required this.httpClient,
+    required this.authUserService,
   });
 
-  Future<Map<String, dynamic>> submitReport(int? sosId, String description, String type, File? image, String token) async {
+  Future<Map<String, dynamic>> submitReport(int? sosId, String description,
+      String type, File? image, String token) async {
     try {
       var request = http.MultipartRequest(
         'POST',
