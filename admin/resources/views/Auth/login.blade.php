@@ -112,7 +112,7 @@
                     <!-- Mobile App Download Section -->
                     <div class="mt-4 text-center">
                         <p>Get our mobile app for a better experience!</p>
-                        <a href="{{ asset('storage/app.apk') }}" class="btn text-dark" style="background-color: white;"
+                        <a href="https://drive.google.com/file/d/1VZkoMP-5eBcsmdika_682qzipHNGw6BN/view" target="_blank" class="btn text-dark" style="background-color: white;"
                             download>
                             📱 Download Mobile App
                         </a>
