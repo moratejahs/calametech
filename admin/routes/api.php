@@ -43,14 +43,11 @@ Route::prefix('v1')->group(function () {
             return $request->user();
         });
 
-        // SOS
-        Route::get('/sos', [SOSController::class, 'index']);
-        Route::get('/sos/featured', [SOSController::class, 'indexFeatured']);
-        Route::get('/sos/reco', [SOSController::class, 'indexReco']);
-        Route::post('/sos', [SOSController::class, 'store']);
+        // News
+        Route::get('/news', [NewsController::class, 'index']);
 
-        Route::get('/newss', [NewsController::class, 'index']);
         // Report
-        Route::post('/report', ReportController::class);
+        Route::post('/report', [ReportController::class, 'store']);
+        Route::put('/report/{id}', [ReportController::class, 'update']);
     });
 });

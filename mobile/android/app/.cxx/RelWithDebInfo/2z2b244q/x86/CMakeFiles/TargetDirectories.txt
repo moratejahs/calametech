@@ -1,0 +1,2 @@
+C:/laragon/www/calametech/mobile/android/app/.cxx/RelWithDebInfo/2z2b244q/x86/CMakeFiles/edit_cache.dir
+C:/laragon/www/calametech/mobile/android/app/.cxx/RelWithDebInfo/2z2b244q/x86/CMakeFiles/rebuild_cache.dir

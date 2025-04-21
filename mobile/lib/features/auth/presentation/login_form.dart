@@ -15,8 +15,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController(text: 'admin@gmail.com');
-    final passwordController = TextEditingController(text: '123');
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -26,6 +26,7 @@ class _LoginFormState extends State<LoginForm> {
               content: Text(state.message),
               backgroundColor: Colors.red,
               behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 2),
             ),
           );
         } else if (state is AuthLoginFieldError) {

@@ -1,10 +1,13 @@
+import 'package:calamitech/core/utils/services/sos_service.dart';
 import 'package:calamitech/core/utils/services/tips_service.dart';
+import 'package:calamitech/features/connectivity/bloc/connectivity_bloc.dart';
+import 'package:calamitech/features/report/blocs/report_bloc.dart';
+import 'package:calamitech/features/report/repositories/sos_repository.dart';
 import 'package:calamitech/features/tips/blocs/tips_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:calamitech/core/connectivity/bloc/connectivity_bloc.dart';
-import 'package:calamitech/core/location/cubit/location_cubit.dart';
+import 'package:calamitech/features/location/cubit/location_cubit.dart';
 import 'package:calamitech/core/utils/services/secure_storage_service.dart';
 import 'package:calamitech/core/utils/services/auth_user_service.dart';
 import 'package:calamitech/features/auth/blocs/auth_bloc.dart';
@@ -23,6 +26,9 @@ List<RepositoryProvider> repositoryProviders() {
     ),
     RepositoryProvider<TipsService>(
       create: (_) => TipsService(storage: storage),
+    ),
+    RepositoryProvider<SosService>(
+      create: (_) => SosService(storage: storage),
     ),
     RepositoryProvider<AuthRepository>(
       create: (context) => AuthRepository(
@@ -43,10 +49,13 @@ List<RepositoryProvider> repositoryProviders() {
         tipsService: context.read<TipsService>(),
       ),
     ),
-    // RepositoryProvider<ReportRepository>(
-    //   create: (_) => ReportRepository(
-    //       httpClient: httpClient, authTokenRepository: authTokenRepository),
-    // ),
+    RepositoryProvider<SosRepository>(
+      create: (context) => SosRepository(
+        httpClient: httpClient,
+        authUserService: context.read<AuthUserService>(),
+        sosService: context.read<SosService>(),
+      ),
+    ),
   ];
 }
 
@@ -73,10 +82,10 @@ List<BlocProvider> blocProviders() {
         tipsRepository: context.read<TipsRepository>(),
       ),
     ),
-    // BlocProvider<ReportBloc>(
-    //   create: (context) => ReportBloc(
-    //     reportRepository: context.read<ReportRepository>(),
-    //   ),
-    // ),
+    BlocProvider<ReportBloc>(
+      create: (context) => ReportBloc(
+        sosRepository: context.read<SosRepository>(),
+      ),
+    ),
   ];
 }
