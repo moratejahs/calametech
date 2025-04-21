@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class TipButton extends StatelessWidget {
   final Color? color;
@@ -18,7 +17,9 @@ class TipButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.go(route),
+      onTap: () => {
+        Navigator.pushNamed(context, route),
+      },
       child: Container(
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(

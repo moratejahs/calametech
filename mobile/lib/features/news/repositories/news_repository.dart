@@ -16,7 +16,6 @@ class NewsRepository extends INewsRepository {
 
   @override
   Future<List<NewsModel>> getNews() async {
-    print('Fetching news...');
     final user = await authUserService.get();
 
     if (user == null) {

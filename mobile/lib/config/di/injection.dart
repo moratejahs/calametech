@@ -1,3 +1,5 @@
+import 'package:calamitech/core/utils/services/tips_service.dart';
+import 'package:calamitech/features/tips/blocs/tips_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -9,8 +11,6 @@ import 'package:calamitech/features/auth/blocs/auth_bloc.dart';
 import 'package:calamitech/features/auth/repositories/auth_repository.dart';
 import 'package:calamitech/features/news/blocs/news_bloc.dart';
 import 'package:calamitech/features/news/repositories/news_repository.dart';
-import 'package:calamitech/features/report/bloc/report_bloc.dart';
-import 'package:calamitech/features/report/repositories/report_repository.dart';
 import 'package:calamitech/features/tips/repositories/tips_repository.dart';
 
 List<RepositoryProvider> repositoryProviders() {
@@ -20,6 +20,9 @@ List<RepositoryProvider> repositoryProviders() {
   return [
     RepositoryProvider<AuthUserService>(
       create: (_) => AuthUserService(storage: storage),
+    ),
+    RepositoryProvider<TipsService>(
+      create: (_) => TipsService(storage: storage),
     ),
     RepositoryProvider<AuthRepository>(
       create: (context) => AuthRepository(
@@ -33,13 +36,16 @@ List<RepositoryProvider> repositoryProviders() {
         authUserService: context.read<AuthUserService>(),
       ),
     ),
+    RepositoryProvider<TipsRepository>(
+      create: (context) => TipsRepository(
+        httpClient: httpClient,
+        token: dotenv.env['AI_API_KEY'] ?? '',
+        tipsService: context.read<TipsService>(),
+      ),
+    ),
     // RepositoryProvider<ReportRepository>(
     //   create: (_) => ReportRepository(
     //       httpClient: httpClient, authTokenRepository: authTokenRepository),
-    // ),
-    // RepositoryProvider<TipsRepository>(
-    //   create: (_) => TipsRepository(
-    //       httpClient: httpClient, token: dotenv.env['AI_API_KEY'] ?? ''),
     // ),
   ];
 }
@@ -62,14 +68,14 @@ List<BlocProvider> blocProviders() {
       create: (context) =>
           NewsBloc(newsRepository: context.read<NewsRepository>()),
     ),
+    BlocProvider<TipsBloc>(
+      create: (context) => TipsBloc(
+        tipsRepository: context.read<TipsRepository>(),
+      ),
+    ),
     // BlocProvider<ReportBloc>(
     //   create: (context) => ReportBloc(
     //     reportRepository: context.read<ReportRepository>(),
-    //   ),
-    // ),
-    // BlocProvider<TipsBloc>(
-    //   create: (context) => TipsBloc(
-    //     tipsRepository: context.read<TipsRepository>(),
     //   ),
     // ),
   ];

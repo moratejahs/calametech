@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:calamitech/constants/api_paths.dart';
+import 'package:calamitech/core/utils/services/tips_service.dart';
 import 'package:calamitech/features/tips/models/tip_model.dart';
 import 'package:calamitech/features/tips/repositories/i_tips_repository.dart';
 import 'package:http/http.dart' as http;
@@ -8,10 +9,12 @@ import 'package:http/http.dart' as http;
 class TipsRepository extends ITipsRepository {
   final http.Client httpClient;
   final String token;
+  final TipsService tipsService;
 
   TipsRepository({
     required this.httpClient,
     required this.token,
+    required this.tipsService,
   });
 
   @override
@@ -65,7 +68,13 @@ Provide a JSON array response of safety tips categorized under "fire_tips", "flo
         final parsedTips = jsonDecode(cleanedContent);
 
         if (parsedTips is List) {
-          return parsedTips.map((tip) => TipModel.fromJson(tip)).toList();
+          final aiTips = parsedTips.map((tip) => TipModel.fromMap(tip)).toList();
+
+          if (!await tipsService.store(aiTips)){
+            throw Exception('Failed to store tips.');
+          }
+
+          return aiTips;
         } else {
           throw Exception('Received invalid tips format.');
         }
@@ -78,8 +87,7 @@ Provide a JSON array response of safety tips categorized under "fire_tips", "flo
   }
 
   @override
-  Future<List<TipModel>> getStoredTips() {
-    // TODO: implement getStoredTips
-    throw UnimplementedError();
+  Future<List<TipModel>> getStoredTips() async {
+    return await tipsService.get();
   }
 }

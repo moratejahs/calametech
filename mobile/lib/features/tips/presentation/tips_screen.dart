@@ -1,12 +1,12 @@
 import 'package:calamitech/config/theme/app_theme.dart';
-import 'package:calamitech/constants/route_constants.dart';
 import 'package:calamitech/features/tips/blocs/tips_bloc.dart';
+import 'package:calamitech/features/tips/presentation/tip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class TipsScreen extends StatefulWidget {
   final String? tipType;
+
   const TipsScreen({super.key, this.tipType});
 
   @override
@@ -17,7 +17,7 @@ class _TipsScreenState extends State<TipsScreen> {
   @override
   void initState() {
     super.initState();
-    if(!mounted) return;
+    if (!mounted) return;
     context.read<TipsBloc>().add(TipsFetched());
   }
 
@@ -26,18 +26,22 @@ class _TipsScreenState extends State<TipsScreen> {
     'fire_tips': 'Fire Tips',
     'flood_tips': 'Flood Tips',
   };
+  
+  String getTitle (String? tipType) {
+    return tipTypes[tipType] ?? 'Tips';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: AppTheme.primaryColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.go(RouteConstants.home),
+        title: Text(
+          getTitle(widget.tipType),
+          style: const TextStyle(
+            color: Colors.white,
+          ),
         ),
-        title: Text(widget.tipType != null ? tipTypes[widget.tipType] ?? 'Tips' : 'Tips', style: const TextStyle(color: Colors.white)),
+        backgroundColor: AppTheme.primaryColor,
       ),
       body: SafeArea(
         child: Padding(
@@ -52,7 +56,9 @@ class _TipsScreenState extends State<TipsScreen> {
 
               if (state is TipsLoaded) {
                 final tips = state.tips;
-                final tipsToShow = widget.tipType != null ? tips.where((tip) => tip.type == widget.tipType).toList() : tips;
+                final tipsToShow = widget.tipType != null
+                    ? tips.where((tip) => tip.type == widget.tipType).toList()
+                    : tips;
 
                 return tipsToShow.isEmpty
                     ? const Center(
@@ -65,13 +71,14 @@ class _TipsScreenState extends State<TipsScreen> {
                           return Container(
                             margin: const EdgeInsets.only(bottom: 12),
                             width: double.infinity,
-                            child: TipCard(index: index + 1, tip: tipsToShow[index]),
+                            child: TipCard(
+                                index: index + 1, tip: tipsToShow[index]),
                           );
                         },
                       );
               }
 
-              if (state is TipsError) {
+              if (state is TipsFailure) {
                 return Center(
                   child: Text(state.message),
                 );

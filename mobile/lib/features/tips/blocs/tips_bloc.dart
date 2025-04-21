@@ -24,7 +24,7 @@ class TipsBloc extends Bloc<TipsEvent, TipsState> {
       final storedTips = await tipsRepository.getStoredTips();
 
       if (storedTips.isNotEmpty &&
-          storedTips[0].createdAt.day == DateTime.now().day) {
+          storedTips[0].createdAt?.day == DateTime.now().day) {
         emit(TipsLoaded(tips: storedTips));
       } else {
         final tips = await tipsRepository.getTips();
