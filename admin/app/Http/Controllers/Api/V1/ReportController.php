@@ -30,7 +30,7 @@ class ReportController extends Controller
             ]);
 
             return response()->json([
-                'message' => 'Report submitted.',
+                'message' => 'Report submitted to CDRRMO.',
                 'data' => [
                     'sos' => $sos,
                 ],
@@ -72,7 +72,7 @@ class ReportController extends Controller
                 ]);
 
                 return response()->json([
-                    'message' => 'Report submitted.',
+                    'message' => 'Report submitted to CDRRMO.',
                     'data' => [
                         'sos' => $sos,
                     ],
@@ -93,7 +93,7 @@ class ReportController extends Controller
                 ]);
 
                 return response()->json([
-                    'message' => 'Report submitted.',
+                    'message' => 'Report submitted to CDRRMO.',
                     'data' => [
                         'sos' => $sos,
                     ],

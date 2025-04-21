@@ -165,7 +165,7 @@ class _ReportFormState extends State<ReportForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Upload an image',
+                    'Upload an image (Optional)',
                     style: TextStyle(color: Colors.red, fontSize: 18.0),
                   ),
                   const SizedBox(height: 8.0),
