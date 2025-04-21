@@ -26,6 +26,7 @@ class _LoginFormState extends State<LoginForm> {
               content: Text(state.message),
               backgroundColor: Colors.red,
               behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 2),
             ),
           );
         } else if (state is AuthLoginFieldError) {

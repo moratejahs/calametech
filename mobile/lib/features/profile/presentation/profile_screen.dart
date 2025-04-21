@@ -29,6 +29,7 @@ class ProfileScreen extends StatelessWidget {
                 content: Text(state.message),
                 backgroundColor: Colors.red,
                 behavior: SnackBarBehavior.floating,
+                duration: const Duration(seconds: 2),
               ),
             );
           } else if (state is AuthUnAuthenticated) {
