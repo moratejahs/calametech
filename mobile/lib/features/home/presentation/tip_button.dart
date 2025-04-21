@@ -20,7 +20,7 @@ class TipButton extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.go(route),
       child: Container(
-        margin: const EdgeInsets.all(12.0),
+        margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(8.0),
@@ -31,8 +31,8 @@ class TipButton extends StatelessWidget {
             children: [
               Image.asset(
                 image,
-                width: 30.0, // specify the width
-                height: 30.0, // specify the height
+                width: 30.0,
+                height: 30.0,
               ),
               const SizedBox(height: 8.0),
               Text(

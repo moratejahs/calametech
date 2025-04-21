@@ -1,6 +1,7 @@
 import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/core/shared_widgets/app_bottom_nav.dart';
+import 'package:calamitech/features/news/presentation/news_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:calamitech/core/location/cubit/location_cubit.dart';
@@ -16,8 +17,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<LocationCubit>().startLocationUpdates();
     super.initState();
+    if (!mounted) return;
+    context.read<LocationCubit>().startLocationUpdates();
   }
 
   @override
@@ -40,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // NewsCards(),
+              NewsCards(),
               CalamityTips(),
               // ReportForm(),
             ],

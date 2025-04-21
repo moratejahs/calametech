@@ -69,8 +69,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         throw Exception('Failed to store user.');
       }
 
-      print('Authenticated!!');
-
       emit(AuthAuthenticated(user: user));
     } on ValidationException catch (e) {
       emit(
