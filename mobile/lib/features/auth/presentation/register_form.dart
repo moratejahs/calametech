@@ -125,8 +125,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 decoration: InputDecoration(
                   labelText: 'Password Confirmation',
                   errorText: state is AuthRegisterFieldError &&
-                          state.emailError != null
-                      ? state.emailError
+                          state.passwordConfirmationError != null
+                      ? state.passwordConfirmationError
                       : null,
                 ),
                 validator: (value) {
