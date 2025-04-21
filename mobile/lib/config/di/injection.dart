@@ -1,6 +1,6 @@
 import 'package:calamitech/core/utils/services/sos_service.dart';
 import 'package:calamitech/core/utils/services/tips_service.dart';
-import 'package:calamitech/features/report/bloc/report_bloc.dart';
+import 'package:calamitech/features/report/blocs/report_bloc.dart';
 import 'package:calamitech/features/report/repositories/sos_repository.dart';
 import 'package:calamitech/features/tips/blocs/tips_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

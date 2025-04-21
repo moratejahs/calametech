@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:calamitech/constants/asset_paths.dart';
 import 'package:calamitech/core/location/cubit/location_cubit.dart';
-import 'package:calamitech/features/report/bloc/report_bloc.dart';
+import 'package:calamitech/features/report/blocs/report_bloc.dart';
 import 'package:calamitech/features/report/presentation/emergency_type_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
