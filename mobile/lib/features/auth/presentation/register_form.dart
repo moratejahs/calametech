@@ -157,7 +157,7 @@ class _RegisterFormState extends State<RegisterForm> {
               TextFormField(
                 controller: addressController,
                 decoration: InputDecoration(
-                  labelText: 'Address (Prk, Brgy, City)',
+                  labelText: 'Address (Purok, Barangay, City)',
                   errorText: state is AuthRegisterFieldError &&
                           state.addressError != null
                       ? state.addressError

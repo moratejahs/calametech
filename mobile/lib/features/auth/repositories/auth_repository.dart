@@ -36,6 +36,8 @@ class AuthRepository implements IAuthRepository {
         'id': jsonBody['user']['id'],
         'name': jsonBody['user']['name'],
         'email': jsonBody['user']['email'],
+        'phone': jsonBody['user']['phone'],
+        'address': jsonBody['user']['address'],
         'token': jsonBody['token'],
       });
     } else if (response.statusCode == 422) {
