@@ -77,6 +77,8 @@ class AuthRepository implements IAuthRepository {
       return UserModel.fromMap({
         'id': jsonBody['user']['id'] as int,
         'name': jsonBody['user']['name'] as String,
+        'address': jsonBody['user']['address'] as String,
+        'phone': jsonBody['user']['phone'] as String,
         'email': jsonBody['user']['email'] as String,
         'token': jsonBody['token'] as String,
       });
