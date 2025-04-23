@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class NewsController extends Controller
 {
@@ -42,6 +43,7 @@ class NewsController extends Controller
             'image_path' => $validated['image_path'],
             'url' => $validated['url'],
         ]);
+        Cache::forget('news');
         return to_route('news.index')->with('success', 'News created successfully');
     }
 
@@ -86,6 +88,7 @@ class NewsController extends Controller
         if ($request->has('delete_image')) {
             $news->update(['image_path' => null]);
         }
+        Cache::forget('news');
         return to_route('news.index')->with('success', value: 'News updated successfully');
     }
 
