@@ -31,7 +31,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
         event.long,
       );
 
-      emit(ReportSuccess('Report submitted.'));
+      emit(ReportSuccess('Report submitted to CDRRMO.'));
       return;
     } catch (e) {
       emit(ReportFailure(message: removeExceptionPrefix(e.toString())));

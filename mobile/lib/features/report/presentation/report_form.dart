@@ -50,6 +50,7 @@ class _ReportFormState extends State<ReportForm> {
           behavior: SnackBarBehavior.floating,
         ),
       );
+      return;
     }
 
     if (_descriptionController.text.isEmpty) {
@@ -60,22 +61,19 @@ class _ReportFormState extends State<ReportForm> {
           behavior: SnackBarBehavior.floating,
         ),
       );
+      return;
     }
 
-    if (selectedEmergencyType != null &&
-        _descriptionController.text.isNotEmpty) {
-      final locationState = context.read<LocationCubit>().state;
-
-      context.read<ReportBloc>().add(
-            ReportSubmitted(
-              emergencyType: selectedEmergencyType!,
-              description: _descriptionController.text,
-              image: _imageFile,
-              lat: locationState.latitude.toString(),
-              long: locationState.longitude.toString(),
-            ),
-          );
-    }
+    final locationState = context.read<LocationCubit>().state;
+    context.read<ReportBloc>().add(
+          ReportSubmitted(
+            emergencyType: selectedEmergencyType!,
+            description: _descriptionController.text,
+            image: _imageFile,
+            lat: locationState.latitude.toString(),
+            long: locationState.longitude.toString(),
+          ),
+        );
   }
 
   @override
@@ -97,9 +95,7 @@ class _ReportFormState extends State<ReportForm> {
             _descriptionController.clear();
             _imageFile = null;
           });
-        }
-
-        if (state is ReportFailure) {
+        } else if (state is ReportFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -113,17 +109,15 @@ class _ReportFormState extends State<ReportForm> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
-            spacing: 16.0,
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'What kind of Emergency?',
                 style: TextStyle(color: Colors.red, fontSize: 18.0),
               ),
+              const SizedBox(height: 8.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   EmergencyTypeButton(
                     image: AssetPaths.fire,
@@ -140,76 +134,70 @@ class _ReportFormState extends State<ReportForm> {
                   ),
                 ],
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Describe the situation',
-                    style: TextStyle(color: Colors.red, fontSize: 18.0),
-                  ),
-                  const SizedBox(height: 8.0),
-                  TextField(
-                    controller: _descriptionController,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                      hintText: 'Type here...',
-                      contentPadding: EdgeInsets.all(16.0),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 16.0),
+              const Text(
+                'Describe the situation',
+                style: TextStyle(color: Colors.red, fontSize: 18.0),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Upload an image (Optional)',
-                    style: TextStyle(color: Colors.red, fontSize: 18.0),
+              const SizedBox(height: 8.0),
+              TextField(
+                controller: _descriptionController,
+                maxLines: 5,
+                decoration: const InputDecoration(
+                  hintText: 'Type here...',
+                  contentPadding: EdgeInsets.all(16.0),
+                  border: InputBorder.none,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Text(
+                'Upload an image (Optional)',
+                style: TextStyle(color: Colors.red, fontSize: 18.0),
+              ),
+              const SizedBox(height: 8.0),
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  width: double.infinity,
+                  height: 250.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(color: Colors.grey.shade300, width: 1.0),
                   ),
-                  const SizedBox(height: 8.0),
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      width: double.infinity,
-                      height: 250.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        border:
-                            Border.all(color: Colors.grey.shade300, width: 1.0),
-                      ),
-                      child: _imageFile != null
-                          ? Image.file(
-                              _imageFile!,
-                              width: 120.0,
-                              height: 120.0,
-                              fit: BoxFit.cover,
-                            )
-                          : const Icon(
-                              Icons.camera_alt,
+                  child: _imageFile != null
+                      ? Image.file(
+                          _imageFile!,
+                          fit: BoxFit.cover,
+                        )
+                      : const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.cloud_upload,
                               size: 40.0,
                               color: Colors.grey,
                             ),
-                    ),
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Colors.red),
+                            Text(
+                              'Tap to upload an image (6mb max)',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
                 ),
-                onPressed: () {
-                  _submit(context);
-                },
-                child: BlocBuilder<ReportBloc, ReportState>(
-                  builder: (context, state) {
-                    if (state is ReportLoading) {
-                      return const CircularProgressIndicator();
-                    }
-
-                    return const Text('Submit Report');
-                  },
+              ),
+              const SizedBox(height: 16.0),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(Colors.red),
+                  ),
+                  onPressed: () => _submit(context),
+                  child: BlocBuilder<ReportBloc, ReportState>(
+                    builder: (context, state) {
+                      return state is ReportLoading ? const CircularProgressIndicator(color: Colors.white) : const Text('Submit Report');
+                    },
+                  ),
                 ),
               ),
             ],
