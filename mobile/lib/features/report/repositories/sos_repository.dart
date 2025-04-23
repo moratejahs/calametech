@@ -71,12 +71,11 @@ class SosRepository extends ISosRepository {
       final jsonBody = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
-        if(!await sosService.store(SosModel.fromMap(jsonBody['data']['sos']))){
+        if (!await sosService.store(SosModel.fromMap(jsonBody['data']['sos']))) {
           throw Exception('Failed to store sos data.');
         }
       } else if (response.statusCode == 422) {
-        throw ValidationException(
-            parseLaravelValidationErrors(jsonBody['errors']));
+        throw ValidationException(jsonBody['message'] ?? 'Failed to submit report.');
       } else {
         throw Exception(jsonBody['message'] ?? 'Failed to submit report.');
       }
@@ -127,8 +126,7 @@ class SosRepository extends ISosRepository {
           await sosService.store(SosModel.fromMap(jsonBody['data']['sos']));
         }
       } else if (response.statusCode == 422) {
-        throw ValidationException(
-            parseLaravelValidationErrors(jsonBody['errors']));
+        throw ValidationException(parseLaravelValidationErrors(jsonBody['errors']));
       } else {
         throw Exception(jsonBody['message'] ?? 'Failed to submit report.');
       }
@@ -136,7 +134,7 @@ class SosRepository extends ISosRepository {
   }
 
   @override
-  Future<SosModel?> getFromStorage() async{
+  Future<SosModel?> getFromStorage() async {
     return await sosService.get();
   }
 
