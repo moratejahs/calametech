@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SosResolved;
 use App\Models\SOS;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,7 +11,7 @@ class IncidentResponseController extends Controller
 {
     public function store(Request $request)
     {
-        
+
         // dd($request->all());
         // Validate request
         $validated = $request->validate([
@@ -35,6 +36,10 @@ class IncidentResponseController extends Controller
         $sos->address = $validated['address'];
         $sos->type = $validated['type'];
         $sos->save(); // Save updates
+
+        if ($validated['status'] === 'resolved') {
+            event(new SosResolved($sos));
+        }
 
         return redirect()->route('admin.admin-projects')->with('message', 'Incident response submitted successfully');
     }

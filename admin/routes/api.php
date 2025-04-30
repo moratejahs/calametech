@@ -7,6 +7,10 @@ use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerifyController;
 use App\Http\Controllers\Api\V1\Auth\AuthenticatedTokenSessionController;
+use Illuminate\Support\Facades\Broadcast;
+
+// Broadcasting routes
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::prefix('v1')->group(function () {
     // Login
