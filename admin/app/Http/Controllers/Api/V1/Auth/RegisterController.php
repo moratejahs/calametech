@@ -3,38 +3,39 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\RegisterRequest;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(RegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:30'],
-            'email' => ['required', 'string', 'email', 'max:30', 'unique:users'],
-            'password' => ['required', 'string', 'confirmed', 'min:6'],
-            'phone' => ['required', 'string', 'regex:/^09[0-9]{9}$/', 'min:11', 'max:11'],
-            'address' => ['required', 'string', 'max:100'],
-        ], [
-            'phone.regex' => 'The phone number must start with 09 and be 11 digits long.',
-        ]);
+        $validated = $request->validated();
+
+        if ($request->hasFile('avatar')) {
+            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        if ($request->hasFile('id_picture')) {
+            $validated['id_picture'] = $request->file('id_picture')->store('id_pictures', 'public');
+        }
 
         $user = User::create([
             'name' => $validated['name'],
-            'email' => $validated['email'],
-            'contact_number' => $validated['phone'],
             'address' => $validated['address'],
+            'contact_number' => $validated['phone'],
+            'avatar' => $validated['avatar'],
+            'email' => $validated['email'],
             'email_verified_at' => now(),
             'plain_password' => $validated['password'],
             'password' => $validated['password'],
+            'id_picture' => $validated['id_picture'],
+            'id_type' => $validated['id_type'],
         ]);
 
         $user->roles()->attach(2); // User role
 
-        // event(new Registered($user)); // Send email verification link
+        // event(new Registered($user)); // Will send an email verification
 
         $token = $user->createToken($user->name)->plainTextToken;
 

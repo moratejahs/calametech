@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\LoginRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class AuthenticatedTokenSessionController extends Controller
+class LoginController extends Controller
 {
-    public function store(Request $request)
+    public function __invoke(LoginRequest $request)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ]);
+        $validated = $request->validated();
 
         $user = User::where('email', $validated['email'])->first();
 
@@ -54,15 +51,6 @@ class AuthenticatedTokenSessionController extends Controller
                 'phone' => $user->contact_number,
                 'address' => $user->address,
             ],
-        ], 200);
-    }
-
-    public function destroy(Request $request)
-    {
-        $request->user()->tokens()->delete();
-
-        return response()->json([
-            'success' => 'Logged out successful',
         ], 200);
     }
 }

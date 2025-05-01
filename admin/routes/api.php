@@ -2,22 +2,27 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\Api\V1\NewsController;
 use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\LogoutController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerifyController;
-use App\Http\Controllers\Api\V1\Auth\AuthenticatedTokenSessionController;
-use Illuminate\Support\Facades\Broadcast;
 
-// Broadcasting routes
+// Broadcasting
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::prefix('v1')->group(function () {
     // Login
-    Route::post('/login', [AuthenticatedTokenSessionController::class, 'store']);
+    Route::post('/login', LoginController::class);
 
     // Register
     Route::post('/register', RegisterController::class);
+
+    // Logout
+    Route::post('/logout', LogoutController::class)
+        ->middleware('auth:sanctum');
 
     // Email Verification
     Route::get('/email/verify/{id}/{hash}', EmailVerifyController::class)
@@ -25,10 +30,7 @@ Route::prefix('v1')->group(function () {
         ->name('verification.verify');
 
     Route::middleware('auth:sanctum')->group(function () {
-        // Logout
-        Route::post('/logout', [AuthenticatedTokenSessionController::class, 'destroy']);
-
-        // Get User
+        // User
         Route::get('/user', function (Request $request) {
             return $request->user();
         });
