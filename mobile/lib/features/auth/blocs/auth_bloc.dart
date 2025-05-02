@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:calamitech/core/exceptions/validation_exception.dart';
 import 'package:calamitech/core/utils/helpers/remove_exception_prefix.dart';
@@ -24,8 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthCheckRequested>(onAuthCheckRequested);
   }
 
-  Future<void> onLoginRequested(
-      LoginRequested event, Emitter<AuthState> emit) async {
+  Future<void> onLoginRequested(LoginRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
     try {
@@ -51,8 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> onRegisterRequested(
-      RegisterRequested event, Emitter<AuthState> emit) async {
+  Future<void> onRegisterRequested(RegisterRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
     try {
@@ -63,6 +63,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         passwordConfirmation: event.passwordConfirmation,
         phone: event.phone,
         address: event.address,
+        avatar: event.avatar,
+        idPicture: event.idPicture,
+        idType: event.idType,
       );
 
       if (!await authUserService.store(user)) {
@@ -79,6 +82,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           passwordConfirmationError: e.errors['password_confirmation']?.first,
           phoneError: e.errors['phone']?.first,
           addressError: e.errors['address']?.first,
+          avatarError: e.errors['avatar']?.first,
+          idPictureError: e.errors['id_picture']?.first,
+          idTypeError: e.errors['id_type']?.first,
         ),
       );
     } catch (e) {
@@ -86,8 +92,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> onLogoutRequested(
-      LogoutRequested event, Emitter<AuthState> emit) async {
+  Future<void> onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
     try {
@@ -99,8 +104,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> onAuthCheckRequested(
-      AuthCheckRequested event, Emitter<AuthState> emit) async {
+  Future<void> onAuthCheckRequested(AuthCheckRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
     try {

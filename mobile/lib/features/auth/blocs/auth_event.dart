@@ -20,6 +20,9 @@ final class RegisterRequested extends AuthEvent {
   final String passwordConfirmation;
   final String phone;
   final String address;
+  final File avatar;
+  final File idPicture;
+  final String idType;
 
   RegisterRequested({
     required this.name,
@@ -28,6 +31,9 @@ final class RegisterRequested extends AuthEvent {
     required this.passwordConfirmation,
     required this.phone,
     required this.address,
+    required this.avatar,
+    required this.idPicture,
+    required this.idType,
   });
 }
 

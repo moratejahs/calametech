@@ -38,6 +38,9 @@ final class AuthRegisterFieldError extends AuthState {
   final String? passwordConfirmationError;
   final String? phoneError;
   final String? addressError;
+  final String? avatarError;
+  final String? idPictureError;
+  final String? idTypeError;
 
   AuthRegisterFieldError({
     required this.nameError,
@@ -46,5 +49,8 @@ final class AuthRegisterFieldError extends AuthState {
     required this.passwordConfirmationError,
     required this.phoneError,
     required this.addressError,
+    required this.avatarError,
+    required this.idPictureError,
+    required this.idTypeError,
   });
 }
