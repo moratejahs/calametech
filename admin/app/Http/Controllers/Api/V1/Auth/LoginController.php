@@ -50,6 +50,7 @@ class LoginController extends Controller
                 'email' => $user->email,
                 'phone' => $user->contact_number,
                 'address' => $user->address,
+                'avatar' => $user->avatar,
             ],
         ], 200);
     }

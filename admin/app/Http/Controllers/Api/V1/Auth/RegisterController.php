@@ -47,8 +47,9 @@ class RegisterController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'phone' => $user->contact_number,
                 'address' => $user->address,
+                'phone' => $user->contact_number,
+                'avatar' => $user->avatar,
             ],
         ], 201);
     }
