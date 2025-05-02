@@ -116,7 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.camera_alt,
+                                Icons.face,
                                 size: 30.0,
                                 color: Colors.white,
                               ),
@@ -292,7 +292,7 @@ class _RegisterFormState extends State<RegisterForm> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.camera_alt,
+                                Icons.badge,
                                 size: 50.0,
                                 color: Colors.white,
                               ),
