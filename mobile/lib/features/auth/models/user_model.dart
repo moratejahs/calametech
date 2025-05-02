@@ -5,6 +5,7 @@ class UserModel {
   final String name;
   final String phone;
   final String address;
+  final String avatar;
   final String email;
   final String token;
 
@@ -13,6 +14,7 @@ class UserModel {
     required this.name,
     required this.phone,
     required this.address,
+    required this.avatar,
     required this.email,
     required this.token,
   });
@@ -22,6 +24,7 @@ class UserModel {
     String? name,
     String? phone,
     String? address,
+    String? avatar,
     String? email,
     String? token,
   }) {
@@ -30,6 +33,7 @@ class UserModel {
       name: name ?? this.name,
       phone: phone ?? this.phone,
       address: address ?? this.address,
+      avatar: avatar ?? this.avatar,
       email: email ?? this.email,
       token: token ?? this.token,
     );
@@ -41,6 +45,7 @@ class UserModel {
       'name': name,
       'phone': phone,
       'address': address,
+      'avatar': avatar,
       'email': email,
       'token': token,
     };
@@ -52,6 +57,7 @@ class UserModel {
       name: map['name'] as String,
       phone: map['phone'] as String,
       address: map['address'] as String,
+      avatar: map['avatar'] as String,
       email: map['email'] as String,
       token: map['token'] as String,
     );
@@ -63,29 +69,24 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, phone: $phone, address: $address, email: $email, token: $token)';
+    return 'UserModel(id: $id, name: $name, phone: $phone, address: $address, avatar: $avatar, email: $email, token: $token)';
   }
 
   @override
   bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.name == name &&
-      other.phone == phone &&
-      other.address == address &&
-      other.email == email &&
-      other.token == token;
+
+    return other.id == id &&
+        other.name == name &&
+        other.phone == phone &&
+        other.address == address &&
+        other.avatar == avatar &&
+        other.email == email &&
+        other.token == token;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-      name.hashCode ^
-      phone.hashCode ^
-      address.hashCode ^
-      email.hashCode ^
-      token.hashCode;
+    return id.hashCode ^ name.hashCode ^ phone.hashCode ^ address.hashCode ^ avatar.hashCode ^ email.hashCode ^ token.hashCode;
   }
 }

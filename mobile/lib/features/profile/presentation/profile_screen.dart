@@ -1,5 +1,6 @@
 import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/config/theme/app_theme.dart';
+import 'package:calamitech/constants/api_paths.dart';
 import 'package:calamitech/core/shared_widgets/app_bottom_nav.dart';
 import 'package:calamitech/features/auth/blocs/auth_bloc.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class ProfileScreen extends StatelessWidget {
             Navigator.pushNamedAndRemoveUntil(
               context,
               AppRoutes.login,
-                  (route) => false,
+              (route) => false,
             );
           }
         },
@@ -58,12 +59,29 @@ class ProfileScreen extends StatelessWidget {
                     if (state is AuthAuthenticated) ...[
                       CircleAvatar(
                         radius: 50,
-                        backgroundColor: AppTheme.primaryColor,
-                        child: Text(
-                          state.user.name[0].toUpperCase(),
-                          style: const TextStyle(
+                        backgroundImage: NetworkImage("${ApiPaths.storage}${state.user.avatar}"),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        state.user.name,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          "Verified",
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -101,16 +119,16 @@ class ProfileScreen extends StatelessWidget {
                           builder: (context, state) {
                             return state is AuthLoading
                                 ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
+                                    color: Colors.white,
+                                  )
                                 : const Text(
-                              'Sign Out',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            );
+                                    'Sign Out',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  );
                           },
                         ),
                       ),

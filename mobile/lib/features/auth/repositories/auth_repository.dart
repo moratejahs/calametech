@@ -40,6 +40,7 @@ class AuthRepository implements IAuthRepository {
         'email': jsonBody['user']['email'],
         'phone': jsonBody['user']['phone'],
         'address': jsonBody['user']['address'],
+        'avatar': jsonBody['user']['avatar'],
         'token': jsonBody['token'],
       });
     } else if (response.statusCode == 422) {
@@ -112,6 +113,7 @@ class AuthRepository implements IAuthRepository {
         'name': jsonBody['user']['name'] as String,
         'address': jsonBody['user']['address'] as String,
         'phone': jsonBody['user']['phone'] as String,
+        'avatar': jsonBody['user']['avatar'] as String,
         'email': jsonBody['user']['email'] as String,
         'token': jsonBody['token'] as String,
       });
