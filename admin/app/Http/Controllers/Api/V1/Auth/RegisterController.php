@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\RegisterRequest;
 use App\Models\User;
+use Storage;
 
 class RegisterController extends Controller
 {
@@ -13,11 +14,11 @@ class RegisterController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('avatar')) {
-            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            $validated['avatar'] = Storage::disk('public')->put('avatars', $validated['avatar']);
         }
 
         if ($request->hasFile('id_picture')) {
-            $validated['id_picture'] = $request->file('id_picture')->store('id_pictures', 'public');
+            $validated['id_picture'] = Storage::disk('public')->put('id_pictures', $validated['id_picture']);
         }
 
         $user = User::create([

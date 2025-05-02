@@ -27,6 +27,10 @@ class AppTheme {
       focusedBorder: AppTheme()._buildOutlineInputBorder(AppTheme.primaryColor),
       errorBorder: AppTheme()._buildOutlineInputBorder(Colors.red),
       focusedErrorBorder: AppTheme()._buildOutlineInputBorder(Colors.red),
+      hintStyle: TextStyle(
+        color: Colors.grey[300],
+        fontSize: 14,
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:calamitech/constants/api_paths.dart';
 import 'package:calamitech/core/exceptions/validation_exception.dart';
 import 'package:calamitech/core/utils/helpers/parse_laravel_validation_errors.dart';
@@ -6,6 +7,7 @@ import 'package:calamitech/core/utils/services/auth_user_service.dart';
 import 'package:calamitech/features/auth/models/user_model.dart';
 import 'package:calamitech/features/auth/repositories/i_auth_repository.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class AuthRepository implements IAuthRepository {
   final http.Client httpClient;
@@ -55,23 +57,54 @@ class AuthRepository implements IAuthRepository {
     required String passwordConfirmation,
     required String phone,
     required String address,
+    required File avatar,
+    required File idPicture,
+    required String idType,
   }) async {
-    final response = await httpClient.post(
+    var request = http.MultipartRequest(
+      'POST',
       Uri.parse(ApiPaths.register),
-      headers: {
-        'Accept': 'application/json',
-      },
-      body: {
-        'name': name,
-        'email': email,
-        'password': password,
-        'password_confirmation': passwordConfirmation,
-        'phone': phone,
-        'address': address,
-      },
     );
 
-    final jsonBody = json.decode(response.body);
+    // Add headers
+    request.headers.addAll({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Add form fields
+    request.fields['name'] = name;
+    request.fields['address'] = address;
+    request.fields['phone'] = phone;
+    request.fields['email'] = email;
+    request.fields['password'] = password;
+    request.fields['password_confirmation'] = passwordConfirmation;
+    request.fields['id_type'] = idType;
+
+    final avatarFileName = avatar.path.split('/').last;
+    final avatarBytes = await avatar.readAsBytes();
+    final avatarFile = http.MultipartFile.fromBytes(
+      'avatar',
+      avatarBytes,
+      filename: avatarFileName,
+      contentType: getContentType(avatarFileName),
+    );
+    request.files.add(avatarFile);
+
+    final idPictureFileName = idPicture.path.split('/').last;
+    final idPictureBytes = await idPicture.readAsBytes();
+    final idPictureFile = http.MultipartFile.fromBytes(
+      'id_picture',
+      idPictureBytes,
+      filename: idPictureFileName,
+      contentType: getContentType(idPictureFileName),
+    );
+    request.files.add(idPictureFile);
+
+    // Send request
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    final jsonBody = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
       return UserModel.fromMap({
@@ -85,7 +118,7 @@ class AuthRepository implements IAuthRepository {
     } else if (response.statusCode == 422) {
       throw ValidationException(parseLaravelValidationErrors(jsonBody['errors']));
     } else {
-      throw Exception(jsonBody['message'] ?? 'Failed to register.');
+      throw Exception(jsonBody['message'] ?? 'Failed to submit report.');
     }
   }
 
@@ -99,11 +132,7 @@ class AuthRepository implements IAuthRepository {
 
     final response = await httpClient.post(
       Uri.parse(ApiPaths.logout),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${user.token}'
-      },
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': 'Bearer ${user.token}'},
     );
 
     final jsonBody = json.decode(response.body);
@@ -115,5 +144,20 @@ class AuthRepository implements IAuthRepository {
     } else {
       throw Exception(jsonBody['message'] ?? 'Failed to logout.');
     }
+  }
+}
+
+MediaType getContentType(String fileName) {
+  final extension = fileName.split('.').last.toLowerCase();
+  switch (extension) {
+    case 'jpg':
+    case 'jpeg':
+      return MediaType('image', 'jpeg');
+    case 'png':
+      return MediaType('image', 'png');
+    case 'gif':
+      return MediaType('image', 'gif');
+    default:
+      return MediaType('application', 'octet-stream');
   }
 }
