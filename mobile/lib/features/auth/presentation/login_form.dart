@@ -12,12 +12,11 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final loginFormKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthFailure) {
@@ -59,18 +58,14 @@ class _LoginFormState extends State<LoginForm> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  errorText: state is AuthLoginFieldError &&
-                          state.emailError.isNotEmpty
-                      ? state.emailError
-                      : null,
+                  errorText: state is AuthLoginFieldError && state.emailError.isNotEmpty ? state.emailError : null,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
                   }
 
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                      .hasMatch(value)) {
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                     return 'Please enter a valid email';
                   }
 
@@ -82,10 +77,7 @@ class _LoginFormState extends State<LoginForm> {
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  errorText: state is AuthLoginFieldError &&
-                          state.emailError.isNotEmpty
-                      ? state.emailError
-                      : null,
+                  errorText: state is AuthLoginFieldError && state.emailError.isNotEmpty ? state.emailError : null,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -110,16 +102,16 @@ class _LoginFormState extends State<LoginForm> {
                   },
                   child: state is AuthLoading
                       ? const CircularProgressIndicator(
-                    color: Colors.white,
-                  )
+                          color: Colors.white,
+                        )
                       : const Text(
-                    'Sign in',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+                          'Sign in',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                 ),
               ),
               Row(
