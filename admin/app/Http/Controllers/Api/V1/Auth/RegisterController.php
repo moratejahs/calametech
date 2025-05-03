@@ -50,6 +50,7 @@ class RegisterController extends Controller
                 'address' => $user->address,
                 'phone' => $user->contact_number,
                 'avatar' => $user->avatar,
+                'is_verified' => (bool) $user->is_verified,
             ],
         ], 201);
     }

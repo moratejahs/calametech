@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\SOS;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\ReportRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\Api\V1\ReportRequest;
 
 class ReportController extends Controller
 {
