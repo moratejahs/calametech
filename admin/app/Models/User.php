@@ -93,6 +93,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+    public function isVerifiedByAdmin(): bool
+    {
+        return $this->is_verified;
+    }
+
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(

@@ -15,7 +15,7 @@ class ApiPaths {
   static String baseUrl = dotenv.env['APP_ENV'] == 'local' ? wifiApiUrl : prodBaseApiUrl;
 
   static String storage = '$rootUrl/storage/';
-  
+
   static String login = '$baseUrl/login';
   static String register = '$baseUrl/register';
   static String logout = '$baseUrl/logout';

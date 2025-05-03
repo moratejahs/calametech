@@ -41,6 +41,7 @@ class AuthRepository implements IAuthRepository {
         'phone': jsonBody['user']['phone'],
         'address': jsonBody['user']['address'],
         'avatar': jsonBody['user']['avatar'],
+        'isVerified': jsonBody['user']['is_verified'],
         'token': jsonBody['token'],
       });
     } else if (response.statusCode == 422) {
@@ -115,6 +116,7 @@ class AuthRepository implements IAuthRepository {
         'phone': jsonBody['user']['phone'] as String,
         'avatar': jsonBody['user']['avatar'] as String,
         'email': jsonBody['user']['email'] as String,
+        'isVerified': jsonBody['user']['is_verified'] as bool,
         'token': jsonBody['token'] as String,
       });
     } else if (response.statusCode == 422) {

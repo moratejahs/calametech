@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class ReportRequest extends FormRequest
 {
@@ -11,8 +14,19 @@ class ReportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->isVerifiedByAdmin();
     }
+
+    /**
+     * Handle a failed authorization attempt.
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('Only verified accounts can send reports.');
+    }
+
 
     /**
      * Get the validation rules that apply to the request.

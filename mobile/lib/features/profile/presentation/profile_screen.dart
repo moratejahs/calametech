@@ -71,15 +71,15 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        decoration: const BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.all(
+                        decoration: BoxDecoration(
+                          color: state.user.isVerified ? Colors.green : Colors.grey,
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          "Verified",
-                          style: TextStyle(
+                        child: Text(
+                          state.user.isVerified ? "Verified" : "Unverified",
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),

@@ -51,6 +51,7 @@ class LoginController extends Controller
                 'phone' => $user->contact_number,
                 'address' => $user->address,
                 'avatar' => $user->avatar,
+                'is_verified' => $user->is_verified,
             ],
         ], 200);
     }

@@ -7,6 +7,7 @@ class UserModel {
   final String address;
   final String avatar;
   final String email;
+  final bool isVerified;
   final String token;
 
   UserModel({
@@ -16,6 +17,7 @@ class UserModel {
     required this.address,
     required this.avatar,
     required this.email,
+    required this.isVerified,
     required this.token,
   });
 
@@ -26,6 +28,7 @@ class UserModel {
     String? address,
     String? avatar,
     String? email,
+    bool? isVerified,
     String? token,
   }) {
     return UserModel(
@@ -35,6 +38,7 @@ class UserModel {
       address: address ?? this.address,
       avatar: avatar ?? this.avatar,
       email: email ?? this.email,
+      isVerified: isVerified ?? this.isVerified,
       token: token ?? this.token,
     );
   }
@@ -47,6 +51,7 @@ class UserModel {
       'address': address,
       'avatar': avatar,
       'email': email,
+      'isVerified': isVerified,
       'token': token,
     };
   }
@@ -59,6 +64,7 @@ class UserModel {
       address: map['address'] as String,
       avatar: map['avatar'] as String,
       email: map['email'] as String,
+      isVerified: map['isVerified'] as bool,
       token: map['token'] as String,
     );
   }
@@ -69,7 +75,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, phone: $phone, address: $address, avatar: $avatar, email: $email, token: $token)';
+    return 'UserModel(id: $id, name: $name, phone: $phone, address: $address, avatar: $avatar, email: $email, isVerified: $isVerified, token: $token)';
   }
 
   @override
@@ -82,11 +88,12 @@ class UserModel {
         other.address == address &&
         other.avatar == avatar &&
         other.email == email &&
+        other.isVerified == isVerified &&
         other.token == token;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ phone.hashCode ^ address.hashCode ^ avatar.hashCode ^ email.hashCode ^ token.hashCode;
+    return id.hashCode ^ name.hashCode ^ phone.hashCode ^ address.hashCode ^ avatar.hashCode ^ email.hashCode ^ isVerified.hashCode ^ token.hashCode;
   }
 }
