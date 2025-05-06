@@ -17,6 +17,17 @@ class UserController extends Controller
         return view('user.index', compact('users'));
     }
 
+    public function userVerification(Request $request)
+    {
+        $user = User::find($request->id);
+        if ($user) {
+            $user->is_verified = true;
+            $user->save();
+            return redirect()->back()->with('success', 'User verified successfully');
+        }
+        return redirect()->back()->with('success', 'User not found');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

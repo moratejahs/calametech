@@ -27,7 +27,7 @@ class RegisterController extends Controller
             'contact_number' => $validated['phone'],
             'avatar' => $validated['avatar'],
             'email' => $validated['email'],
-            'email_verified_at' => now(),
+            // 'email_verified_at' => now(),
             'plain_password' => $validated['password'],
             'password' => $validated['password'],
             'id_picture' => $validated['id_picture'],

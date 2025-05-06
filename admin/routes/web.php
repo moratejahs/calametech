@@ -105,7 +105,8 @@ Route::prefix('admin')->group(function () {
     Route::controller(UserController::class)->group(function (){
          Route::get('manage-users', 'index')->name('manage-users.index');
     });
-
+    Route::put('verification', [UserController::class, 'userVerification'])
+    ->name('admin.userVerification');
     Route::get('/news', [NewsController::class, 'index'])->name('news.index');
     Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
     Route::post('/news', [NewsController::class, 'store'])->name('news.store');
