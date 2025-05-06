@@ -181,7 +181,6 @@
                                 <select id="sosStatus" name="status" class="form-control">
                                     <option value="pending">Pending</option>
                                     <option value="resolved">Resolved</option>
-                                    <option value="dismissed">Dismissed</option>
                                 </select>
                             </p>
 
