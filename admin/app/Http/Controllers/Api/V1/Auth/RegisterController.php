@@ -27,12 +27,12 @@ class RegisterController extends Controller
             'contact_number' => $validated['phone'],
             'avatar' => $validated['avatar'],
             'email' => $validated['email'],
-            // 'email_verified_at' => now(),
+            'email_verified_at' => now(),
             'plain_password' => $validated['password'],
             'password' => $validated['password'],
             'id_picture' => $validated['id_picture'],
             'id_type' => $validated['id_type'],
-            'is_verified' => true,
+            'is_verified' => false,
         ]);
 
         $user->roles()->attach(2); // User role

@@ -14,8 +14,8 @@ class ReportRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // return $this->user()->isVerifiedByAdmin();
-        return true;
+        return $this->user()->isVerifiedByAdmin();
+        // return true;
     }
 
     /**

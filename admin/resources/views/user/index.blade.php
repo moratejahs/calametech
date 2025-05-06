@@ -27,6 +27,7 @@
                         <table class="table table-hover" id="table1">
                             <thead>
                                 <tr>
+                                    <th class="text-white" style="background-color: #0099FF;">ID</th>
                                     <th class="text-white" style="background-color: #0099FF;">Name</th>
                                     <th class="text-white" style="background-color: #0099FF;">Address</th>
                                     <th class="text-white" style="background-color: #0099FF;">Email</th>
@@ -38,6 +39,17 @@
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
+                                        <td>
+                                            @if ($user->avatar)
+                                                <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar"
+                                                    class="img-thumbnail" style="width: 50px; height: 50px;">
+                                            @else
+                                                <span>No Avatar</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{ $user->id_type }}
+                                        </td>
                                         <td>
                                             {{ $user->name }}
                                         </td>
@@ -51,7 +63,7 @@
                                             {{ $user->contact_number }}
                                         </td>
                                         <td>
-                                            @if ($user->email_verified_at)
+                                            @if ($user->is_verified)
                                                 <span class="badge bg-success">Verified</span>
                                             @else
                                                 <span class="badge bg-secondary">Unverified</span>
