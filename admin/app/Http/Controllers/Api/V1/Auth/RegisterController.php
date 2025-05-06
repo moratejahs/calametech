@@ -32,6 +32,7 @@ class RegisterController extends Controller
             'password' => $validated['password'],
             'id_picture' => $validated['id_picture'],
             'id_type' => $validated['id_type'],
+            'is_verified' => true,
         ]);
 
         $user->roles()->attach(2); // User role
