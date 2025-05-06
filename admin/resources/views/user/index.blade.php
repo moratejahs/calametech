@@ -27,6 +27,7 @@
                         <table class="table table-hover" id="table1">
                             <thead>
                                 <tr>
+                                    <th class="text-white" style="background-color: #0099FF;">Avatar</th>
                                     <th class="text-white" style="background-color: #0099FF;">ID</th>
                                     <th class="text-white" style="background-color: #0099FF;">Name</th>
                                     <th class="text-white" style="background-color: #0099FF;">Address</th>
@@ -39,6 +40,7 @@
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
+
                                         <td>
                                             @if ($user->avatar)
                                                 <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar"
