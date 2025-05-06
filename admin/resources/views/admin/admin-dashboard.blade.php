@@ -168,6 +168,7 @@
                             <input type="file" name="image" class="form-control" accept=".jpeg,.jpg,.png">
 
                             <p><strong>Reported by:</strong> <span id="sosPerson"></span></p>
+                            <p><strong>Contact No.:</strong> <span id="sosNo"></span></p>
                             <p style="display:none;"><strong>Description:</strong> <span id="sosDescription"></span></p>
                             <p style="display:none;"><strong>Location:</strong> <span id="sosLocation"></span></p>
 
@@ -314,7 +315,7 @@
             }
         }
 
-        function showSOSAlert(id, description, location, address, status, type, image_path, name) {
+        function showSOSAlert(id, description, location, address, status, type, image_path, name, contact_number) {
             console.log("SOS Status Received:", status); // Debugging: Check what status is received
             console.log("🔹 SOS ID:", id);
             console.log("🔹 SOS Description:", description);
@@ -323,11 +324,13 @@
             console.log("🔹 SOS Status (Raw):", status);
             console.log("🔹 SOS Image Path:", image_path);
             console.log("🔹 Reported By:", name); // Debugging: Log the reporter's name
+            console.log("🔹 Reported By:", contact_number);
 
             document.getElementById('sosId').value = id;
             document.getElementById('sosDescription').textContent = description || "No description provided";
             document.getElementById('sosLocation').textContent = location || "No location provided";
             document.getElementById('sosPerson').textContent = name || "Unknown"; // Set the reporter's name
+            document.getElementById('sosNo').textContent = contact_number || "Unknown"; // Set the reporter's name
             document.getElementById('sosAddress').value = address || "No address available";
 
             let statusDropdown = document.getElementById('sosStatus');
@@ -382,7 +385,8 @@
                                 sos.status,
                                 sos.type,
                                 sos.image_path,
-                                sos.user.name // Pass the reporter's name
+                                sos.user.name,
+                                sos.user.contact_number // Pass the reporter's name
                             );
                         });
                     })
