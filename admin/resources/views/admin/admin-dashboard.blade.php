@@ -155,6 +155,8 @@
                                     class="form-control">
                             </p>
                             <input type="file" name="image" class="form-control" accept=".jpeg,.jpg,.png">
+
+                            <p><strong>Reported by:</strong> <span id="sosPerson"></span></p>
                             <p style="display:none;"><strong>Description:</strong> <span id="sosDescription"></span></p>
                             <p style="display:none;"><strong>Location:</strong> <span id="sosLocation"></span></p>
 
@@ -171,12 +173,12 @@
                                     <option value="dismissed">Dismissed</option>
                                 </select>
                             </p>
-                            <p><strong>Incident Type:</strong>
-                                <select id="sosType" name="type" class="form-control">
-                                    <option value="fire">Fire</option>
-                                    <option value="flood">Flood</option>
-                                </select>
-                            </p>
+
+                            <select id="sosType" name="type" hidden class="form-control">
+                                <option value="fire">Fire</option>
+                                <option value="flood">Flood</option>
+                            </select>
+
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -278,9 +280,6 @@
             popupAnchor: [0, -32]
         });
 
-
-
-
         var sosFireIcon = L.icon({
             iconUrl: "{{ asset('assets/images/fire.png') }}",
             iconSize: [32, 32],
@@ -305,6 +304,47 @@
             }
         }
 
+        function showSOSAlert(id, description, location, address, status, type, image_path, name) {
+            console.log("SOS Status Received:", status); // Debugging: Check what status is received
+            console.log("🔹 SOS ID:", id);
+            console.log("🔹 SOS Description:", description);
+            console.log("🔹 SOS Location:", location);
+            console.log("🔹 SOS Address:", address);
+            console.log("🔹 SOS Status (Raw):", status);
+            console.log("🔹 SOS Image Path:", image_path);
+            console.log("🔹 Reported By:", name); // Debugging: Log the reporter's name
+
+            document.getElementById('sosId').value = id;
+            document.getElementById('sosDescription').textContent = description || "No description provided";
+            document.getElementById('sosLocation').textContent = location || "No location provided";
+            document.getElementById('sosPerson').textContent = name || "Unknown"; // Set the reporter's name
+            document.getElementById('sosAddress').value = address || "No address available";
+
+            let statusDropdown = document.getElementById('sosStatus');
+            let typeDropdown = document.getElementById('sosType');
+            typeDropdown.value = type;
+            status = (status || "").trim();
+
+            let isValidStatus = [...statusDropdown.options].some(option => option.value === status);
+
+            if (isValidStatus) {
+                statusDropdown.value = status;
+            } else {
+                console.warn("Invalid status value:", status);
+                statusDropdown.value = statusDropdown.options[0].value;
+            }
+
+            var sosImage = document.getElementById('sosImage');
+            if (image_path) {
+                sosImage.src = `/storage/${image_path}`;
+            } else {
+                sosImage.src = "{{ asset('assets/images/placeholder.png') }}";
+            }
+
+            var sosModal = new bootstrap.Modal(document.getElementById('sosModal'));
+            sosModal.show();
+        }
+
         sosData.forEach(function(sos) {
             if (sos.lat && sos.long) {
                 var latitude = parseFloat(sos.lat);
@@ -324,8 +364,16 @@
 
                         // Attach click event to open modal
                         marker.on('click', function() {
-                            showSOSAlert(sos.id, sos.description, latitude + ', ' + longitude, address,
-                                sos.status, sos.type, sos.image_path);
+                            showSOSAlert(
+                                sos.id,
+                                sos.description,
+                                latitude + ', ' + longitude,
+                                address,
+                                sos.status,
+                                sos.type,
+                                sos.image_path,
+                                sos.user.name // Pass the reporter's name
+                            );
                         });
                     })
                     .catch(error => {
@@ -334,46 +382,6 @@
                     });
             }
         });
-
-        function showSOSAlert(id, description, location, address, status, type, image_path) {
-            console.log("SOS Status Received:", status); // Debugging: Check what status is received
-            console.log("🔹 SOS ID:", id);
-            console.log("🔹 SOS Description:", description);
-            console.log("🔹 SOS Location:", location);
-            console.log("🔹 SOS Address:", address);
-            console.log("🔹 SOS Status (Raw):", status);
-            console.log("🔹 SOS Image Path:", image_path);
-            document.getElementById('sosId').value = id;
-            document.getElementById('sosDescription').textContent = description;
-            document.getElementById('sosLocation').textContent = location;
-            document.getElementById('sosAddress').value = address;
-
-            let statusDropdown = document.getElementById('sosStatus');
-            let typeDropdown = document.getElementById('sosType');
-            typeDropdown.value = type;
-            // Trim status to remove extra spaces and ensure it's a string
-            status = (status || "").trim();
-
-            // Check if the value exists in the dropdown options
-            let isValidStatus = [...statusDropdown.options].some(option => option.value === status);
-
-            if (isValidStatus) {
-                statusDropdown.value = status;
-            } else {
-                console.warn("Invalid status value:", status); // Debugging: Show warning if invalid
-                statusDropdown.value = statusDropdown.options[0].value; // Fallback to first option
-            }
-
-            var sosImage = document.getElementById('sosImage');
-            if (image_path) {
-                sosImage.src = `/storage/${image_path}`; // Debugging: Log the image path
-            } else {
-                sosImage.src = "{{ asset('assets/images/placeholder.png') }}";
-            }
-
-            var sosModal = new bootstrap.Modal(document.getElementById('sosModal'));
-            sosModal.show();
-        }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

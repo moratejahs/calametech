@@ -44,11 +44,12 @@ class AdminDashboardController extends Controller
             ->orderBy('month')
             ->get();
 
-
-
             $sos = SOS::query()
+                ->with('user')
                 ->where('status', 'pending')
                 ->get();
+
+
                 // dd($sos);
         return view('admin.admin-dashboard', compact(
             'projectStatusData',

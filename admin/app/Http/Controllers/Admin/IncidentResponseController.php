@@ -34,7 +34,7 @@ class IncidentResponseController extends Controller
         // Update SOS record
         $sos->status = $validated['status'];
         $sos->address = $validated['address'];
-        $sos->type = $validated['type'];
+        // $sos->type = $validated['type'];
         $sos->save(); // Save updates
 
         if ($validated['status'] === 'resolved') {
