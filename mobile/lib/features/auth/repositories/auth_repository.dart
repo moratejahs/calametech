@@ -70,7 +70,6 @@ class AuthRepository implements IAuthRepository {
 
     // Add headers
     request.headers.addAll({
-      'Content-Type': 'application/json',
       'Accept': 'application/json',
     });
 
