@@ -27,9 +27,9 @@
                         <table class="table table-hover" id="table1">
                             <thead>
                                 <tr>
-                                    <th class="text-white" style="background-color: #0099FF;">Avatar</th>
-                                    <th class="text-white" style="background-color: #0099FF;">Id Type</th>
                                     <th class="text-white" style="background-color: #0099FF;">Id Picture</th>
+                                    <th class="text-white" style="background-color: #0099FF;">Id Type</th>
+                                    <th class="text-white" style="background-color: #0099FF;">Avatar</th>
                                     <th class="text-white" style="background-color: #0099FF;">Name</th>
                                     <th class="text-white" style="background-color: #0099FF;">Address</th>
                                     <th class="text-white" style="background-color: #0099FF;">Email</th>
@@ -41,21 +41,23 @@
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
+                                        <td>
+                                            @if ($user->id_picture)
+                                                <img src="{{ asset('storage/' . $user->id_picture) }}" alt="Avatar"
+                                                    class="img-thumbnail" style="width: 50px; height: 50px;">
+                                            @else
+                                                <span>No Id Picture</span>
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            {{ $user->id_type }}
+                                        </td>
+
 
                                         <td>
                                             @if ($user->avatar)
                                                 <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar"
-                                                    class="img-thumbnail" style="width: 50px; height: 50px;">
-                                            @else
-                                                <span>No Avatar</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            {{ $user->id_type }}
-                                        </td>
-                                        <td>
-                                            @if ($user->id_picture)
-                                                <img src="{{ asset('storage/' . $user->id_picture) }}" alt="Avatar"
                                                     class="img-thumbnail" style="width: 50px; height: 50px;">
                                             @else
                                                 <span>No Avatar</span>
