@@ -133,6 +133,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Monthly SOS Reports</h5>
+                                    <canvas id="monthlySOSChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -148,8 +159,8 @@
                         <center>
                             <img id="sosImage" src="" alt="SOS Image" width="100" height="100">
                         </center>
-                        <form id="storeIncidenResponse" method="post" accept="POST" action="{{ route('incident.store') }}"
-                            enctype="multipart/form-data">
+                        <form id="storeIncidenResponse" method="post" accept="POST"
+                            action="{{ route('incident.store') }}" enctype="multipart/form-data">
                             @csrf
                             <p><strong></strong> <input hidden type="text" id="sosId" name="id"
                                     class="form-control">
@@ -400,4 +411,69 @@
 
     <script src="{{ asset('assets/js/pages/cards-dashboard.js') }}"></script>
     <script src="{{ asset('assets/js/pages/barchart-dashboard.js') }}"></script>
+@endpush
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('monthlySOSChart').getContext('2d');
+
+            // Get monthly SOS data from Laravel
+            const monthlySOSCounts = @json($monthlySOSCounts);
+
+            // Define all months for consistent ordering
+            const monthlyLabels = ["January", "February", "March", "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+
+            // Initialize data arrays
+            let fireReports = Array(12).fill(0);
+            let floodReports = Array(12).fill(0);
+
+            // Populate data arrays based on available database data
+            Object.keys(monthlySOSCounts).forEach(month => {
+                const monthIndex = parseInt(month) - 1; // Convert month from 1-based to 0-based index
+                fireReports[monthIndex] = monthlySOSCounts[month].fire_count;
+                floodReports[monthIndex] = monthlySOSCounts[month].flood_count;
+            });
+
+            // Create Chart.js bar chart
+            new Chart(ctx, {
+                type: 'bar', // Change to 'bar' for a bar chart
+                data: {
+                    labels: monthlyLabels,
+                    datasets: [{
+                            label: 'Fire Reports',
+                            data: fireReports,
+                            backgroundColor: 'rgba(255, 0, 0, 0.6)', // Bar color for fire reports
+                            borderColor: '#eb4d4b',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Flood Reports',
+                            data: floodReports,
+                            backgroundColor: 'rgba(0, 0, 255, 0.6)', // Bar color for flood reports
+                            borderColor: '#3498db',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: false // Set to true if you want stacked bars
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 @endpush

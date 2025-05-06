@@ -49,7 +49,26 @@ class AdminDashboardController extends Controller
                 ->where('status', 'pending')
                 ->get();
 
+            $currentYear = Carbon::now()->year;
 
+            $monthlySOSCounts = SOS::selectRaw("
+                MONTH(created_at) as month,
+                SUM(CASE WHEN type = 'fire' THEN 1 ELSE 0 END) as fire_count,
+                SUM(CASE WHEN type = 'flood' THEN 1 ELSE 0 END) as flood_count
+            ")
+                ->whereYear('created_at', $currentYear)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get()
+                ->keyBy('month');
+
+            $monthlyData = [];
+            for ($month = 1; $month <= 12; $month++) {
+                $monthlyData[$month] = [
+                    'fire_count' => $monthlySOSCounts->get($month)->fire_count ?? 0,
+                    'flood_count' => $monthlySOSCounts->get($month)->flood_count ?? 0,
+                ];
+            }
                 // dd($sos);
         return view('admin.admin-dashboard', compact(
             'projectStatusData',
@@ -62,7 +81,8 @@ class AdminDashboardController extends Controller
             'sosFood',
             'total',
             'chartData',
-            'sos'
+            'sos',
+            'monthlySOSCounts' // Add this to pass the data
         ));
     }
 
