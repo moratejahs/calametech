@@ -43,6 +43,7 @@ class AdminProjectsController extends Controller
     {
         $sos = SOS::query()
             ->where('status', '!=', 'pending')
+            ->orderBy('id', 'desc')
             ->get();
         // dd($sos);
         return view('admin.admin-projects',[

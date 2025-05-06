@@ -70,5 +70,26 @@
     <script>
         let table1 = document.querySelector('#table1');
         let dataTable = new simpleDatatables.DataTable(table1);
+
+        // Add print functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let printButton = document.createElement('button');
+            printButton.textContent = 'Print Report';
+            printButton.classList.add('btn', 'btn-primary', 'mb-3');
+            table1.parentElement.insertBefore(printButton, table1);
+
+            printButton.addEventListener('click', function() {
+                let printWindow = window.open('', '_blank');
+                printWindow.document.write('<html><head><title>Print Table</title>');
+                printWindow.document.write(
+                    '<link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">'
+                );
+                printWindow.document.write('</head><body>');
+                printWindow.document.write('<table>' + table1.outerHTML + '</table>');
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+                printWindow.print();
+            });
+        });
     </script>
 @endsection

@@ -115,7 +115,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <h6 class="text-muted font-semibold">Flood Reportst</h6>
+                                            <h6 class="text-muted font-semibold">Flood Reports</h6>
                                             <h6 class="font-extrabold mb-0">{{ $sosFood }}</h6>
                                         </div>
                                     </div>
@@ -286,21 +286,21 @@
 
         var sosIcon = L.icon({
             iconUrl: sosIconUrl,
-            iconSize: [32, 32],
+            iconSize: [50, 50],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
         });
 
         var sosFireIcon = L.icon({
             iconUrl: "{{ asset('assets/images/fire.png') }}",
-            iconSize: [32, 32],
+            iconSize: [50, 50],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
         });
 
         var sosFloodIcon = L.icon({
             iconUrl: "{{ asset('assets/images/flood.png') }}",
-            iconSize: [32, 32],
+            iconSize: [50, 50],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
         });
