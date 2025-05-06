@@ -11,7 +11,14 @@
         <div class="page-heading">
             <h3>Users Monitoring</h3>
         </div>
-
+        <div>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+        </div>
         <div class="page-heading">
             <section class="section">
                 <div class="card">
@@ -54,7 +61,7 @@
                                             <form action="{{ route('admin.userVerification') }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
-                                                <input type="text" name="id" value="{{ $users->id }}" hidden>
+                                                <input type="text" name="id" value="{{ $user->id }}" hidden>
                                                 <button type="submit" class="btn btn-sm btn-success">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                         fill="currentColor" class="bi bi-check-circle-fill"
