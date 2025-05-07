@@ -5,4 +5,5 @@ class AssetPaths {
   static const String safety = 'assets/images/safety.png';
   static const String more = 'assets/images/more.png';
   static const String heartShield = 'assets/images/heartshield.png';
+  static const String gas = 'assets/images/gas.png';
 }
