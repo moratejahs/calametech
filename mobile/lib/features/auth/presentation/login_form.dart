@@ -75,7 +75,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
               TextFormField(
                 controller: passwordController,
-                obscureText: isPasswordVisible,
+                obscureText: !isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   errorText: state is AuthLoginFieldError && state.emailError.isNotEmpty ? state.emailError : null,

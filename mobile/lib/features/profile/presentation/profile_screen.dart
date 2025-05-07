@@ -59,6 +59,7 @@ class ProfileScreen extends StatelessWidget {
                     if (state is AuthAuthenticated) ...[
                       CircleAvatar(
                         radius: 50,
+                        backgroundColor: AppTheme.primaryColor,
                         backgroundImage: NetworkImage("${ApiPaths.storage}${state.user.avatar}"),
                       ),
                       const SizedBox(height: 10),

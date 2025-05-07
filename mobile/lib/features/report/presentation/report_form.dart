@@ -41,6 +41,49 @@ class _ReportFormState extends State<ReportForm> {
     }
   }
 
+  Future<void> _showImageSourceActionSheet() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      builder: (_) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Take a Photo'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _imageFile = File(pickedFile.path);
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _imageFile = File(pickedFile.path);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _submit(BuildContext context) {
     if (selectedEmergencyType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -156,7 +199,7 @@ class _ReportFormState extends State<ReportForm> {
               ),
               const SizedBox(height: 8.0),
               GestureDetector(
-                onTap: _pickImage,
+                onTap: _showImageSourceActionSheet,
                 child: Container(
                   width: double.infinity,
                   height: 250.0,
