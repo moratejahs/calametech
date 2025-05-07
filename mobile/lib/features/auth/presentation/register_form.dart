@@ -24,32 +24,100 @@ class _RegisterFormState extends State<RegisterForm> {
   final idTypeController = TextEditingController();
   File? avatar;
   File? idPicture;
-
   String? avatarError;
   String? idPictureError;
+  bool isPasswordVisible = false;
 
   final ImagePicker picker = ImagePicker();
 
-  Future<void> pickAvatar() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        avatar = File(pickedFile.path);
-        avatarError = null;
-      });
-    }
+  Future<void> _showAvatarImageSourceActionSheet() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      builder: (_) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Take a Photo'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      avatar = File(pickedFile.path);
+                      avatarError = null;
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    setState(() {
+                      avatar = File(pickedFile.path);
+                      avatarError = null;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  Future<void> pickIdPicture() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        idPicture = File(pickedFile.path);
-        idPictureError = null;
-      });
-    }
+  Future<void> _showIdPicImageSourceActionSheet() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      builder: (_) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Take a Photo'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      idPicture = File(pickedFile.path);
+                      idPictureError = null;
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    setState(() {
+                      idPicture = File(pickedFile.path);
+                      idPictureError = null;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -94,7 +162,7 @@ class _RegisterFormState extends State<RegisterForm> {
             children: [
               // Avatar Field
               GestureDetector(
-                  onTap: pickAvatar,
+                  onTap: _showAvatarImageSourceActionSheet,
                   child: Container(
                     width: 120.0,
                     height: 120.0,
@@ -177,10 +245,20 @@ class _RegisterFormState extends State<RegisterForm> {
               // Password Field
               TextFormField(
                 controller: passwordController,
-                obscureText: true,
+                obscureText: !isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   errorText: state is AuthRegisterFieldError && state.passwordError != null ? state.passwordError : null,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -193,10 +271,20 @@ class _RegisterFormState extends State<RegisterForm> {
               // Password Confirmation Field
               TextFormField(
                 controller: passwordConfirmationController,
-                obscureText: true,
+                obscureText: !isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password Confirmation',
                   errorText: state is AuthRegisterFieldError && state.passwordConfirmationError != null ? state.passwordConfirmationError : null,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -269,7 +357,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
               // ID Picture Field
               GestureDetector(
-                onTap: () => pickIdPicture(),
+                onTap: _showIdPicImageSourceActionSheet,
                 child: Container(
                   height: 250,
                   width: double.infinity,
@@ -353,7 +441,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           color: Colors.white,
                         )
                       : const Text(
-                          'Sign in',
+                          'Sign up',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,

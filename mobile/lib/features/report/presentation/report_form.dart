@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/constants/asset_paths.dart';
 import 'package:calamitech/features/location/cubit/location_cubit.dart';
 import 'package:calamitech/features/report/blocs/report_bloc.dart';
@@ -32,13 +33,47 @@ class _ReportFormState extends State<ReportForm> {
     });
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
-    }
+  Future<void> _showImageSourceActionSheet() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+      ),
+      builder: (_) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Take a Photo'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _imageFile = File(pickedFile.path);
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _imageFile = File(pickedFile.path);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _submit(BuildContext context) {
@@ -89,6 +124,8 @@ class _ReportFormState extends State<ReportForm> {
               behavior: SnackBarBehavior.floating,
             ),
           );
+
+          Navigator.pushNamed(context, selectedEmergencyType == 'fire' ? AppRoutes.fireTips : AppRoutes.floodTips);
 
           setState(() {
             selectedEmergencyType = null;
@@ -156,7 +193,7 @@ class _ReportFormState extends State<ReportForm> {
               ),
               const SizedBox(height: 8.0),
               GestureDetector(
-                onTap: _pickImage,
+                onTap: _showImageSourceActionSheet,
                 child: Container(
                   width: double.infinity,
                   height: 250.0,

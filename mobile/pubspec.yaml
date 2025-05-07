@@ -45,6 +45,8 @@ flutter:
     - assets/images/fire.png
     - assets/images/safety.png
     - assets/images/more.png
+    - assets/images/heartshield.png
+    - assets/images/gas.png
 
   # fonts:
   #   - family: Schyler

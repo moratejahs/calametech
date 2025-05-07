@@ -18,8 +18,7 @@ class SosResolved implements ShouldBroadcast
      */
     public function __construct(
         public SOS $sos,
-    )
-    {
+    ) {
         //
     }
 
@@ -48,6 +47,7 @@ class SosResolved implements ShouldBroadcast
         return [
             'id' => $this->sos->id,
             'description' => $this->sos->description,
+            'image' => url('storage/' . $this->sos->image_path),
             'status' => $this->sos->status,
             'type' => $this->sos->type,
             'address' => $this->sos->address,

@@ -58,7 +58,7 @@ class _TipsScreenState extends State<TipsScreen> {
                 final tips = state.tips;
                 final tipsToShow = widget.tipType != null
                     ? tips.where((tip) => tip.type == widget.tipType).toList()
-                    : tips;
+                    : tips.where((tip) => tip.type == 'other_tips').toList();
 
                 return tipsToShow.isEmpty
                     ? const Center(
