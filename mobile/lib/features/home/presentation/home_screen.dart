@@ -83,21 +83,18 @@ class _HomeScreenState extends State<HomeScreen> {
       try {
         final data = jsonDecode(event.data ?? '{}');
 
+        final Map<String, String> resolvedSos = {
+          'description': data['description'] as String,
+          'image': data['image'] as String,
+          'status': data['status'] as String,
+          'type': data['type'] as String,
+          'address': data['address'] as String,
+        };
+
         if (!mounted) return;
 
-        // Safely schedule snackbar display
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '🚨 Your ${data['type']} SOS has been resolved!',
-                style: const TextStyle(fontSize: 16),
-              ),
-              duration: const Duration(seconds: 5),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.green,
-            ),
-          );
+          _showResolvedSosDialog(context, resolvedSos);
         });
 
         debugPrint("Decoded SOS Resolved Data: $data");
@@ -105,6 +102,99 @@ class _HomeScreenState extends State<HomeScreen> {
         debugPrint("Error parsing SOS resolved data: $e");
       }
     }
+  }
+
+  Future<void> _showResolvedSosDialog(BuildContext context, Map<String, String> resolvedSos) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'SOS Resolved - ${resolvedSos['type']?[0].toUpperCase()}${resolvedSos['type']?.substring(1)}',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          content: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 400),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Status
+                    Row(
+                      children: [
+                        const Icon(Icons.check_circle, color: Colors.green, size: 16),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Status: ${resolvedSos['status']?[0].toUpperCase()}${resolvedSos['status']?.substring(1)}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12.0),
+
+                    // Description
+                    const Text(
+                      'Description:',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      resolvedSos['description'] ?? 'No description available.',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 12.0),
+
+                    // Address
+                    const Text(
+                      'Address:',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      resolvedSos['address'] ?? 'No address available.',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 12.0),
+
+                    // Image (if available)
+                    resolvedSos['image'] != null
+                        ? Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 200,
+                          maxWidth: double.infinity,
+                        ),
+                        child: Image.network(
+                          resolvedSos['image']!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
