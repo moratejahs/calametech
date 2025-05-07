@@ -38,7 +38,7 @@ class ReportRequest extends FormRequest
     {
         return [
             'description' => ['required'],
-            'image' => ['nullable', 'image', 'max:6144'], // max 6mb
+            'image' => ['nullable', 'image', 'max:12288'], // max 12mb
             'type' => ['required', 'in:fire,flood'],
             'lat' => ['required'],
             'long' => ['required'],
