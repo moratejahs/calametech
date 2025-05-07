@@ -24,9 +24,9 @@ class _RegisterFormState extends State<RegisterForm> {
   final idTypeController = TextEditingController();
   File? avatar;
   File? idPicture;
-
   String? avatarError;
   String? idPictureError;
+  bool isPasswordVisible = false;
 
   final ImagePicker picker = ImagePicker();
 
@@ -177,10 +177,20 @@ class _RegisterFormState extends State<RegisterForm> {
               // Password Field
               TextFormField(
                 controller: passwordController,
-                obscureText: true,
+                obscureText: isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   errorText: state is AuthRegisterFieldError && state.passwordError != null ? state.passwordError : null,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -193,10 +203,20 @@ class _RegisterFormState extends State<RegisterForm> {
               // Password Confirmation Field
               TextFormField(
                 controller: passwordConfirmationController,
-                obscureText: true,
+                obscureText: isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password Confirmation',
                   errorText: state is AuthRegisterFieldError && state.passwordConfirmationError != null ? state.passwordConfirmationError : null,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -353,7 +373,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           color: Colors.white,
                         )
                       : const Text(
-                          'Sign in',
+                          'Sign up',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,

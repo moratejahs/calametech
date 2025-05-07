@@ -14,6 +14,7 @@ class _LoginFormState extends State<LoginForm> {
   final loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +75,20 @@ class _LoginFormState extends State<LoginForm> {
               ),
               TextFormField(
                 controller: passwordController,
-                obscureText: true,
+                obscureText: isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   errorText: state is AuthLoginFieldError && state.emailError.isNotEmpty ? state.emailError : null,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isPasswordVisible = !isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
