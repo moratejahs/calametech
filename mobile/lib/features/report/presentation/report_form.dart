@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/constants/asset_paths.dart';
 import 'package:calamitech/features/location/cubit/location_cubit.dart';
 import 'package:calamitech/features/report/blocs/report_bloc.dart';
@@ -132,6 +133,9 @@ class _ReportFormState extends State<ReportForm> {
               behavior: SnackBarBehavior.floating,
             ),
           );
+
+          Navigator.pushNamed(context,
+              selectedEmergencyType == 'fire' ? AppRoutes.fireTips : AppRoutes.floodTips);
 
           setState(() {
             selectedEmergencyType = null;
