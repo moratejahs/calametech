@@ -35,7 +35,7 @@ You are an AI assistant that provides safety tips. The response should be a JSON
 
 {
   "content": "Tip content here",
-  "type": "fire_tips" | "flood_tips" | "safety_tips"
+  "type": "fire_tips" | "flood_tips" | "safety_tips" | "other_tips"
 }
 
 Ensure that the response is a valid JSON array containing multiple tips under different categories.
@@ -44,11 +44,11 @@ Ensure that the response is a valid JSON array containing multiple tips under di
           {
             'role': 'user',
             'content': """
-Provide a JSON array response of safety tips categorized under "fire_tips", "flood_tips", and "safety_tips". Each tip should contain 5 to 10 tips maximum and follow this structure:
+Provide a JSON array response of safety tips categorized under "fire_tips", "flood_tips", "safety_tips", "other_tips". Each tip should contain 8 tips minimum and 20 tips maximum and follow this structure:
 
 {
   "content": "Tip content here",
-  "type": "fire_tips" | "flood_tips" | "safety_tips"
+  "type": "fire_tips" | "flood_tips" | "safety_tips" | "other_tips"
 }
 """
           },

@@ -32,7 +32,9 @@ class _TipCardState extends State<TipCard> {
                     ? AssetPaths.fire
                     : widget.tip.type == 'flood_tips'
                     ? AssetPaths.home
-                    : AssetPaths.safety,
+                    : widget.tip.type == 'safety_tips'
+                    ? AssetPaths.safety
+                    : AssetPaths.heartShield,
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
