@@ -31,25 +31,30 @@ class TipsRepository extends ITipsRepository {
           {
             'role': 'system',
             'content': """
-You are an AI assistant that provides safety tips. The response should be a JSON array of tips, where each tip has the following structure:
+You are an AI assistant that provides safety tips. You must respond only with a valid JSON array. Do not include any explanations, markdown formatting, or extra text.
+
+Each element in the array should follow this structure:
 
 {
   "content": "Tip content here",
   "type": "fire_tips" | "flood_tips" | "safety_tips" | "other_tips"
 }
-
-Ensure that the response is a valid JSON array containing multiple tips under different categories.
 """
           },
           {
             'role': 'user',
             'content': """
-Provide a JSON array response of safety tips categorized under "fire_tips", "flood_tips", "safety_tips", "other_tips". Each tip should contain 8 tips minimum and 20 tips maximum and follow this structure:
+Generate 40 tips as a JSON array, with exactly 10 tips for each of the following types: "fire_tips", "flood_tips", "safety_tips", "other_tips".
 
-{
-  "content": "Tip content here",
-  "type": "fire_tips" | "flood_tips" | "safety_tips" | "other_tips"
-}
+Output only a raw JSON array with this structure:
+
+[
+  {
+    "content": "Tip content here",
+    "type": "fire_tips"
+  },
+  ...
+]
 """
           },
         ],

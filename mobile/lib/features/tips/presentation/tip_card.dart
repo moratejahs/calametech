@@ -29,7 +29,7 @@ class _TipCardState extends State<TipCard> {
               borderRadius: BorderRadius.circular(12.0),
               child: Image.asset(
                 widget.tip.type == 'fire_tips'
-                    ? AssetPaths.fire
+                    ? AssetPaths.gas
                     : widget.tip.type == 'flood_tips'
                     ? AssetPaths.home
                     : widget.tip.type == 'safety_tips'
