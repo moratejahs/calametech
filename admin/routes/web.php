@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\AdminIncidentReport;
 use App\Http\Controllers\Admin\AdminNewsController;
 use App\Http\Controllers\Calametech\UserController;
 use App\Http\Controllers\Admin\AdminUsersController;
@@ -60,6 +61,7 @@ Route::prefix('admin')->group(function () {
     Route::get('news/{id}', [AdminNewsController::class, 'show'])
         ->name('admin.admin-news.show');
 
+    Route::get('incident-reports', [AdminIncidentReport::class, 'index'])->name('admin.incident-reports');
 
     Route::post('store/projects', [AdminProjectsController::class, 'store'])
         ->name('store.admin.admin-projects');

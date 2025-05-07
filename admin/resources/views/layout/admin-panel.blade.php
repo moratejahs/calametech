@@ -79,7 +79,12 @@
                                 <span style="color: white;">Dashboard</span>
                             </a>
                         </li>
-
+                        <li class="sidebar-item">
+                            <a href="{{ route('admin.incident-reports') }}" class='sidebar-link'>
+                                <i class="bi bi-grid-fill" style="color: white;"></i>
+                                <span style="color: white;">Incident Analytics</span>
+                            </a>
+                        </li>
                         <li class="sidebar-item ">
                             <a href="{{ route('admin.admin-projects') }}" class='sidebar-link'>
                                 {{-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
