@@ -33,15 +33,6 @@ class _ReportFormState extends State<ReportForm> {
     });
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
-    }
-  }
-
   Future<void> _showImageSourceActionSheet() async {
     showModalBottomSheet(
       context: context,
@@ -134,8 +125,7 @@ class _ReportFormState extends State<ReportForm> {
             ),
           );
 
-          Navigator.pushNamed(context,
-              selectedEmergencyType == 'fire' ? AppRoutes.fireTips : AppRoutes.floodTips);
+          Navigator.pushNamed(context, selectedEmergencyType == 'fire' ? AppRoutes.fireTips : AppRoutes.floodTips);
 
           setState(() {
             selectedEmergencyType = null;
