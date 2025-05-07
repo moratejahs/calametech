@@ -202,13 +202,11 @@
     </div>
 @endsection
 @push('scripts')
-    {{-- <script>
-        window.onload = function() {
-            var audio = document.getElementById('sosAudio');
-            audio.play();
-            audio.muted = false; // Unmute after autoplay
-        }
-    </script> --}}
+<script>
+    setInterval(function () {
+      location.reload();
+    }, 5000); // Refresh every 5000 milliseconds (5 seconds)
+  </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const ctx = document.getElementById('reportsChart').getContext('2d');
