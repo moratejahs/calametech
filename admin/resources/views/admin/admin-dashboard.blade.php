@@ -133,17 +133,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Monthly SOS Reports</h5>
-                                    <canvas id="monthlySOSChart" width="400" height="200"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </div>
@@ -159,8 +148,8 @@
                         <center>
                             <img id="sosImage" src="" alt="SOS Image" width="100" height="100">
                         </center>
-                        <form id="storeIncidenResponse" method="post" accept="POST"
-                            action="{{ route('incident.store') }}" enctype="multipart/form-data">
+                        <form id="storeIncidenResponse" method="post" accept="POST" action="{{ route('incident.store') }}"
+                            enctype="multipart/form-data">
                             @csrf
                             <p><strong></strong> <input hidden type="text" id="sosId" name="id"
                                     class="form-control">
