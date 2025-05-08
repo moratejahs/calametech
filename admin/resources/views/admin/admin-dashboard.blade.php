@@ -194,7 +194,7 @@
     <script>
         setInterval(function() {
             location.reload();
-        }, 5000); // Refresh every 5000 milliseconds (5 seconds)
+        }, 10000); // Refresh every 5000 milliseconds (5 seconds)
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
