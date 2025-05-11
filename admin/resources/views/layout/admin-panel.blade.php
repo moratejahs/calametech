@@ -31,7 +31,7 @@
     @yield('links')
 </head>
 
-<body style="background: linear-gradient(to bottom, #08BFF1, #FFFFFF);">
+<body style="background: linear-gradient(to bottom, #05bff3, #ecf0f1);">
     <div id="app">
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active"
@@ -50,15 +50,15 @@
                                 </div>
                                 <div class="text-center pt-3">
                                     <img src="{{ asset('assets/images/calametech-logo.png') }}" alt="Logo"
-                                        width="70">
-                                    <div class="my-3">
+                                        width="150">
+                                    {{-- <div class="my-3">
                                         <div class="bg-primary rounded-circle mx-auto"
                                             style="width: 70px; height: 70px;">
                                             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                                                 class="img-fluid rounded-circle p-1" alt="User">
                                         </div>
                                         <h6 class="text-dark mt-2 mb-0">{{ auth()->user()->name }}</h6>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
 

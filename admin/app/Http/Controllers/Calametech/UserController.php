@@ -14,7 +14,10 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('user.index', compact('users'));
+        $totalUsers = User::count();
+        $totalVerifiedUsers = User::where('is_verified', true)->count();
+        $totalUnverifiedUsers = User::where('is_verified', false)->count();
+        return view('user.index', compact('users', 'totalUsers', 'totalVerifiedUsers', 'totalUnverifiedUsers'));
     }
 
     public function userVerification(Request $request)

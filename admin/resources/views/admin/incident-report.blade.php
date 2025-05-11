@@ -32,7 +32,73 @@
         <div class="page-heading">
             <h3>Incident Report</h3>
         </div>
+        <div class="row">
+            {{-- Not Started Project --}}
 
+            {{-- Completed Project --}}
+            <div class="col-6 col-lg-4 col-md-6 pointer">
+                <div class="card">
+                    <div class="card-body px-3 py-4-5">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div>
+                                    <span class="text-white pt-2">
+                                        <img src="https://scontent.fdvo2-2.fna.fbcdn.net/v/t1.15752-9/491004676_1464360264969856_2941979217056718572_n.png?_nc_cat=100&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHL1MOkJA7ZNHR5zLcYVkvjuD_P_b8Xmb64P8_9vxeZvhqYq6R1O6odpPCMiCuf4oiWaHmV6i8W2UM-Cj0A9-bW&_nc_ohc=_DkRVyweKvYQ7kNvwESxBeK&_nc_oc=Adkto7uW-fZJZvOVww4-oSVeyLZ4AdnED9CMCmh8ER3u7FgfigptyE07U4VWtAikz9g&_nc_zt=23&_nc_ht=scontent.fdvo2-2.fna&oh=03_Q7cD2AG7J4o_cbT4uhEFmBSUAgEfdZ2_fTr3d3lGxp5CnOy2Sg&oe=68272A8B"
+                                            alt="" width="60px">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h6 class="text-muted font-semibold">Total Incidents</h6>
+                                <h6 class="font-extrabold mb-0">{{ $total }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- In Progress Project --}}
+            <div class="col-6 col-lg-4 col-md-6 pointer">
+                <div class="card">
+                    <div class="card-body px-3 py-4-5">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div>
+                                    <span class="text-white pt-2">
+                                        <img src="https://scontent.fdvo2-2.fna.fbcdn.net/v/t1.15752-9/491004676_1464360264969856_2941979217056718572_n.png?_nc_cat=100&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHL1MOkJA7ZNHR5zLcYVkvjuD_P_b8Xmb64P8_9vxeZvhqYq6R1O6odpPCMiCuf4oiWaHmV6i8W2UM-Cj0A9-bW&_nc_ohc=_DkRVyweKvYQ7kNvwESxBeK&_nc_oc=Adkto7uW-fZJZvOVww4-oSVeyLZ4AdnED9CMCmh8ER3u7FgfigptyE07U4VWtAikz9g&_nc_zt=23&_nc_ht=scontent.fdvo2-2.fna&oh=03_Q7cD2AG7J4o_cbT4uhEFmBSUAgEfdZ2_fTr3d3lGxp5CnOy2Sg&oe=68272A8B"
+                                            alt="" width="60px">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h6 class="text-muted font-semibold">Fire Reports</h6>
+                                <h6 class="font-extrabold mb-0">{{ $sosFire }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Stuck Project --}}
+            <div class="col-6 col-lg-4 col-md-6 pointer">
+                <div class="card">
+                    <div class="card-body px-3 py-4-5">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div>
+                                    <span class="text-white pt-2">
+                                        <img src="https://scontent.fdvo2-2.fna.fbcdn.net/v/t1.15752-9/491004676_1464360264969856_2941979217056718572_n.png?_nc_cat=100&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHL1MOkJA7ZNHR5zLcYVkvjuD_P_b8Xmb64P8_9vxeZvhqYq6R1O6odpPCMiCuf4oiWaHmV6i8W2UM-Cj0A9-bW&_nc_ohc=_DkRVyweKvYQ7kNvwESxBeK&_nc_oc=Adkto7uW-fZJZvOVww4-oSVeyLZ4AdnED9CMCmh8ER3u7FgfigptyE07U4VWtAikz9g&_nc_zt=23&_nc_ht=scontent.fdvo2-2.fna&oh=03_Q7cD2AG7J4o_cbT4uhEFmBSUAgEfdZ2_fTr3d3lGxp5CnOy2Sg&oe=68272A8B"
+                                            alt="" width="60px">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h6 class="text-muted font-semibold">Flood Reports</h6>
+                                <h6 class="font-extrabold mb-0">{{ $sosFood }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="page-content">
             <section class="row">
                 <div class="col-lg-12">

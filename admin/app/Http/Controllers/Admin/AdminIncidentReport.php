@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\SOS;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -33,8 +34,18 @@ class AdminIncidentReport extends Controller
                     'flood_count' => $monthlySOSCounts->get($month)->flood_count ?? 0,
                 ];
             }
+
+
+        $users  = User::count();
+        $sosFire = SOS::where('type', 'fire')->count();
+        $sosFood = SOS::where('type', 'flood')->count();
+        $total = SOS::count();
         return view('admin.incident-report', [
             'monthlySOSCounts'  => $monthlyData,
+            'users' => $users,
+            'sosFire' => $sosFire,
+            'sosFood' => $sosFood,
+            'total' => $total,
         ]);
     }
 

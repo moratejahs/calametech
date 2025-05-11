@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/css/app-dark.css') }}">
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo/reygenix.png') }}" type="image/x-icon">
 
     @yield('links')
     @yield('css')
@@ -95,16 +94,14 @@
                         </div>
 
 
-                        <li
-                            class="sidebar-item">
+                        <li class="sidebar-item">
                             <a href="{{ route('super-admin.super-admin-dashboard') }}" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
 
-                        <li
-                            class="sidebar-item">
+                        <li class="sidebar-item">
                             <a href="{{ route('super-admin.super-admin-projects') }}" class='sidebar-link'>
                                 {{-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     fill="currentColor" class="bi bi-git" viewBox="0 0 16 16">
@@ -189,8 +186,8 @@
                                     <hr class="dropdown-divider">
                                     </li> --}}
                                     <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#logout-modal" style="cursor: pointer;">
+                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logout-modal"
+                                            style="cursor: pointer;">
                                             <i class="icon-mid bi bi-box-arrow-left me-2 text-danger"></i>
                                             Logout
                                         </a>
