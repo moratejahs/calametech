@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Calametech;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Events\AccountVerified;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -26,6 +27,9 @@ class UserController extends Controller
         if ($user) {
             $user->is_verified = true;
             $user->save();
+
+            event(new AccountVerified($user));
+
             return redirect()->back()->with('success', 'User verified successfully');
         }
         return redirect()->back()->with('success', 'User not found');

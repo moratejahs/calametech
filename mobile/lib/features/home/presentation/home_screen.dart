@@ -4,6 +4,7 @@ import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/core/shared_widgets/app_bottom_nav.dart';
 import 'package:calamitech/core/utils/services/auth_user_service.dart';
+import 'package:calamitech/features/auth/blocs/auth_bloc.dart';
 import 'package:calamitech/features/news/presentation/news_cards.dart';
 import 'package:calamitech/features/report/presentation/report_form.dart';
 import 'package:flutter/material.dart';
@@ -80,27 +81,35 @@ class _HomeScreenState extends State<HomeScreen> {
     debugPrint("Event Data: ${event.data}");
 
     if (event.eventName == 'sos.resolved') {
-      try {
-        final data = jsonDecode(event.data ?? '{}');
+      _handleSosResolvedEvent(event);
+    } else if (event.eventName == 'user.verified') {
+      _handleUserVerifiedEvent(event);
+    } else {
+      debugPrint("Unhandled event: ${event.eventName}");
+    }
+  }
 
-        final Map<String, String> resolvedSos = {
-          'description': data['description'] as String,
-          'image': data['image'] as String,
-          'status': data['status'] as String,
-          'type': data['type'] as String,
-          'address': data['address'] as String,
-        };
+  void _handleSosResolvedEvent(PusherEvent event) {
+    try {
+      final data = jsonDecode(event.data ?? '{}');
 
-        if (!mounted) return;
+      final Map<String, String> resolvedSos = {
+        'description': data['description'] as String,
+        'image': data['image'] as String,
+        'status': data['status'] as String,
+        'type': data['type'] as String,
+        'address': data['address'] as String,
+      };
 
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _showResolvedSosDialog(context, resolvedSos);
-        });
+      if (!mounted) return;
 
-        debugPrint("Decoded SOS Resolved Data: $data");
-      } catch (e) {
-        debugPrint("Error parsing SOS resolved data: $e");
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showResolvedSosDialog(context, resolvedSos);
+      });
+
+      debugPrint("Decoded SOS Resolved Data: $data");
+    } catch (e) {
+      debugPrint("Error parsing SOS resolved data: $e");
     }
   }
 
@@ -162,18 +171,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Image (if available)
                     resolvedSos['image'] != null
                         ? Padding(
-                      padding: const EdgeInsets.only(top: 12.0),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 200,
-                          maxWidth: double.infinity,
-                        ),
-                        child: Image.network(
-                          resolvedSos['image']!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxHeight: 200,
+                                maxWidth: double.infinity,
+                              ),
+                              child: Image.network(
+                                resolvedSos['image']!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
                         : const SizedBox.shrink(),
                   ],
                 ),
@@ -194,6 +203,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         );
       },
+    );
+  }
+
+  void _handleUserVerifiedEvent(PusherEvent event) {
+    context.read<AuthBloc>().add(MarkAuthUserAsVerified());
+    _showUserVerifiedSnackbar();
+  }
+
+  void _showUserVerifiedSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Your account has been verified.'),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 

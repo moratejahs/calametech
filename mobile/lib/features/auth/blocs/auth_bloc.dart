@@ -24,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RegisterRequested>(onRegisterRequested);
     on<LogoutRequested>(onLogoutRequested);
     on<AuthCheckRequested>(onAuthCheckRequested);
+    on<MarkAuthUserAsVerified>(onMarkAuthUserAsVerified);
   }
 
   Future<void> onLoginRequested(LoginRequested event, Emitter<AuthState> emit) async {
@@ -115,6 +116,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         emit(AuthUnAuthenticated());
       }
+    } catch (e) {
+      emit(AuthFailure(message: removeExceptionPrefix(e.toString())));
+    }
+  }
+
+  Future<void> onMarkAuthUserAsVerified(MarkAuthUserAsVerified event, Emitter<AuthState> emit) async {
+    try {
+      final user = await authRepository.markAsVerified();
+
+      emit(AuthAuthenticated(user: user));
     } catch (e) {
       emit(AuthFailure(message: removeExceptionPrefix(e.toString())));
     }

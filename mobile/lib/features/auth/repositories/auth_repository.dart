@@ -148,6 +148,31 @@ class AuthRepository implements IAuthRepository {
       throw Exception(jsonBody['message'] ?? 'Failed to logout.');
     }
   }
+
+  Future<UserModel> markAsVerified() async {
+    final user = await authUserService.get();
+
+    if (user == null) {
+      throw Exception('Unauthenticated.');
+    }
+
+    final userVerified = UserModel(
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      avatar: user.avatar,
+      isVerified: true,
+      token: user.token,
+    );
+
+    if (!await authUserService.store(userVerified)) {
+      throw Exception('Failed to mark user as verified, unable to store user data.');
+    }
+
+    return userVerified;
+  }
 }
 
 MediaType getContentType(String fileName) {
