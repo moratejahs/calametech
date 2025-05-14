@@ -42,3 +42,5 @@ final class LogoutRequested extends AuthEvent {
 }
 
 final class AuthCheckRequested extends AuthEvent {}
+
+final class MarkAuthUserAsVerified extends AuthEvent {}

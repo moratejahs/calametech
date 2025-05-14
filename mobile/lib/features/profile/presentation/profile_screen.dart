@@ -2,12 +2,101 @@ import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/config/theme/app_theme.dart';
 import 'package:calamitech/constants/api_paths.dart';
 import 'package:calamitech/core/shared_widgets/app_bottom_nav.dart';
+import 'package:calamitech/core/utils/services/auth_user_service.dart';
 import 'package:calamitech/features/auth/blocs/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late PusherChannelsFlutter pusher;
+  late AuthUserService authUserService;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPusher();
+  }
+
+  Future<void> _initPusher() async {
+    authUserService = context.read<AuthUserService>();
+    pusher = PusherChannelsFlutter();
+
+    try {
+      await pusher.init(
+        apiKey: dotenv.env['PUSHER_APP_KEY'] ?? '',
+        cluster: dotenv.env['PUSHER_APP_CLUSTER'] ?? '',
+        onConnectionStateChange: (currentState, previousState) {
+          debugPrint("Pusher state changed: $previousState → $currentState");
+        },
+        onError: (message, code, error) {
+          debugPrint("Pusher error: $message (Code: $code)");
+        },
+        onSubscriptionSucceeded: (channelName, data) {
+          debugPrint("Successfully subscribed to: $channelName");
+        },
+      );
+
+      // Connect to Pusher
+      await pusher.connect();
+      debugPrint("Connected to Pusher: ${pusher.connectionState}");
+
+      // Listen for events
+      pusher.onEvent = _handlePusherEvent;
+
+      final user = await authUserService.get();
+      if (user != null) {
+        await pusher.subscribe(channelName: 'user.${user.id}');
+        debugPrint("Subscribed to channel: user.${user.id}");
+      } else {
+        debugPrint("No authenticated user found.");
+      }
+    } catch (e, stackTrace) {
+      debugPrint("Exception initializing Pusher: $e");
+      debugPrint("StackTrace: $stackTrace");
+    }
+  }
+
+  void _handlePusherEvent(PusherEvent event) {
+    debugPrint("Received Event: ${event.channelName} | ${event.eventName}");
+    debugPrint("Event Data: ${event.data}");
+
+    if (event.eventName == 'user.verified') {
+      _handleUserVerifiedEvent(event);
+    } else {
+      debugPrint("Unhandled event: ${event.eventName}");
+    }
+  }
+
+  void _handleUserVerifiedEvent(PusherEvent event) {
+    context.read<AuthBloc>().add(MarkAuthUserAsVerified());
+    _showUserVerifiedSnackbar();
+  }
+
+  void _showUserVerifiedSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Your account has been verified.'),
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pusher.disconnect();
+  }
 
   @override
   Widget build(BuildContext context) {
