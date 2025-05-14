@@ -29,9 +29,9 @@
 @endsection
 @section('content')
     <div id="main">
-        <div class="page-heading">
+        {{-- <div class="page-heading">
             <h3>Dashboard</h3>
-        </div>
+        </div> --}}
 
         <div class="page-content">
             <section class="row">
@@ -66,11 +66,11 @@
                             <p><strong></strong> <input hidden type="text" id="sosId" name="id"
                                     class="form-control">
                             </p>
-                            <input type="file" name="image" class="form-control" accept=".jpeg,.jpg,.png">
+                            {{-- <input type="file" name="image" class="form-control" accept=".jpeg,.jpg,.png"> --}}
 
                             <p><strong>Reported by:</strong> <span id="sosPerson"></span></p>
                             <p><strong>Contact No.:</strong> <span id="sosNo"></span></p>
-                            <p style="display:none;"><strong>Description:</strong> <span id="sosDescription"></span></p>
+                            <p><strong>Description:</strong> <span id="sosDescription"></span></p>
                             <p style="display:none;"><strong>Location:</strong> <span id="sosLocation"></span></p>
 
 
