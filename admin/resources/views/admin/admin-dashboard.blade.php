@@ -172,7 +172,15 @@
     <script>
         const sosIconUrl = "{{ asset('assets/images/placeholder.png') }}";
         const sosSoundUrl = "{{ asset('assets/sound/sos.mp3') }}";
-        var map = L.map('map').setView([9.078408, 126.199289], 13);
+        var map = L.map('map', {
+            scrollWheelZoom: false, // Disable scroll wheel zoom
+            dragging: false, // Disable map dragging (panning)
+            touchZoom: false, // Disable touch zoom
+            doubleClickZoom: false, // Disable double click zoom
+            boxZoom: false, // Disable box zoom
+            keyboard: false, // Disable keyboard navigation
+            zoomControl: false // Remove zoom control buttons
+        }).setView([9.078408, 126.199289], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© Calamitech'
