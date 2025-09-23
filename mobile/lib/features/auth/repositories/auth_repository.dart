@@ -105,7 +105,15 @@ class AuthRepository implements IAuthRepository {
     // Send request
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
-    final jsonBody = jsonDecode(response.body);
+
+    Map<String, dynamic> jsonBody = {};
+    if (response.body.isNotEmpty) {
+      try {
+        jsonBody = jsonDecode(response.body) as Map<String, dynamic>;
+      } on FormatException {
+        throw Exception('Invalid response format.');
+      }
+    }
 
     if (response.statusCode == 201) {
       return UserModel.fromMap({
