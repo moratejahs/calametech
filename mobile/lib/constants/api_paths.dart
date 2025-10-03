@@ -2,7 +2,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiPaths {
   static const String emulatorIP = '10.0.2.2';
-  static const String wifiIP = '192.168.1.7';
+  static const String wifiIP = '192.168.1.6';
   static const String port = '8888';
 
   static const String localApiUrl = 'http://$emulatorIP:$port/api/v1';

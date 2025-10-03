@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\AdminProjectsNotStartedController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectsController;
 use App\Http\Controllers\SuperAdmin\SuperAdminDashboardController;
 use App\Http\Controllers\Admin\AdminProjectsBehindScheduleController;
+use App\Http\Controllers\Admin\MaintenanceController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectsCompletedController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectsInProgressController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProjectsNotStartedController;
@@ -62,6 +63,18 @@ Route::prefix('admin')->group(function () {
         ->name('admin.admin-news.show');
 
     Route::get('incident-reports', [AdminIncidentReport::class, 'index'])->name('admin.incident-reports');
+
+    // Maintenance & Archive
+    Route::get('export/sos.csv', [MaintenanceController::class, 'exportSosCsv'])->name('admin.export.sos.csv');
+    Route::get('export/incidents.csv', [MaintenanceController::class, 'exportIncidentsCsv'])->name('admin.export.incidents.csv');
+    Route::post('backup/run', [MaintenanceController::class, 'runBackup'])->name('admin.backup.run');
+    Route::get('backup/download', [MaintenanceController::class, 'runBackup'])->name('admin.backup.download');
+    Route::get('backup/view', [MaintenanceController::class, 'viewBackup'])->name('admin.backup.view');
+    // Backup Manager
+    Route::get('backups', [MaintenanceController::class, 'backupsIndex'])->name('admin.backups.index');
+    Route::post('backups/generate', [MaintenanceController::class, 'backupsGenerate'])->name('admin.backups.generate');
+    Route::get('backups/download/{id}', [MaintenanceController::class, 'backupsDownload'])->name('admin.backups.download');
+    Route::delete('backups/delete/{id}', [MaintenanceController::class, 'backupsDelete'])->name('admin.backups.delete');
 
     Route::post('store/projects', [AdminProjectsController::class, 'store'])
         ->name('store.admin.admin-projects');

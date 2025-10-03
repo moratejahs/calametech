@@ -75,14 +75,14 @@
 
                         <li class="sidebar-item">
                             <a href="{{ route('admin.admin-dashboard') }}" class='sidebar-link'>
-                                <i class="bi bi-grid-fill" style="color: white;"></i>
-                                <span style="color: white;">Dashboard</span>
+                                <i class="bi bi-grid-fill text-dark"></i>
+                                <span class="text-dark">Dashboard</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{{ route('admin.incident-reports') }}" class='sidebar-link'>
-                                <i class="bi bi-grid-fill" style="color: white;"></i>
-                                <span style="color: white;">Incident Analytics</span>
+                                <i class="bi bi-grid-fill text-dark"></i>
+                                <span class="text-dark">Incident Analytics</span>
                             </a>
                         </li>
                         <li class="sidebar-item ">
@@ -92,22 +92,22 @@
                                     <path
                                         d="M15.698 7.287 8.712.302a1.03 1.03 0 0 0-1.457 0l-1.45 1.45 1.84 1.84a1.223 1.223 0 0 1 1.55 1.56l1.773 1.774a1.224 1.224 0 0 1 1.267 2.025 1.226 1.226 0 0 1-2.002-1.334L8.58 5.963v4.353a1.226 1.226 0 1 1-1.008-.036V5.887a1.226 1.226 0 0 1-.666-1.608L5.093 2.465l-4.79 4.79a1.03 1.03 0 0 0 0 1.457l6.986 6.986a1.03 1.03 0 0 0 1.457 0l6.953-6.953a1.031 1.031 0 0 0 0-1.457" />
                                 </svg> --}}
-                                <i class="bi bi-exclamation-circle-fill" style="color: white;"></i>
-                                <span style="color: white;">Incidents</span>
+                                <i class="bi bi-exclamation-circle-fill text-dark"></i>
+                                <span class="text-dark">Incidents</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item ">
                             <a href="{{ route('manage-users.index') }}" class='sidebar-link'>
-                                <i class="bi bi-people-fill" style="color: white;"></i>
-                                <span style="color: white;">Users</span>
+                                <i class="bi bi-people-fill text-dark"></i>
+                                <span class="text-dark">Users</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item ">
                             <a href="{{ route('news.index') }}" class='sidebar-link'>
-                                <i class="bi bi-rss" style="color: white;"></i>
-                                <span style="color: white;">News</span>
+                                <i class="bi bi-rss text-dark"></i>
+                                <span class="text-dark">News</span>
                             </a>
                         </li>
                     </ul>
@@ -251,6 +251,17 @@
                     var audio = document.getElementById('sosAudio');
                     audio.play();
                     audio.muted = false; // Unmute after autoplay
+                }
+            </script>
+        @else
+            {{-- Stop any existing audio when no pending reports are found --}}
+            <script>
+                window.onload = function() {
+                    var existingAudio = document.getElementById('sosAudio');
+                    if (existingAudio) {
+                        existingAudio.pause();
+                        existingAudio.currentTime = 0;
+                    }
                 }
             </script>
         @endif
