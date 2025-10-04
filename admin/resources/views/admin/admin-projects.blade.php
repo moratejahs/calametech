@@ -4,6 +4,10 @@
     {{-- <link rel="stylesheet" href="{{ asset('assets/vendors/choices.js/choices.min.css') }}" /> --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ asset('assets/vendors/simple-datatables/style.css') }}">
+    <style>
+        /* Ensure colored table headers remain readable */
+        table.table thead th { color: #ffffff !important; }
+    </style>
 @endsection
 
 @section('content')
@@ -175,7 +179,12 @@
                     function renderMonthTable(values, type) {
                         const max = Math.max(...values, 0);
                         let thead = months.map(m => `<th class="text-center small p-1">${m}</th>`).join('');
-                        let row = values.map(v => { const bg = valueToColor(v, max, type); return `<td class="text-center small p-1" style="background:${bg}">${v}</td>` }).join('');
+                        let row = values.map(v => {
+                            const bg = valueToColor(v, max, type);
+                            // Use white text for non-zero colored cells (improves contrast for red/blue backgrounds)
+                            const textColor = (v && Number(v) > 0) ? 'color: #ffffff;' : '';
+                            return `<td class="text-center small p-1" style="background:${bg}; ${textColor}">${v}</td>`
+                        }).join('');
                         return `<div class="table-responsive"><table class="table table-sm mb-0"><thead><tr>${thead}</tr></thead><tbody><tr>${row}</tr></tbody></table></div>`;
                     }
 

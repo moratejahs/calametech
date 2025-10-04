@@ -175,22 +175,6 @@
             </section>
         </div>
 
-    <div class="card mt-3">
-    <div class="card-header"><strong class="text-dark">Incident Prediction</strong></div>
-    <div class="card-body">
-        <div class="row mb-2">
-            <div class="col-md-8">
-                <canvas id="aiForecastChart" height="120"></canvas>
-            </div>
-            <div class="col-md-4">
-                <div><strong>Year:</strong> <span id="aiYear">-</span></div>
-                <div class="mt-2"><strong>Fire (counts)</strong><div id="aiFireVals" class="small text-muted"></div></div>
-                <div class="mt-2"><strong>Flood (counts)</strong><div id="aiFloodVals" class="small text-muted"></div></div>
-                <div class="mt-3"><strong>3-mo moving avg (fire)</strong><div id="aiFireTrend" class="small text-muted"></div></div>
-                <div class="mt-2"><strong>3-mo moving avg (flood)</strong><div id="aiFloodTrend" class="small text-muted"></div></div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>

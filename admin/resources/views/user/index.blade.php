@@ -11,11 +11,11 @@
         <div class="page-heading">
             <h3>Users Monitoring</h3>
         </div>
-        <div class="mb-3 d-flex gap-2">
+        {{-- <div class="mb-3 d-flex gap-2">
             <a href="{{ route('admin.backups.index') }}" class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Open backup manager">
                 <i class="bi bi-database"></i> Database Backups
             </a>
-        </div>
+        </div> --}}
         <div>
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
