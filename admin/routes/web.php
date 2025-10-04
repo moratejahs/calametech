@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminProjectsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\IncidentResponseController;
+use App\Http\Controllers\Admin\AiTipsController;
+use App\Http\Controllers\Admin\PredictionController;
 use App\Http\Controllers\SuperAdmin\SuperAdminUsersController;
 use App\Http\Controllers\Admin\AdminProjectsCompletedController;
 use App\Http\Controllers\SuperAdmin\SuperAdminProfileController;
@@ -29,6 +31,12 @@ use App\Http\Controllers\SuperAdmin\SuperAdminProjectsBehindScheduleController;
 Route::get('/', function () {
     return redirect('/login');
 });
+
+// AI tips endpoint (used by dashboard JS)
+Route::get('/ai-tips', [AiTipsController::class, 'getTips'])->name('admin.ai-tips');
+
+// AI prediction endpoint (monthly aggregates + simple trend)
+Route::get('/ai-predict', [PredictionController::class, 'monthlyProjection'])->name('admin.ai-predict');
 
 // Auth Endpoints
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('auth.login');

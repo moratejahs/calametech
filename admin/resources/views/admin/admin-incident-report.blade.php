@@ -157,7 +157,7 @@
                             <div class="mini-card">
                                 <div class="day">Thu</div>
                                 <svg class="mini-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 40h28" stroke="#60A5FA" stroke-width="6" stroke-linecap="round"/>
+                                    <path d="M18 40h28" stroke="#60A5FA" stroke-width="6" stroke-linecap="`round"/>
                                     <circle cx="24" cy="28" r="8" fill="#9CA3AF"/>
                                     <circle cx="38" cy="30" r="10" fill="#6B7280"/>
                                 </svg>
