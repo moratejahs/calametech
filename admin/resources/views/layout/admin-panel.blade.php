@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/vendors/iconly/bold.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="{{ asset('assets/vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -108,6 +109,13 @@
                             <a href="{{ route('news.index') }}" class='sidebar-link'>
                                 <i class="bi bi-rss text-dark"></i>
                                 <span class="text-dark">News</span>
+                            </a>
+                        </li>
+
+                         <li class="sidebar-item ">
+                            <a href="{{ route('admin.backups.index') }}" class='sidebar-link'>
+                                <i class="bi bi-database text-dark"></i>
+                                <span class="text-dark">Database Backups</span>
                             </a>
                         </li>
                     </ul>
