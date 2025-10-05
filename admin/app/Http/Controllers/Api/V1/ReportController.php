@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
+    public function index() {
+        $tips = SOS::all();
+        return response()->json([
+            'data' => $tips
+        ]);
+    }
     public function store(ReportRequest $request)
     {
         $validated = $request->validated();
