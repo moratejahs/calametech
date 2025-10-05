@@ -16,10 +16,13 @@ class ReportController extends Controller
         $validated = $request->validated();
 
         try {
+            // Debug: log the incoming description so we can trace ai tip generation
+            \Log::info('ReportController.store - description', ['description' => $validated['description'] ?? null]);
             if (isset($validated['image'])) {
                 $filePath = Storage::disk('public')->put('sos_images', $validated['image']);
             }
             $aiTip = $this->generateAiTipFromDescription($validated['description']);
+            \Log::info('ReportController.store - computed aiTip', ['aiTip' => $aiTip]);
             $sos = SOS::create([
                 'description' => $validated['description'],
                 'ai_tips' => $aiTip,
@@ -46,14 +49,17 @@ class ReportController extends Controller
         }
     }
 
-    protected function generateAiTipFromDescription(string $description): ?string
+    protected function generateAiTipFromDescription(?string $description): ?string
     {
         try {
             // Read API key from environment or services config. Do NOT hardcode keys in source.
             $apiKey = env('AI_API_KEY');
+            \Log::info('generateAiTipFromDescription - apiKey present', ['hasKey' => !empty($apiKey)]);
+
+            // If no API key is present, return a deterministic fallback tip immediately
             if (empty($apiKey)) {
-                // Key not available; skipping AI tip generation
-                return null;
+                \Log::info('AI API key missing; using fallback tip generator');
+                return $this->fallbackAiTip((string) $description);
             }
 
             // Updated system + user prompts for strict 100-character tips
@@ -81,17 +87,20 @@ class ReportController extends Controller
             if ($response->failed()) {
                 \Log::warning('OpenAI request failed', [
                     'status' => $response->status(),
-                    'body' => $response->body(),
+                    // truncate body to avoid huge logs, but include message/code if present
+                    'body_summary' => substr($response->body(), 0, 1000),
                 ]);
 
-                return null;
+                // Fall through to fallback tip generator
+                return $this->fallbackAiTip($description);
             }
 
             $data = $response->json();
             $content = data_get($data, 'choices.0.message.content', null);
 
             if (empty($content)) {
-                return null;
+                \Log::warning('OpenAI returned empty content for ai_tip', ['response_summary' => array_slice($data,0,3)]);
+                return $this->fallbackAiTip($description);
             }
 
             $content = trim($content, "\"'\n ");
@@ -106,12 +115,41 @@ class ReportController extends Controller
                 $content = rtrim($truncated, ' ,.;:');
             }
 
+            \Log::info('generateAiTipFromDescription - returning content', ['len' => mb_strlen($content)]);
             return $content;
         } catch (\Exception $e) {
             \Log::error('OpenAI error generating ai_tip: '.$e->getMessage());
-
-            return null;
+            return $this->fallbackAiTip($description);
         }
+    }
+
+    /**
+     * Deterministic fallback tip generator when AI is unavailable.
+     * Keeps output under 100 characters and returns a concise safety tip.
+     */
+    protected function fallbackAiTip(string $description): ?string
+    {
+        $d = strtolower($description);
+        // common heuristics
+        if (str_contains($d, 'fire') || str_contains($d, 'flame') || str_contains($d, 'smoke')) {
+            return 'Evacuate to a safe area; alert others and call emergency services.'; // 62 chars
+        }
+        if (str_contains($d, 'flood') || str_contains($d, 'water') || str_contains($d, 'inund')) {
+            return 'Move to higher ground immediately and avoid floodwaters.'; // 54 chars
+        }
+        if (str_contains($d, 'gas') || str_contains($d, 'leak') || str_contains($d, 'chemical')) {
+            return 'Leave the area, avoid inhaling fumes, and call emergency responders.'; // 66 chars
+        }
+        if (str_contains($d, 'injury') || str_contains($d, 'bleed') || str_contains($d, 'hurt')) {
+            return 'Apply pressure to bleeding, keep the person still, and seek medical help.'; // 70 chars
+        }
+
+        // Generic fallback
+        $short = trim(preg_replace('/\s+/', ' ', strip_tags($description)));
+        if (empty($short)) return null;
+        // return a truncated generic tip
+        $tip = 'Stay safe: move away from immediate danger and call for help if needed.';
+        return mb_substr($tip, 0, 100);
     }
 
     public function update(ReportRequest $request, string $id)
