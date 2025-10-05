@@ -37,10 +37,11 @@ Route::prefix('v1')->group(function () {
 
         // News
         Route::get('/news', [NewsController::class, 'index']);
-        Route::get('/tips', [ReportController::class, 'index']);
 
         // Report
         Route::post('/report', [ReportController::class, 'store']);
         Route::put('/report/{id}', [ReportController::class, 'update']);
     });
+
+       Route::get('/tips', [ReportController::class, 'index']);
 });
