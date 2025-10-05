@@ -49,8 +49,10 @@ class ReportController extends Controller
     protected function generateAiTipFromDescription(string $description): ?string
     {
         try {
-            $apiKey = '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';
+            // Read API key from environment or services config. Do NOT hardcode keys in source.
+            $apiKey = env('AI_API_KEY');
             if (empty($apiKey)) {
+                // Key not available; skipping AI tip generation
                 return null;
             }
 
