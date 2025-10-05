@@ -50,78 +50,55 @@ class ReportController extends Controller
     }
 
     protected function generateAiTipFromDescription(?string $description): ?string
-    {
-        try {
-            // Read API key from environment or services config. Do NOT hardcode keys in source.
-            $apiKey = env('AI_API_KEY');
-            \Log::info('generateAiTipFromDescription - apiKey present', ['hasKey' => !empty($apiKey)]);
+{
+    try {
+        $apiKey = env('AI_API_KEY');
+        \Log::info('generateAiTipFromDescription - apiKey present', ['hasKey' => !empty($apiKey)]);
 
-            // If no API key is present, return a deterministic fallback tip immediately
-            if (empty($apiKey)) {
-                \Log::info('AI API key missing; using fallback tip generator');
-                return $this->fallbackAiTip((string) $description);
-            }
+        if (empty($apiKey)) {
+            return $this->fallbackAiTip((string) $description);
+        }
 
-            // Updated system + user prompts for strict 100-character tips
-            $systemPrompt = 'You are a concise safety assistant. Respond only with one short safety tip under 100 characters. No JSON, no explanation.';
-            $userPrompt = "Generate a short safety tip based on the following description.
-            The tip must be 100 characters or fewer, simple, and specific.
+        $systemPrompt = 'You are a safety assistant. Respond with one practical safety tip under 100 words. No JSON, no formatting.';
+        $userPrompt = "Generate a 100-word safety tip based on this emergency description:
+        \"\"\"{$description}\"\"\"
 
-            Description:
-            \"\"\"{$description}\"\"\"
+        Tip:";
 
-            Tip:";
+        $response = Http::withToken($apiKey)
+            ->timeout(20)
+            ->post('https://api.openai.com/v1/chat/completions', [
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    ['role' => 'system', 'content' => $systemPrompt],
+                    ['role' => 'user', 'content' => $userPrompt],
+                ],
+                'max_tokens' => 250, // enough for ~100 words
+                'temperature' => 0.4,
+            ]);
 
-            $response = Http::withToken($apiKey)
-                ->timeout(10)
-                ->post('https://api.openai.com/v1/chat/completions', [
-                    'model' => 'gpt-3.5-turbo',
-                    'messages' => [
-                        ['role' => 'system', 'content' => $systemPrompt],
-                        ['role' => 'user', 'content' => $userPrompt],
-                    ],
-                    'max_tokens' => 60,
-                    'temperature' => 0.2,
-                ]);
-
-            if ($response->failed()) {
-                \Log::warning('OpenAI request failed', [
-                    'status' => $response->status(),
-                    // truncate body to avoid huge logs, but include message/code if present
-                    'body_summary' => substr($response->body(), 0, 1000),
-                ]);
-
-                // Fall through to fallback tip generator
-                return $this->fallbackAiTip($description);
-            }
-
-            $data = $response->json();
-            $content = data_get($data, 'choices.0.message.content', null);
-
-            if (empty($content)) {
-                \Log::warning('OpenAI returned empty content for ai_tip', ['response_summary' => array_slice($data,0,3)]);
-                return $this->fallbackAiTip($description);
-            }
-
-            $content = trim($content, "\"'\n ");
-
-            // Strictly limit to 100 chars, cut cleanly at a space if possible
-            if (mb_strlen($content) > 100) {
-                $truncated = mb_substr($content, 0, 100);
-                $lastSpace = mb_strrpos($truncated, ' ');
-                if ($lastSpace !== false) {
-                    $truncated = mb_substr($truncated, 0, $lastSpace);
-                }
-                $content = rtrim($truncated, ' ,.;:');
-            }
-
-            \Log::info('generateAiTipFromDescription - returning content', ['len' => mb_strlen($content)]);
-            return $content;
-        } catch (\Exception $e) {
-            \Log::error('OpenAI error generating ai_tip: '.$e->getMessage());
+        if ($response->failed()) {
+            \Log::warning('OpenAI request failed', [
+                'status' => $response->status(),
+                'body_summary' => substr($response->body(), 0, 1000),
+            ]);
             return $this->fallbackAiTip($description);
         }
+
+        $data = $response->json();
+        $content = data_get($data, 'choices.0.message.content', null);
+
+        if (empty($content)) {
+            return $this->fallbackAiTip($description);
+        }
+
+        return trim($content);
+    } catch (\Exception $e) {
+        \Log::error('OpenAI error generating ai_tip: '.$e->getMessage());
+        return $this->fallbackAiTip($description);
     }
+}
+
 
     /**
      * Deterministic fallback tip generator when AI is unavailable.
