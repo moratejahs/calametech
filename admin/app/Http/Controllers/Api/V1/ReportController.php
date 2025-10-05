@@ -21,6 +21,7 @@ class ReportController extends Controller
 
             $sos = SOS::create([
                 'description' => $validated['description'],
+                'ai_tips' => $validated['ai_tips'],
                 'type' => $validated['type'],
                 'image_path' => $filePath ?? null,
                 'lat' => $validated['lat'],
