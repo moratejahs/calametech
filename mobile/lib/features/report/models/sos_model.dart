@@ -53,7 +53,8 @@ class SosModel {
 
   String toJson() => json.encode(toMap());
 
-  factory SosModel.fromJson(String source) => SosModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory SosModel.fromJson(String source) =>
+      SosModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -64,11 +65,19 @@ class SosModel {
   bool operator ==(covariant SosModel other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.lat == lat && other.long == long && other.type == type && other.status == status;
+    return other.id == id &&
+        other.lat == lat &&
+        other.long == long &&
+        other.type == type &&
+        other.status == status;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ lat.hashCode ^ long.hashCode ^ type.hashCode ^ status.hashCode;
+    return id.hashCode ^
+        lat.hashCode ^
+        long.hashCode ^
+        type.hashCode ^
+        status.hashCode;
   }
 }

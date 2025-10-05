@@ -24,14 +24,18 @@ class ReportController extends Controller
         try {
             // Debug: log the incoming description so we can trace ai tip generation
             \Log::info('ReportController.store - description', ['description' => $validated['description'] ?? null]);
+
             if (isset($validated['image'])) {
                 $filePath = Storage::disk('public')->put('sos_images', $validated['image']);
             }
+
+            // Generate AI tip based on description (max 100 chars). If it fails we return null and still create the SOS.
             $aiTip = $this->generateAiTipFromDescription($validated['description']);
-            \Log::info('ReportController.store - computed aiTip', ['aiTip' => $aiTip]);
+            $validated['ai_tips'] = $aiTip;
+
             $sos = SOS::create([
                 'description' => $validated['description'],
-                'ai_tips' => $aiTip,
+                'ai_tips' => $validated['ai_tips'],
                 'type' => $validated['type'],
                 'image_path' => $filePath ?? null,
                 'lat' => $validated['lat'],
@@ -55,85 +59,80 @@ class ReportController extends Controller
         }
     }
 
-    protected function generateAiTipFromDescription(?string $description): ?string
-{
-    try {
-        $apiKey = env('AI_API_KEY');
-        \Log::info('generateAiTipFromDescription - apiKey present', ['hasKey' => !empty($apiKey)]);
-
-        if (empty($apiKey)) {
-            return $this->fallbackAiTip((string) $description);
-        }
-
-        $systemPrompt = 'You are a safety assistant. Respond with one practical safety tip under 100 words. No JSON, no formatting.';
-        $userPrompt = "Generate a 100-word safety tip based on this emergency description:
-        \"\"\"{$description}\"\"\"
-
-        Tip:";
-
-        $response = Http::withToken($apiKey)
-            ->timeout(20)
-            ->post('https://api.openai.com/v1/chat/completions', [
-                'model' => 'gpt-3.5-turbo',
-                'messages' => [
-                    ['role' => 'system', 'content' => $systemPrompt],
-                    ['role' => 'user', 'content' => $userPrompt],
-                ],
-                'max_tokens' => 250, // enough for ~100 words
-                'temperature' => 0.4,
-            ]);
-
-        if ($response->failed()) {
-            \Log::warning('OpenAI request failed', [
-                'status' => $response->status(),
-                'body_summary' => substr($response->body(), 0, 1000),
-            ]);
-            return $this->fallbackAiTip($description);
-        }
-
-        $data = $response->json();
-        $content = data_get($data, 'choices.0.message.content', null);
-
-        if (empty($content)) {
-            return $this->fallbackAiTip($description);
-        }
-
-        return trim($content);
-    } catch (\Exception $e) {
-        \Log::error('OpenAI error generating ai_tip: '.$e->getMessage());
-        return $this->fallbackAiTip($description);
-    }
-}
-
-
     /**
-     * Deterministic fallback tip generator when AI is unavailable.
-     * Keeps output under 100 characters and returns a concise safety tip.
+     * Generate a concise AI tip (<= 100 chars) based on the provided description.
+     * Returns string|null. Will return null if no API key or on failure.
      */
-    protected function fallbackAiTip(string $description): ?string
+    protected function generateAiTipFromDescription(string $description): ?string
     {
-        $d = strtolower($description);
-        // common heuristics
-        if (str_contains($d, 'fire') || str_contains($d, 'flame') || str_contains($d, 'smoke')) {
-            return 'Evacuate to a safe area; alert others and call emergency services.'; // 62 chars
-        }
-        if (str_contains($d, 'flood') || str_contains($d, 'water') || str_contains($d, 'inund')) {
-            return 'Move to higher ground immediately and avoid floodwaters.'; // 54 chars
-        }
-        if (str_contains($d, 'gas') || str_contains($d, 'leak') || str_contains($d, 'chemical')) {
-            return 'Leave the area, avoid inhaling fumes, and call emergency responders.'; // 66 chars
-        }
-        if (str_contains($d, 'injury') || str_contains($d, 'bleed') || str_contains($d, 'hurt')) {
-            return 'Apply pressure to bleeding, keep the person still, and seek medical help.'; // 70 chars
-        }
+        try {
+            // Prefer config('services.openai.key'), fallback to env
+            $apiKey = config('services.openai.key') ?? env('AI_API_KEY');
 
-        // Generic fallback
-        $short = trim(preg_replace('/\s+/', ' ', strip_tags($description)));
-        if (empty($short)) return null;
-        // return a truncated generic tip
-        $tip = 'Stay safe: move away from immediate danger and call for help if needed.';
-        return mb_substr($tip, 0, 100);
+            if (empty($apiKey)) {
+                \Log::warning('OpenAI API key not configured; skipping ai tip generation.');
+                return null;
+            }
+
+            // Build prompts tightly to request plain text tip only
+            $systemPrompt = 'You are a concise safety assistant. Respond only with one short safety tip. No JSON, no markdown, no explanations.';
+            $userPrompt = "Create a single short safety tip based only on the description below. The tip must be at most 100 characters and specific to the description.\n\nDescription:\n\"\"\"\n{$description}\n\"\"\"\n\nTip:";
+
+            // Call OpenAI Chat Completions
+            $response = Http::withToken($apiKey)
+                ->timeout(10)
+                ->post('https://api.openai.com/v1/chat/completions', [
+                    'model' => 'gpt-3.5-turbo',
+                    'messages' => [
+                        ['role' => 'system', 'content' => $systemPrompt],
+                        ['role' => 'user', 'content' => $userPrompt],
+                    ],
+                    'max_tokens' => 60,
+                    'temperature' => 0.2,
+                    'n' => 1,
+                ]);
+
+            if ($response->failed()) {
+                \Log::warning('OpenAI request failed', ['status' => $response->status(), 'body' => $response->body()]);
+                return null;
+            }
+
+            $data = $response->json();
+
+            // Extract content from typical response structure: choices[0].message.content
+            $content = data_get($data, 'choices.0.message.content', null);
+            if (empty($content)) {
+                \Log::warning('OpenAI returned empty content for ai tip', ['response' => $data]);
+                return null;
+            }
+
+            // Clean and trim returned text
+            $content = trim($content);
+            // Remove backticks or surrounding quotes often present
+            $content = trim($content, "\"'\n `");
+
+            // Remove common code fences if any
+            $content = preg_replace('/^```(?:\w+)?\s*/', '', $content);
+            $content = preg_replace('/\s*```$/', '', $content);
+
+            // Ensure the text length is <= 100 chars. Truncate at word boundary where possible.
+            $maxLen = 100;
+            if (mb_strlen($content) > $maxLen) {
+                $truncated = mb_substr($content, 0, $maxLen);
+                $lastSpace = mb_strrpos($truncated, ' ');
+                if ($lastSpace !== false && $lastSpace > 0) {
+                    $truncated = mb_substr($truncated, 0, $lastSpace);
+                }
+                $content = rtrim($truncated, " ,.;:");
+            }
+
+            return $content;
+        } catch (\Exception $e) {
+            \Log::error('OpenAI error generating ai_tip: ' . $e->getMessage());
+            return null;
+        }
     }
+
 
     public function update(ReportRequest $request, string $id)
     {

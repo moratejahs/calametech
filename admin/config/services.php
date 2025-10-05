@@ -21,6 +21,10 @@ return [
         'scheme' => 'https',
     ],
 
+    'openai' => [
+        'key' => env('AI_API_KEY'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
