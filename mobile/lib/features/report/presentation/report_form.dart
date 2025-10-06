@@ -3,6 +3,7 @@ import 'package:calamitech/config/routing/app_routes.dart';
 import 'package:calamitech/constants/asset_paths.dart';
 import 'package:calamitech/features/location/cubit/location_cubit.dart';
 import 'package:calamitech/features/report/blocs/report_bloc.dart';
+import 'package:calamitech/features/tips/blocs/tips_bloc.dart';
 import 'package:calamitech/features/report/presentation/emergency_type_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +49,8 @@ class _ReportFormState extends State<ReportForm> {
                 title: const Text('Take a Photo'),
                 onTap: () async {
                   Navigator.of(context).pop();
-                  final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+                  final pickedFile =
+                      await _picker.pickImage(source: ImageSource.camera);
                   if (pickedFile != null) {
                     setState(() {
                       _imageFile = File(pickedFile.path);
@@ -61,7 +63,8 @@ class _ReportFormState extends State<ReportForm> {
                 title: const Text('Choose from Gallery'),
                 onTap: () async {
                   Navigator.of(context).pop();
-                  final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+                  final pickedFile =
+                      await _picker.pickImage(source: ImageSource.gallery);
                   if (pickedFile != null) {
                     setState(() {
                       _imageFile = File(pickedFile.path);
@@ -114,7 +117,7 @@ class _ReportFormState extends State<ReportForm> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ReportBloc, ReportState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is ReportSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -125,7 +128,7 @@ class _ReportFormState extends State<ReportForm> {
             ),
           );
 
-          Navigator.pushNamed(context, selectedEmergencyType == 'fire' ? AppRoutes.fireTips : AppRoutes.floodTips);
+          await _showTipsDialogAfterSubmit();
 
           setState(() {
             selectedEmergencyType = null;
@@ -227,12 +230,15 @@ class _ReportFormState extends State<ReportForm> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.red),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red),
                   ),
                   onPressed: () => _submit(context),
                   child: BlocBuilder<ReportBloc, ReportState>(
                     builder: (context, state) {
-                      return state is ReportLoading ? const CircularProgressIndicator(color: Colors.white) : const Text('Submit Report');
+                      return state is ReportLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text('Submit Report');
                     },
                   ),
                 ),
@@ -241,6 +247,78 @@ class _ReportFormState extends State<ReportForm> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showTipsDialogAfterSubmit() async {
+    // Dispatch event to fetch tips based on description
+    try {
+      context
+          .read<TipsBloc>()
+          .add(TipsFetched(description: _descriptionController.text));
+    } catch (_) {
+      // ignore: avoid_print
+      print('TipsBloc not available in context');
+    }
+
+    // Show dialog that listens to TipsBloc states
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return BlocProvider.value(
+          value: context.read<TipsBloc>(),
+          child: AlertDialog(
+            title: const Text('AI-generated tips'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: BlocBuilder<TipsBloc, TipsState>(
+                builder: (context, state) {
+                  if (state is TipsLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state is TipsLoaded) {
+                    final tips = state.tips;
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: tips.length,
+                      separatorBuilder: (_, __) => const Divider(),
+                      itemBuilder: (context, index) {
+                        final tip = tips[index];
+                        return ListTile(
+                          leading: CircleAvatar(child: Text('#${index + 1}')),
+                          title: Text(tip.content),
+                          subtitle: Text('Type: ${tip.type}'),
+                        );
+                      },
+                    );
+                  }
+
+                  if (state is TipsFailure) {
+                    return Center(child: Text(state.message));
+                  }
+
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(
+                      context,
+                      selectedEmergencyType == 'fire'
+                          ? AppRoutes.fireTips
+                          : AppRoutes.floodTips);
+                },
+                child: const Text('Continue'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
