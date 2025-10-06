@@ -21,6 +21,15 @@ class TipsBloc extends Bloc<TipsEvent, TipsState> {
     emit(TipsLoading());
 
     try {
+      // If the caller provided a description, always fetch fresh tips
+      // generated from that description. Otherwise use cached stored tips
+      // when available for the current day.
+      if (event.description != null && event.description!.trim().isNotEmpty) {
+        final tips = await tipsRepository.getTips(event.description);
+        emit(TipsLoaded(tips: tips));
+        return;
+      }
+
       final storedTips = await tipsRepository.getStoredTips();
 
       if (storedTips.isNotEmpty &&

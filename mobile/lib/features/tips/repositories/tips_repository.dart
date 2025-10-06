@@ -18,7 +18,13 @@ class TipsRepository extends ITipsRepository {
   });
 
   @override
-  Future<List<TipModel>> getTips() async {
+  Future<List<TipModel>> getTips([String? description]) async {
+    // Build the user prompt. If a description is provided, ask the model to
+    // generate concise tips based strictly on that description.
+    final userPrompt = description != null && description.trim().isNotEmpty
+        ? '''Generate up to 3 short safety tips strictly based on the following incident description. Return a raw JSON array (no markdown, no extra text). Each item must be an object with fields: "content" and "type" (one of "fire_tips","flood_tips","safety_tips","other_tips"). The description: "${description.trim()}". Keep tips concise (max 120 characters each).'''
+        : '''Generate 40 tips as a JSON array, with exactly 10 tips for each of the following types: "fire_tips", "flood_tips", "safety_tips", "other_tips". Output only a raw JSON array.''';
+
     final response = await httpClient.post(
       Uri.parse(ApiPaths.aiApiUrl),
       headers: {
@@ -43,22 +49,11 @@ Each element in the array should follow this structure:
           },
           {
             'role': 'user',
-            'content': """
-Generate 40 tips as a JSON array, with exactly 10 tips for each of the following types: "fire_tips", "flood_tips", "safety_tips", "other_tips".
-
-Output only a raw JSON array with this structure:
-
-[
-  {
-    "content": "Tip content here",
-    "type": "fire_tips"
-  },
-  ...
-]
-"""
+            'content': userPrompt,
           },
         ],
         'max_tokens': 1000,
+        'temperature': 0.0,
       }),
     );
 
@@ -73,10 +68,14 @@ Output only a raw JSON array with this structure:
         final parsedTips = jsonDecode(cleanedContent);
 
         if (parsedTips is List) {
-          final aiTips = parsedTips.map((tip) => TipModel.fromMap(tip)).toList();
+          final aiTips =
+              parsedTips.map((tip) => TipModel.fromMap(tip)).toList();
 
-          if (!await tipsService.store(aiTips)){
-            throw Exception('Failed to store tips.');
+          // If description was not provided, persist the large default set.
+          if (description == null || description.trim().isEmpty) {
+            if (!await tipsService.store(aiTips)) {
+              throw Exception('Failed to store tips.');
+            }
           }
 
           return aiTips;

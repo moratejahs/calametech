@@ -51,6 +51,12 @@ class SosRepository extends ISosRepository {
       request.fields['type'] = type;
       request.fields['lat'] = lat;
       request.fields['long'] = long;
+      // Ensure the server receives ai_tips as an array structure. Some backends
+      // expect indexed form fields (ai_tips[0][content], ai_tips[0][type]) so
+      // PHP/Laravel will parse it as an array. Send a minimal empty tip to
+      // avoid undefined array key / custom validator errors server-side.
+      request.fields['ai_tips[0][content]'] = '';
+      request.fields['ai_tips[0][type]'] = 'other_tips';
 
       // Attach image if available
       if (image != null) {
@@ -71,11 +77,13 @@ class SosRepository extends ISosRepository {
       final jsonBody = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
-        if (!await sosService.store(SosModel.fromMap(jsonBody['data']['sos']))) {
+        if (!await sosService
+            .store(SosModel.fromMap(jsonBody['data']['sos']))) {
           throw Exception('Failed to store sos data.');
         }
       } else if (response.statusCode == 422) {
-        throw ValidationException(jsonBody['message'] ?? 'Failed to submit report.');
+        throw ValidationException(
+            jsonBody['message'] ?? 'Failed to submit report.');
       } else {
         throw Exception(jsonBody['message'] ?? 'Failed to submit report.');
       }
@@ -98,6 +106,9 @@ class SosRepository extends ISosRepository {
       request.fields['type'] = type;
       request.fields['lat'] = lat;
       request.fields['long'] = long;
+      // Ensure the server receives ai_tips as an array structure for updates too.
+      request.fields['ai_tips[0][content]'] = '';
+      request.fields['ai_tips[0][type]'] = 'other_tips';
 
       // Attach image if available
       if (image != null) {
@@ -126,7 +137,8 @@ class SosRepository extends ISosRepository {
           await sosService.store(SosModel.fromMap(jsonBody['data']['sos']));
         }
       } else if (response.statusCode == 422) {
-        throw ValidationException(parseLaravelValidationErrors(jsonBody['errors']));
+        throw ValidationException(
+            parseLaravelValidationErrors(jsonBody['errors']));
       } else {
         throw Exception(jsonBody['message'] ?? 'Failed to submit report.');
       }
