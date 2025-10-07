@@ -339,6 +339,9 @@
             return st === 'pending';
         });
 
+        // Keep an array of marker positions to compute bounds
+        const pendingMarkerLatLngs = [];
+
         pendingSos.forEach(function(sos) {
             if (sos.lat && sos.long) {
                 var latitude = parseFloat(sos.lat);
@@ -347,6 +350,9 @@
                 var marker = L.marker([latitude, longitude], {
                     icon: getIconByType(sos.type)
                 }).addTo(map);
+
+                // collect for bounds
+                pendingMarkerLatLngs.push([latitude, longitude]);
 
                 var geocodeUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
 
@@ -376,6 +382,21 @@
                     });
             }
         });
+
+        // If we added any pending markers, adjust the map view to include them
+        if (pendingMarkerLatLngs.length > 0) {
+            try {
+                if (pendingMarkerLatLngs.length === 1) {
+                    // Single marker: zoom in reasonably
+                    map.setView(pendingMarkerLatLngs[0], 15);
+                } else {
+                    const bounds = L.latLngBounds(pendingMarkerLatLngs);
+                    map.fitBounds(bounds.pad(0.25));
+                }
+            } catch (err) {
+                console.warn('Failed to fit bounds for pending markers', err);
+            }
+        }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -42,6 +42,15 @@ class SOSSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
             ],
+             [
+            'lat' => '9.0040412',
+            'long' => '126.126386',
+            'status' => 'pending',
+            'type' => 'fire',
+            'user_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+            ],
         ];
 
         foreach ($sosData as $data) {
