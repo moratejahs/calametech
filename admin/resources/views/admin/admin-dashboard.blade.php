@@ -333,7 +333,13 @@
             sosModal.show();
         }
 
-        sosData.forEach(function(sos) {
+        // Only render SOS markers whose status is 'pending'
+        const pendingSos = sosData.filter(function(s) {
+            const st = (s.status || '').toString().trim().toLowerCase();
+            return st === 'pending';
+        });
+
+        pendingSos.forEach(function(sos) {
             if (sos.lat && sos.long) {
                 var latitude = parseFloat(sos.lat);
                 var longitude = parseFloat(sos.long);
@@ -342,8 +348,7 @@
                     icon: getIconByType(sos.type)
                 }).addTo(map);
 
-                var geocodeUrl =
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+                var geocodeUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
 
                 fetch(geocodeUrl)
                     .then(response => response.json())
@@ -360,14 +365,14 @@
                                 sos.status,
                                 sos.type,
                                 sos.image_path,
-                                sos.user.name,
-                                sos.user.contact_number // Pass the reporter's name
+                                sos.user ? sos.user.name : null,
+                                sos.user ? sos.user.contact_number : null // Pass the reporter's name
                             );
                         });
                     })
                     .catch(error => {
                         console.error('Error fetching address:', error);
-                        marker.bindPopup(`<b>SOS Alert</b><br>${sos.description}<br>Address not available`);
+                        marker.bindPopup(`<b>SOS Alert</b><br>${sos.description || ''}<br>Address not available`);
                     });
             }
         });
